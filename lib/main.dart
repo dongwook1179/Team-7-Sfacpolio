@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/pageloader.dart';
+import 'package:team_7_sfacpolio/screen/onboarding.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
-      home: const Center(
-        child: Text('메인 화면'),
-      ),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PageLoader()),
+      ],
+      child: CupertinoApp(color: CupertinoColors.white, home: Onboarding()),
     ),
   );
 }
