@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:team_7_sfacpolio/provider/pageloader.dart';
+import '../../provider/pagecontrol.dart';
 
 class NextButton extends StatefulWidget {
   const NextButton({super.key});
@@ -12,33 +12,34 @@ class NextButton extends StatefulWidget {
 class _NextButtonState extends State<NextButton> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-        child: ChangeNotifierProvider(
-      create: (BuildContext context) => PageLoader(),
-      child: GestureDetector(
-        onTap: () {
-          context.read<PageLoader>().Next(context);
-        },
-        child: Container(
-          height: 50,
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: Color(0xFF0059FF),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Center(
-            child: Text(
-              '다음',
-              style: TextStyle(
-                color: CupertinoColors.white,
-                fontSize: 15,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w700,
-              ),
+    return GestureDetector(
+      onTap: () {
+        // print(context.read<Page_Controller>().slot_active.length);
+        context.read<Page_Controller>().Next(context);
+      },
+      child: Container(
+        height: 50,
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: context.watch<Page_Controller>().slot_active.length > 0
+              ? Color(0xFF0059FF)
+              : Color(0xFFE6E6E6),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Text(
+            '다음',
+            style: TextStyle(
+              color: context.watch<Page_Controller>().slot_active.length > 0
+                  ? Color(0xFFFFFFFF)
+                  : Color(0xFF999999),
+              fontSize: 15,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
       ),
-    ));
+    );
   }
 }
