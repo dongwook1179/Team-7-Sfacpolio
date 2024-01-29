@@ -38,7 +38,7 @@ class _QuestionTextState extends State<QuestionText> {
                   style: TextStyle(
                     color: CupertinoColors.black,
                     fontSize: 18,
-                    // fontFamily: 'Pretendard',
+                    fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -48,7 +48,7 @@ class _QuestionTextState extends State<QuestionText> {
                   style: TextStyle(
                     color: CupertinoColors.black,
                     fontSize: 18,
-                    // fontFamily: 'Pretendard',
+                    fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -58,7 +58,7 @@ class _QuestionTextState extends State<QuestionText> {
                   style: TextStyle(
                     color: CupertinoColors.black,
                     fontSize: 18,
-                    // fontFamily: 'Pretendard',
+                    fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -77,7 +77,7 @@ class _QuestionTextState extends State<QuestionText> {
                   style: TextStyle(
                     color: Color(0xFF999999),
                     fontSize: 12,
-                    // fontFamily: 'Pretendard',
+                    fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                   ),
                 )

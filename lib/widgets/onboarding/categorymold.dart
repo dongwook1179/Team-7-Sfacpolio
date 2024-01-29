@@ -76,7 +76,7 @@ class _CategoryMoldState extends State<CategoryMold> {
               style: TextStyle(
                 color: text_color[text]!,
                 fontSize: 12,
-                // fontFamily: 'Pretendard',
+                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w400,
               ),
             )),
@@ -89,9 +89,12 @@ class _CategoryMoldState extends State<CategoryMold> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Wrap(
-        children: category_widget.values.toList(),
+      child: Container(
+        width: 328,
+        padding: EdgeInsets.symmetric(horizontal: 0),
+        child: Wrap(
+          children: category_widget.values.toList(),
+        ),
       ),
     );
   }

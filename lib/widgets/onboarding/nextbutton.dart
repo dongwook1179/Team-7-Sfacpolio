@@ -19,7 +19,7 @@ class _NextButtonState extends State<NextButton> {
       },
       child: Container(
         height: 50,
-        margin: EdgeInsets.symmetric(horizontal: 16),
+        margin: EdgeInsets.symmetric(horizontal: 30),
         decoration: BoxDecoration(
           color: context.watch<Page_Controller>().slot_active.length > 0
               ? Color(0xFF0059FF)
