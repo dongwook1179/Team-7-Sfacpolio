@@ -52,7 +52,7 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
                             ? Color(0xFF020202)
                             : Color(0xFFE6E6E6),
                         fontSize: 14,
-                        // fontFamily: 'Pretendard',
+                        fontFamily: 'Pretendard',
                         fontWeight:
                             pagenum == i ? FontWeight.w700 : FontWeight.w500,
                       ),

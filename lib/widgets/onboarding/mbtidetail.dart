@@ -35,7 +35,7 @@ class _MbtiDetailState extends State<MbtiDetail> {
             style: TextStyle(
               color: Color(0xFF000000),
               fontSize: 15,
-              // fontFamily: 'Pretendard',
+              fontFamily: 'Pretendard',
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -59,7 +59,7 @@ class _MbtiDetailState extends State<MbtiDetail> {
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 12,
-                    // fontFamily: 'Pretendard',
+                    fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                   ),
                 )
@@ -87,7 +87,7 @@ class _MbtiDetailState extends State<MbtiDetail> {
                       style: TextStyle(
                         color: Color(0xFF0059FF),
                         fontSize: 11,
-                        // fontFamily: 'Pretendard',
+                        fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                       ),
                     )),

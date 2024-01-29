@@ -20,7 +20,7 @@ class _CareerState extends State<DevelopCareer> {
             style: TextStyle(
               color: Color(0xFF0000000),
               fontSize: 14,
-              // fontFamily: 'Pretendard',
+              fontFamily: 'Pretendard',
               fontWeight: FontWeight.w400,
             ),
           ),

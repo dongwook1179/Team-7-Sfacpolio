@@ -18,19 +18,23 @@ class _OnboardingState extends State<Onboarding> {
     return CupertinoPageScaffold(
         child: ChangeNotifierProvider(
       create: (BuildContext context) => PageController(),
-      child: Container(
-        margin: EdgeInsets.only(top: 45),
-        child: Column(children: [
-          Container(child: ProgressBar()),
-          Container(
-            height: 630,
-            child: Column(children: [
-              QuestionText(),
-              OnboardingBody(),
-            ]),
-          ),
-          Container(height: 50, child: NextButton()),
-        ]),
+      child: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(top: 45),
+          padding: EdgeInsets.zero,
+          child: Column(children: [
+            Container(child: ProgressBar()),
+            IntrinsicHeight(
+              child: Container(
+                child: Column(children: [
+                  QuestionText(),
+                  OnboardingBody(),
+                ]),
+              ),
+            ),
+            Container(height: 50, child: NextButton()),
+          ]),
+        ),
       ),
     ));
   }

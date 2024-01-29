@@ -87,7 +87,7 @@ class _MbtiSelectState extends State<MbtiSelect> {
                 style: TextStyle(
                   color: font_color[title],
                   fontSize: 14,
-                  // fontFamily: 'Pretendard',
+                  fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -99,7 +99,7 @@ class _MbtiSelectState extends State<MbtiSelect> {
                 style: TextStyle(
                   color: font_color[title],
                   fontSize: 12,
-                  // fontFamily: 'Pretendard',
+                  fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
                 ),
               )
