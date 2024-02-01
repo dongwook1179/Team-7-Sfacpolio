@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import '/widgets/onboarding/languageinput.dart';
 import '/widgets/onboarding/languageslot.dart';
 import '/widgets/onboarding/searchfield.dart';
-import '/widgets/onboarding/selectslot.dart';
+import 'selectslot_1.dart';
 
 class UseLanguage extends StatefulWidget {
   const UseLanguage({super.key});
@@ -37,7 +37,7 @@ class _UseLanguageState extends State<UseLanguage> {
             height: 56,
             margin: EdgeInsets.only(bottom: 12),
             alignment: Alignment.bottomLeft,
-            child: Select_Slot(),
+            child: Select_Slot_1(),
           ),
         ],
       ),

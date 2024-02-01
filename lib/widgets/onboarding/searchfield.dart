@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
-import 'package:team_7_sfacpolio/widgets/onboarding/languageslot.dart';
 
 class SearchField extends StatefulWidget {
   const SearchField({super.key});
@@ -20,7 +19,7 @@ class _SearchFieldState extends State<SearchField> {
       width: 360,
       height: 48,
       margin: EdgeInsets.symmetric(horizontal: 16),
-      child: CupertinoTextField(
+      child: TextField(
         controller: search_control,
         onChanged: (text) {
           setState(() {
@@ -32,11 +31,11 @@ class _SearchFieldState extends State<SearchField> {
           });
           context.read<Page_Controller>().Input_Filter(text);
         },
-        suffix: Container(
-          margin: EdgeInsets.only(right: 16),
-          width: 24,
-          height: 24,
-          child: Container(
+        decoration: InputDecoration(
+          suffixIcon: Container(
+            margin: EdgeInsets.only(right: 16),
+            width: 24,
+            height: 24,
             child: GestureDetector(
               onTap: () {
                 if (!input_text) {
@@ -45,23 +44,25 @@ class _SearchFieldState extends State<SearchField> {
                 }
               },
               child: Icon(
-                input_text ? CupertinoIcons.search : CupertinoIcons.xmark,
+                input_text ? Icons.search : Icons.clear,
                 color: Color(0xFF000000),
               ),
             ),
           ),
-        ),
-        placeholder: '개발 언어 검색',
-        placeholderStyle: TextStyle(
-          color: Color(0xFF4C4C4C),
-          fontSize: 14,
-          fontFamily: 'Pretendard',
-          fontWeight: FontWeight.w400,
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: Color(0xFFF3F3F3),
-          borderRadius: BorderRadius.circular(30),
+          hintText: '개발 언어 검색',
+          hintStyle: TextStyle(
+            color: Color(0xFF4C4C4C),
+            fontSize: 14,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w400,
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+          filled: true,
+          fillColor: Color(0xFFF3F3F3),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     );

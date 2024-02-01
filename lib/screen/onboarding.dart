@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import '/widgets/onboarding/onboardingbody.dart';
 import '/widgets/onboarding/nextbutton.dart';
@@ -15,24 +16,26 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-        child: ChangeNotifierProvider(
+    return Scaffold(
+        body: ChangeNotifierProvider(
       create: (BuildContext context) => PageController(),
       child: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.only(top: 45),
           padding: EdgeInsets.zero,
           child: Column(children: [
-            Container(child: ProgressBar()),
-            IntrinsicHeight(
-              child: Container(
-                child: Column(children: [
-                  QuestionText(),
-                  OnboardingBody(),
-                ]),
-              ),
-            ),
-            Container(height: 50, child: NextButton()),
+            Container(height: 1, child: ProgressBar()),
+            // IntrinsicHeight(
+            //   child: Container(
+            //     child: Column(children: []),
+            //   ),
+            // ),
+            Container(child: QuestionText()),
+            Container(child: OnboardingBody()),
+            Container(
+                alignment: Alignment.bottomCenter,
+                height: 50,
+                child: NextButton()),
           ]),
         ),
       ),

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 
@@ -22,10 +22,21 @@ class _CategoryMoldState extends State<CategoryMold> {
     // TODO: implement initState
     super.initState();
     for (String text in widget.text_list) {
-      border_color[text] = Color(0xFFE6E6E6);
-      text_color[text] = Color(0xFF4C4C4C);
+      border_color[text] = Color(0xFFB3B3B3);
+      text_color[text] = Color(0xFF7F7F7F);
       back_color[text] = Color(0xFFFFFFFF);
       category_bool[text] = false;
+      if (context.read<Page_Controller>().select_info['develop'] != null) {
+        if (context
+            .read<Page_Controller>()
+            .select_info['develop']!
+            .contains(text)) {
+          border_color[text] = Color(0xFF0059FF);
+          text_color[text] = Color(0xFF0059FF);
+          back_color[text] = Color(0xFFFFFFFF);
+          category_bool[text] = true;
+        }
+      }
     }
     Slot_Build();
   }
@@ -34,8 +45,8 @@ class _CategoryMoldState extends State<CategoryMold> {
     if (category_bool[text]!) {
       setState(
         () {
-          border_color[text] = Color(0xFFE6E6E6);
-          text_color[text] = Color(0xFF4C4C4C);
+          border_color[text] = Color(0xFFB3B3B3);
+          text_color[text] = Color(0xFF7F7F7F);
           back_color[text] = Color(0xFFFFFFFF);
           category_bool[text] = false;
         },
@@ -44,8 +55,8 @@ class _CategoryMoldState extends State<CategoryMold> {
       setState(
         () {
           border_color[text] = Color(0xFF0059FF);
-          text_color[text] = Color(0xFFFFFFFF);
-          back_color[text] = Color(0xFF0059FF);
+          text_color[text] = Color(0xFF0059FF);
+          back_color[text] = Color(0xFFFFFFFF);
           category_bool[text] = true;
         },
       );
@@ -57,7 +68,7 @@ class _CategoryMoldState extends State<CategoryMold> {
       category_widget[text] = GestureDetector(
         onTap: () {
           Color_Change(text);
-          context.read<Page_Controller>().Slot_active(text);
+          context.read<Page_Controller>().Add_Information('develop', text);
           Slot_Build();
         },
         child: IntrinsicWidth(
@@ -91,6 +102,7 @@ class _CategoryMoldState extends State<CategoryMold> {
     return Container(
       child: Container(
         width: 328,
+        height: 540,
         padding: EdgeInsets.symmetric(horizontal: 0),
         child: Wrap(
           children: category_widget.values.toList(),

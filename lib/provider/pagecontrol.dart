@@ -1,39 +1,35 @@
 import 'package:flutter/cupertino.dart';
-import 'package:team_7_sfacpolio/widgets/onboarding/languageslot.dart';
 
 class Page_Controller with ChangeNotifier {
   int pagenum = 1;
-  Map<String, bool> slot_active = {};
+  Map<String, List<String>> select_info = {};
   Map<String, dynamic> mbti_data = {};
+  Map<String, Widget> service_data = {};
   String search = '';
   Map<String, Widget> widget_select = {};
   String language_text = '';
+  List<String> period_save = [];
+  String career_save = '';
 
   void Next(BuildContext context) {
     pagenum++;
-    if (pagenum == 5) {
+    if (pagenum == 7) {
       pagenum = 1;
       // Navigator.push(context, CupertinoPageRoute(builder: (context)=> ));
     }
     notifyListeners();
   }
 
-  void Previous() {
-    pagenum--;
-    if (pagenum == 0) {
-      pagenum = 1;
-    }
-    notifyListeners();
-  }
-
-  void Slot_active(String text) {
-    if (slot_active[text] != null) {
-      if (slot_active[text]!) {
-        slot_active.remove(text);
-      }
+  void Add_Information(String type, String text) {
+    print('맵 이전 ${select_info}');
+    if (!select_info.containsKey(type)) {
+      select_info[type] = [text];
+    } else if (select_info[type]!.contains(text)) {
+      select_info[type]!.remove(text);
     } else {
-      slot_active[text] = true;
+      select_info[type]!.add(text);
     }
+    print('맵 이후 ${select_info}');
     notifyListeners();
   }
 
@@ -65,6 +61,22 @@ class Page_Controller with ChangeNotifier {
 
   void Delete_Widget(String text) {
     widget_select.remove(text);
+    notifyListeners();
+  }
+
+  void Period_Save(List<String> text_List) {
+    period_save.clear();
+    period_save = text_List;
+    notifyListeners();
+  }
+
+  void Service_Data(String text, Widget widget) {
+    if (service_data.containsKey(text)) {
+      service_data.remove(text);
+    } else {
+      service_data[text] = widget;
+    }
+    print(service_data);
     notifyListeners();
   }
 }

@@ -12,15 +12,10 @@ class MbtiDetail extends StatefulWidget {
 class _MbtiDetailState extends State<MbtiDetail> {
   @override
   Widget build(BuildContext context) {
-    print(context.watch<Page_Controller>().mbti_data);
     return Container(
       width: 328,
-      height: 120,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      margin: EdgeInsets.only(
-        left: 16,
-        right: 16,
-      ),
+      height: 125,
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
           border: Border.all(
             width: 1,
@@ -43,7 +38,7 @@ class _MbtiDetailState extends State<MbtiDetail> {
             height: 8,
           ),
           for (String text
-              in context.watch<Page_Controller>().mbti_data['content'])
+              in (context.watch<Page_Controller>().mbti_data['content'] ?? []))
             Row(
               children: [
                 Icon(
@@ -71,7 +66,7 @@ class _MbtiDetailState extends State<MbtiDetail> {
           Row(
             children: [
               for (String text
-                  in context.watch<Page_Controller>().mbti_data['tag'])
+                  in (context.watch<Page_Controller>().mbti_data['tag'] ?? []))
                 IntrinsicWidth(
                   child: Container(
                     margin: EdgeInsets.only(right: 6),
