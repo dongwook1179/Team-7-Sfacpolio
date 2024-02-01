@@ -31,4 +31,29 @@ class PocketBaseData {
         .toString();
     return url;
   }
+
+  Future<List<String>> Develop_Load() async {
+    final collection_data =
+        await pb.collection('develop_type_list').getFullList();
+    List<String> data_conversion = [];
+    for (int i = 0; i < collection_data.length; i++) {
+      data_conversion.add(collection_data[i].data['develop_type']);
+    }
+    return data_conversion;
+  }
+
+  Future<Map<String, dynamic>> Service_Load() async {
+    final collection_data = await pb.collection('service_list').getFullList();
+    Map<String, dynamic> data_conversion = {};
+    for (int i = 0; i < collection_data.length; i++) {
+      final url = pb.files
+          .getUrl(collection_data[i], collection_data[i].data['image'])
+          .toString();
+      data_conversion[collection_data[i].data['service']] = {
+        'image': url,
+        'image_name': collection_data[i].data['image_name']
+      };
+    }
+    return data_conversion;
+  }
 }

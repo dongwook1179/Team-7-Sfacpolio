@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +53,18 @@ class _LanguageSlotState extends State<LanguageSlot> {
       language_bool[text] = false;
       language_backcolor[text] = Color(0xFFFFFFFF);
       language_fontcolor[text] = Color(0xFF7F7F7F);
-      language_bordercolor[text] = Color(0xFF7F7F7F);
+      language_bordercolor[text] = Color(0xFFB3B3B3);
+      if (context.read<Page_Controller>().select_info['language'] != null) {
+        if (context
+            .read<Page_Controller>()
+            .select_info['language']!
+            .contains(text)) {
+          language_bordercolor[text] = Color(0xFF0059FF);
+          language_fontcolor[text] = Color(0xFF0059FF);
+          language_backcolor[text] = Color(0xFFFFFFFF);
+          language_bool[text] = true;
+        }
+      }
     }
   }
 
@@ -67,34 +77,30 @@ class _LanguageSlotState extends State<LanguageSlot> {
   }
 
   void Color_Change(String text) {
-    setState(() {
-      if (language_bool[text]!) {
-        language_fontcolor[text] = Color(0xFF0059FF);
-        language_bordercolor[text] = Color(0xFF0059FF);
-      } else {
-        language_fontcolor[text] = Color(0xFF7F7F7F);
-        language_bordercolor[text] = Color(0xFF7F7F7F);
-      }
-    });
+    // setState(() {
+    if (language_bool[text]!) {
+      language_fontcolor[text] = Color(0xFF0059FF);
+      language_bordercolor[text] = Color(0xFF0059FF);
+    } else {
+      language_fontcolor[text] = Color(0xFF7F7F7F);
+      language_bordercolor[text] = Color(0xFFB3B3B3);
+    }
+    // });
   }
 
   void Slot_Build() {
     for (String text in language_datas.keys.toList()) {
       language_widget[text] = GestureDetector(
         onTap: () {
-          setState(() {
-            print(language_bool[text]);
-            language_bool[text] = !language_bool[text]!;
-            print(language_bool[text]);
-            Color_Change(text);
-            Slot_Build();
-            Filter(Provider.of<Page_Controller>(context, listen: false).search);
-          });
-          print(text);
-          print(language_bool[text]);
-          print(language_backcolor[text]);
-          context
-              .read<Page_Controller>()
+          // setState(() {
+          language_bool[text] = !language_bool[text]!;
+          Color_Change(text);
+          Slot_Build();
+          // });
+          Filter(Provider.of<Page_Controller>(context, listen: false).search);
+          Provider.of<Page_Controller>(context, listen: false)
+              .Add_Information('language', text);
+          Provider.of<Page_Controller>(context, listen: false)
               .Select_Widget(text, language_widget[text]!);
         },
         child: IntrinsicWidth(
@@ -129,7 +135,6 @@ class _LanguageSlotState extends State<LanguageSlot> {
         )),
       );
     }
-    ;
   }
 
   void Filter(String search) {
@@ -138,10 +143,14 @@ class _LanguageSlotState extends State<LanguageSlot> {
       String text = language_datas[key]?['search'];
       if (search == '') {
         for (String text1 in trend) {
-          language_filter[text1] = language_widget[text1]!;
+          setState(() {
+            language_filter[text1] = language_widget[text1]!;
+          });
         }
       } else if (text.contains(search)) {
-        language_filter[key] = language_widget[key]!;
+        setState(() {
+          language_filter[key] = language_widget[key]!;
+        });
       }
     }
   }

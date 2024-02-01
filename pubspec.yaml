@@ -40,6 +40,8 @@ dependencies:
   dio: ^5.4.0
   image_picker: ^1.0.7
   flutter_svg: ^2.0.9
+  bottom_picker: ^2.3.3
+  numberpicker: ^2.1.2
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +71,7 @@ flutter:
     - assets/icons/
     - assets/jsons/
     - assets/images/programing_logo/
+    - assets/images/service/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,4 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/widgets/onboarding/createlanguage.dart';
 import 'package:team_7_sfacpolio/widgets/onboarding/directinput.dart';
 
 class Language_Input extends StatefulWidget {
@@ -30,12 +33,26 @@ class _Language_InputState extends State<Language_Input> {
             width: 8,
           ),
           GestureDetector(
-            onTap: () {
-              showCupertinoDialog(
+            onTap: () async {
+              print('클릭');
+              await showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return Direct_Input();
+                    return Scaffold(
+                      body: Direct_Input(),
+                      backgroundColor: Color(0xffffffff).withOpacity(0),
+                    );
                   });
+              String text = Provider.of<Page_Controller>(context, listen: false)
+                  .language_text;
+              if (text != '') {
+                Widget widgets =
+                    await Create_Language().Create_Widget(context, text);
+                context.read<Page_Controller>().Select_Widget(text, widgets);
+                context
+                    .read<Page_Controller>()
+                    .Add_Information('language', text);
+              }
             },
             child: Text(
               '직접입력',
