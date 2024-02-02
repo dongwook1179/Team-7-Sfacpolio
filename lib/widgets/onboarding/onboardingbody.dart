@@ -5,7 +5,7 @@ import 'package:team_7_sfacpolio/widgets/onboarding/career_page.dart';
 import 'package:team_7_sfacpolio/widgets/onboarding/condition_page.dart';
 import 'package:team_7_sfacpolio/widgets/onboarding/mbti_page.dart';
 import 'package:team_7_sfacpolio/widgets/onboarding/service_page.dart';
-import 'package:team_7_sfacpolio/widgets/onboarding/uselanguage.dart';
+import 'package:team_7_sfacpolio/widgets/onboarding/language_page.dart';
 import '/provider/pagecontrol.dart';
 import '/widgets/onboarding/categorymold.dart';
 

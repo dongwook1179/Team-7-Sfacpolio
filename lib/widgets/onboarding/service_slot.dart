@@ -44,12 +44,12 @@ class _Service_SlotState extends State<Service_Slot> {
 
   Future<void> Load_Image() async {
     for (String text in datas.keys.toList()) {
-      datas_image[text] = SvgPicture.asset(
-        'assets/images/service/${datas[text]['image_name']}',
-        fit: BoxFit.cover,
-        placeholderBuilder: (BuildContext context) => Container(
-          color: Colors.grey,
-        ),
+      datas_image[text] = Image.network(
+        'assets/images/service/${datas[text]['image']}',
+        fit: BoxFit.fill,
+        // placeholderBuilder: (BuildContext context) => Container(
+        //   color: Colors.grey,
+        // ),
       );
       widget_active[text] = false;
     }
@@ -72,13 +72,15 @@ class _Service_SlotState extends State<Service_Slot> {
         height: 32,
         margin: EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
+          image: DecorationImage(
+              image: NetworkImage(
+                datas[text]['image'],
+              ),
+              fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Stack(
           children: [
-            // ClipRRect(
-            //     borderRadius: BorderRadius.circular(8),
-            //     child: datas_image[text]),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -130,9 +132,13 @@ class _Service_SlotState extends State<Service_Slot> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(shape: BoxShape.circle),
-                    // child: ClipOval(
-                    //   child: datas_image[text],
-                    // ),
+                    child: ClipOval(
+                      child: Image.network(
+                        // 'assets/images/service/${datas[text]['image_name']}',
+                        datas[text]['image'],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                   widget_active[text]!
                       ? Container(

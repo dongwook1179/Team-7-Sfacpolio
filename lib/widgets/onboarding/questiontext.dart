@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import '../../provider/pagecontrol.dart';
 
 class QuestionText extends StatefulWidget {
@@ -83,10 +84,15 @@ class _QuestionTextState extends State<QuestionText> {
                   ],
                 ),
               ),
-              Container(
-                width: 24,
-                height: 24,
-                child: SvgPicture.asset('assets/icons/x.svg'),
+              GestureDetector(
+                onTap: () async {
+                  await PocketBaseData().Dummy();
+                },
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  child: SvgPicture.asset('assets/icons/x.svg'),
+                ),
               )
             ],
           ),

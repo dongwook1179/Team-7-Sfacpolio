@@ -42,6 +42,8 @@ dependencies:
   flutter_svg: ^2.0.9
   bottom_picker: ^2.3.3
   numberpicker: ^2.1.2
+  web_socket_channel: ^2.4.0
+
 
 dev_dependencies:
   flutter_test:
@@ -71,7 +73,7 @@ flutter:
     - assets/icons/
     - assets/jsons/
     - assets/images/programing_logo/
-    - assets/images/service/
+    - assets/images/chatting/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

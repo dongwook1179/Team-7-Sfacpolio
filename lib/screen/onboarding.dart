@@ -25,11 +25,6 @@ class _OnboardingState extends State<Onboarding> {
           padding: EdgeInsets.zero,
           child: Column(children: [
             Container(height: 1, child: ProgressBar()),
-            // IntrinsicHeight(
-            //   child: Container(
-            //     child: Column(children: []),
-            //   ),
-            // ),
             Container(child: QuestionText()),
             Container(child: OnboardingBody()),
             Container(

@@ -10,7 +10,9 @@ class PocketBaseData {
     final collection_data = await pb.collection('language_list').getFullList(
           sort: '-created',
         );
+
     Map<String, dynamic> data_conversion = {};
+
     for (int i = 0; i < collection_data.length; i++) {
       final url = pb.files
           .getUrl(collection_data[i], collection_data[i].data['logo'])
@@ -55,5 +57,43 @@ class PocketBaseData {
       };
     }
     return data_conversion;
+  }
+
+  Future<Map<String, dynamic>> Dummy() async {
+    final collection_data = await pb.collection('community').getFullList(
+          sort: '-created',
+        );
+
+    Map<String, dynamic> data_conversion = {};
+    List<String> url = [];
+    for (int i = 0; i < collection_data.length; i++) {
+      for (String name in collection_data[i].data['image']) {
+        String image = pb.files.getUrl(collection_data[i], name).toString();
+        url.add(image);
+      }
+
+      data_conversion[collection_data[i].id] = {
+        'user_id': collection_data[i].data['user_id'],
+        'topic': collection_data[i].data['topic'],
+        'image': url,
+        'title': collection_data[i].data['title'],
+        'content': collection_data[i].data['content'],
+        'created': collection_data[i].created,
+        'updated': collection_data[i].updated,
+        'id': collection_data[i].id,
+      };
+    }
+    print(collection_data);
+    print(data_conversion);
+    return data_conversion;
+  }
+
+  Future<void> Dummy_2() async {
+    final record = await pb.collection('users').getOne(
+          'ty52e7fdm9b1sj6',
+          expand: 'relField1,relField2.subRelField',
+        );
+    print(record);
+    print(record.data['verified']);
   }
 }
