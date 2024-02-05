@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/widgets/chatting/chatting_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/chatting/chatting_body.dart';
 import 'package:team_7_sfacpolio/widgets/chatting/chatting_tapbar.dart';
