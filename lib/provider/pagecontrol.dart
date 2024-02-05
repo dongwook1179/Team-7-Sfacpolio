@@ -10,6 +10,7 @@ class Page_Controller with ChangeNotifier {
   String language_text = '';
   List<String> period_save = [];
   String career_save = '';
+  Map<String, String> fillter = {};
 
   void Next(BuildContext context) {
     pagenum++;
@@ -77,6 +78,16 @@ class Page_Controller with ChangeNotifier {
       service_data[text] = widget;
     }
     print(service_data);
+    notifyListeners();
+  }
+
+  void Select_Fillter(String type, String text) {
+    if (fillter.containsKey(type)) {
+      fillter[type] = '';
+    } else {
+      fillter[type] = text;
+    }
+    print(fillter);
     notifyListeners();
   }
 }

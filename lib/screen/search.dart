@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:team_7_sfacpolio/widgets/search/search_app.dart';
+import 'package:team_7_sfacpolio/widgets/search/search_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/search/search_textfield.dart';
 
 class Search extends StatefulWidget {

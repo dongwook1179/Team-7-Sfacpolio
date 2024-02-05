@@ -10,7 +10,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => Page_Controller()),
       ],
-      child: MaterialApp(color: Color(0xFFFFFFFF), home: Search()),
+      child: MaterialApp(color: Color(0xFFFFFFFF), home: Chatting()),
     ),
   );
 }
