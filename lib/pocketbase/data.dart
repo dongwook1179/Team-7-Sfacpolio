@@ -96,4 +96,148 @@ class PocketBaseData {
     print(record);
     print(record.data['verified']);
   }
+
+  Future<Map<String, dynamic>> Get_Log() async {
+    Map<String, dynamic> return_data = {};
+    final record_log = await pb.collection('log').getFullList();
+    final record_lan = await pb.collection('log_language').getFullList();
+    final record_dev = await pb.collection('log_develop_tpye').getFullList();
+    final record_like = await pb.collection('log_like').getFullList();
+    final record_view = await pb.collection('log_view').getFullList();
+    final record_com = await pb.collection('log_comment').getFullList();
+
+    for (var data in record_log) {
+      return_data[data.id] = {};
+      return_data[data.id]['language'] = [];
+      return_data[data.id]['develop_type'] = [];
+      return_data[data.id]['like'] = [];
+      return_data[data.id]['view'] = [];
+      return_data[data.id]['comment'] = {};
+
+      for (var data_lan in record_lan) {
+        //로그 id 에 맞는 언어 가져오기
+        if (data_lan.data['log_id'] == data.id) {
+          // 언어가 멀티플이므로 반복문을 통해
+          for (var language_id in data_lan.data['language_id']) {
+            final language =
+                await pb.collection('language_list').getOne(language_id);
+            return_data[data.id]['language'].add(language.data['language']);
+          }
+        }
+      }
+      for (var data_dev in record_dev) {
+        if (data_dev.data['log_id'] == data.id) {
+          for (var develop_id in data_dev.data['develop_type_id']) {
+            final develop_type =
+                await pb.collection('develop_type_list').getOne(develop_id);
+            return_data[data.id]['develop_type']
+                .add(develop_type.data['develop_type']);
+          }
+        }
+      }
+
+      for (var data_like in record_like) {
+        print('비교');
+        print(data.id);
+        print(data_like.data['log_id']);
+        if (data_like.data['log_id'] == data.id) {
+          print('진입 확인');
+          return_data[data.id]['like'].add(data_like.id);
+        }
+      }
+
+      for (var data_view in record_view) {
+        print('비교');
+        print(data.id);
+        print(data_view.data['log_id']);
+        if (data_view.data['log_id'] == data.id) {
+          print('진입 확인');
+          return_data[data.id]['view'].add(data_view.id);
+        }
+      }
+      for (var data_com in record_com) {
+        if (data_com.data['log_id'] == data.id) {
+          return_data[data.id]['comment'] = [
+            {
+              'user': data_com.data['user_id'],
+              'content': data_com.data['content']
+            }
+          ];
+        }
+      }
+
+      return_data[data.id]['type'] = 'log';
+      final user = await pb.collection('users').getOne(data.data['user_id']);
+      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
+      return_data[data.id]['avatar'] = user_image;
+      return_data[data.id]['writer'] = user.data['nickname'];
+      if (data.data['type'] == '포트폴리오') {
+        return_data[data.id]['type'] = 'LOG';
+      } else {
+        return_data[data.id]['type'] = data.data['type'];
+      }
+      String image = pb.files.getUrl(data, data.data['image']).toString();
+      return_data[data.id]['image'] = image;
+      return_data[data.id]['title'] = data.data['title'];
+      return_data[data.id]['content'] = data.data['content'];
+      return_data[data.id]['update'] = data.updated;
+    }
+    print(return_data);
+    return return_data;
+  }
+
+  Future<Map<String, dynamic>> Data_Filter(
+      String text, Map<String, dynamic> condition) async {
+    Map<String, dynamic> datas = await Get_Log();
+    Map<String, dynamic> filter_data = {};
+    for (String data in datas.keys) {
+      if (condition.isNotEmpty) {
+        if ((condition['제목'] ?? false) && datas[data]['title'].contains(text)) {
+          filter_data[data] = datas[data];
+        }
+        if ((condition['내용'] ?? false) &&
+            datas[data]['content'].contains(text)) {
+          filter_data[data] = datas[data];
+        }
+        if ((condition['작성자'] ?? false) &&
+            datas[data]['writer'].contains(text)) {
+          filter_data[data] = datas[data];
+        }
+        // if ((condition['작성자'] ?? false) &&
+        //     datas[data]['comment'].contains(text)) {
+        //   filter_data[data] = datas[data];
+        // }
+        if ((condition['Log'] ?? false) && datas[data]['type'].contains(text)) {
+          filter_data[data] = datas[data];
+        }
+        if ((condition['커뮤니티'] ?? false) &&
+            datas[data]['type'].contains(text)) {
+          filter_data[data] = datas[data];
+        }
+        if ((condition['프로젝트'] ?? false) &&
+            datas[data]['type'].contains(text)) {
+          filter_data[data] = datas[data];
+        }
+        if ((condition['내 게시물'] ?? false) &&
+            datas[data]['type'].contains(text)) {
+          filter_data[data] = datas[data];
+        }
+        if (condition.containsKey('tag')) {
+          for (String tag in condition['tag']) {
+            if (datas[data]['develop_type'].contains(tag)) {
+              filter_data[data] = datas[data];
+            }
+            if (datas[data]['develop_type'].contains(tag)) {
+              filter_data[data] = datas[data];
+            }
+          }
+        }
+      } else {
+        if (datas[data]['title'].contains(text)) {
+          filter_data[data] = datas[data];
+        }
+      }
+    }
+    return filter_data;
+  }
 }

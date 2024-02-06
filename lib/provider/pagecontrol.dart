@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class Page_Controller with ChangeNotifier {
   int pagenum = 1;
+  // 온보딩 선택항목 저장
   Map<String, List<String>> select_info = {};
   Map<String, dynamic> mbti_data = {};
   Map<String, Widget> service_data = {};
@@ -10,7 +11,13 @@ class Page_Controller with ChangeNotifier {
   String language_text = '';
   List<String> period_save = [];
   String career_save = '';
-  Map<String, String> fillter = {};
+  Map<String, List<String>> filter = {
+    'type': [
+      '제목',
+    ]
+  };
+  List<String> tag_list = [];
+  Map<String, dynamic> get_data_search = {};
 
   void Next(BuildContext context) {
     pagenum++;
@@ -82,12 +89,36 @@ class Page_Controller with ChangeNotifier {
   }
 
   void Select_Fillter(String type, String text) {
-    if (fillter.containsKey(type)) {
-      fillter[type] = '';
+    if (!filter.containsKey(type)) {
+      filter[type] = [];
+      filter[type]!.add(text);
+    } else if (filter[type]!.contains(text)) {
+      filter[type]!.remove(text);
     } else {
-      fillter[type] = text;
+      filter[type]!.add(text);
     }
-    print(fillter);
+    print(filter);
+    notifyListeners();
+  }
+
+  void Search_Input_Tag(String text) {
+    tag_list.add(text);
+    notifyListeners();
+  }
+
+  void Search_Delete_Tag(String text) {
+    tag_list.remove(text);
+    notifyListeners();
+  }
+
+  void Reset_Filter() {
+    tag_list.clear();
+    filter.clear();
+    notifyListeners();
+  }
+
+  void Get_Data(Map<String, dynamic> datas) {
+    get_data_search = datas;
     notifyListeners();
   }
 }
