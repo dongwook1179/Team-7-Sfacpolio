@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/pocketbase/data.dart';
+import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 import 'package:team_7_sfacpolio/widgets/search/search_bottom.dart';
 
 class Search_Textfield extends StatefulWidget {
@@ -20,7 +23,37 @@ class _Search_TextfieldState extends State<Search_Textfield> {
       child: TextField(
         controller: search_control,
         onChanged: (text) {
-          // context.read<Page_Controller>().Input_Filter(text);
+          context.read<Page_Controller>().Input_Filter(text);
+        },
+        onEditingComplete: () async {
+          Map<String, dynamic> condition = {};
+          if (context.read<Page_Controller>().tag_list.isNotEmpty) {
+            condition['tag'] = [];
+            for (String tag in context.read<Page_Controller>().tag_list) {
+              condition['tag'].add(tag);
+            }
+          }
+          for (String type
+              in (context.read<Page_Controller>().filter['type'] ?? [])) {
+            condition[type] = true;
+          }
+          for (String catagory
+              in (context.read<Page_Controller>().filter['category'] ?? [])) {
+            condition[catagory] = true;
+          }
+          String text = context.read<Page_Controller>().search;
+          Map<String, dynamic> filter_data =
+              await PocketBaseData().Data_Filter(text, condition);
+          print('입력 정보  --------------------');
+          print(text);
+          print(condition);
+          print('입력 정보  --------------------');
+
+          print('필터 --------------------');
+          print(filter_data);
+          print('필터 --------------------');
+          context.read<Page_Controller>().Get_Data(filter_data);
+          FocusScope.of(context).unfocus();
         },
         decoration: InputDecoration(
           suffixIcon: Container(
@@ -29,12 +62,9 @@ class _Search_TextfieldState extends State<Search_Textfield> {
             height: 24,
             child: GestureDetector(
               onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Search_Bottom_Sheet();
-                  },
-                );
+                PocketBaseData().Get_Log();
+                context.read<Page_Controller>().Input_Filter('');
+                search_control.text = '';
               },
               child: SvgPicture.asset(
                 search_control.text.length > 0
