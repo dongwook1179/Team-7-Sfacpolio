@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class Page_Controller with ChangeNotifier {
   int pagenum = 1;
@@ -18,6 +18,8 @@ class Page_Controller with ChangeNotifier {
   };
   List<String> tag_list = [];
   Map<String, dynamic> get_data_search = {};
+  bool delete_state = false;
+  Map<String, dynamic> follow_data = {};
 
   void Next(BuildContext context) {
     pagenum++;
@@ -119,6 +121,34 @@ class Page_Controller with ChangeNotifier {
 
   void Get_Data(Map<String, dynamic> datas) {
     get_data_search = datas;
+    notifyListeners();
+  }
+
+  void Delete_State(bool click) {
+    delete_state = click;
+    notifyListeners();
+  }
+
+  void Get_Follow(Map<String, dynamic> data) {
+    follow_data = data;
+    notifyListeners();
+  }
+
+  void Delete_Follow(String type, String id) {
+    print('프린트 확인');
+    print(follow_data[type][0]);
+    for (int index = 0; index < follow_data[type].length; index++) {
+      if (follow_data[type][index]['id'] == id) {
+        print('삭제 이전');
+        print(follow_data[type]);
+        follow_data[type].removeAt(index);
+        print('삭제 이후');
+        print(follow_data[type]);
+        print('$index 번 인덱스 ');
+        notifyListeners();
+      }
+    }
+    print(follow_data);
     notifyListeners();
   }
 }

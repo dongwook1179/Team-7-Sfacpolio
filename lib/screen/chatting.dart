@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team_7_sfacpolio/widgets/chatting/chatting_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/chatting/chatting_body.dart';
-import 'package:team_7_sfacpolio/widgets/chatting/chatting_tapbar.dart';
+import 'package:team_7_sfacpolio/widgets/chatting/chatting_tabbar.dart';
 
 class Chatting extends StatefulWidget {
   const Chatting({super.key});
