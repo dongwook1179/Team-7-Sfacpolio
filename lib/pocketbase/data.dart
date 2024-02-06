@@ -240,4 +240,74 @@ class PocketBaseData {
     }
     return filter_data;
   }
+
+  // Future<void> Get_Follow(String user_id) async { // 해당부분 로그인 연결후 본인 id 가져오도록 설계
+  Future<Map<String, dynamic>> Get_Follow() async {
+    final record = await pb.collection('follow').getFullList();
+    String user_id = 'modeumi19950804'; //  해당부분 로그인 연결후 본인 id 가져오도록 설계
+    Map<String, dynamic> follow = {'follower': [], 'following': []};
+    for (var data in record) {
+      if (data.data['following'] == user_id) {
+        final follower_data =
+            await pb.collection('users').getOne(data.data['follower']);
+        String image = pb.files
+            .getUrl(follower_data, follower_data.data['avatar'])
+            .toString();
+        print(follower_data);
+        Map<String, dynamic> follower = {
+          'my_id': user_id,
+          'id': data.data['follower'],
+          'image': image,
+          'nickname': follower_data.data['nickname'],
+          'email': follower_data.data['email'],
+        };
+        follow['follower'].add(follower);
+      }
+
+      if (data.data['follower'] == user_id) {
+        final following_data =
+            await pb.collection('users').getOne(data.data['following']);
+        String image = pb.files
+            .getUrl(following_data, following_data.data['avatar'])
+            .toString();
+        Map<String, dynamic> follower = {
+          'my_id': user_id,
+          'id': data.data['following'],
+          'image': image,
+          'nickname': following_data.data['nickname'],
+          'email': following_data.data['email'],
+        };
+        follow['following'].add(follower);
+      }
+    }
+    print('팔로워 목록');
+    print(follow['follower']);
+    print('팔로잉 목록');
+    print(follow['following']);
+    return follow;
+  }
+
+  Future<void> Delete_Follow(
+      String type, String target_id, String performer_id) async {
+    final record = await pb.collection('follow').getFullList();
+    if (type == 'follower') {
+      for (var data in record) {
+        if (data.data['following'] == target_id &&
+            data.data['follower'] == performer_id) {
+          print('삭제 대상');
+          print(data);
+          await pb.collection('follow').delete(data.id);
+        }
+      }
+    } else if (type == 'following') {
+      for (var data in record) {
+        if (data.data['follower'] == target_id &&
+            data.data['following'] == performer_id) {
+          print('삭제 대상');
+          print(data);
+          await pb.collection('follow').delete(data.id);
+        }
+      }
+    }
+  }
 }

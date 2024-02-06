@@ -36,13 +36,14 @@ class _Language_InputState extends State<Language_Input> {
             onTap: () async {
               print('클릭');
               await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Scaffold(
-                      body: Direct_Input(),
-                      backgroundColor: Color(0xffffffff).withOpacity(0),
-                    );
-                  });
+                context: context,
+                builder: (BuildContext context) {
+                  return Scaffold(
+                    body: Direct_Input(),
+                    backgroundColor: Color(0xffffffff).withOpacity(0),
+                  );
+                },
+              );
               String text = Provider.of<Page_Controller>(context, listen: false)
                   .language_text;
               if (text != '') {
