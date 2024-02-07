@@ -90,12 +90,14 @@ class PocketBaseData {
   }
 
   Future<void> Dummy_2() async {
-    final record = await pb.collection('users').getOne(
-          'ty52e7fdm9b1sj6',
-          expand: 'relField1,relField2.subRelField',
-        );
-    print(record);
-    print(record.data['verified']);
+    final record = await pb
+        .collection('follow')
+        .getList(filter: "( following ='dhwjdgus9708010' )");
+    print(record.items);
+    for (var data in record.items) {
+      print(data.data['follower']);
+    }
+    print(record.items[0].data['following']);
   }
 
   Future<Map<String, dynamic>> Get_Log() async {
@@ -138,21 +140,13 @@ class PocketBaseData {
       }
 
       for (var data_like in record_like) {
-        print('비교');
-        print(data.id);
-        print(data_like.data['log_id']);
         if (data_like.data['log_id'] == data.id) {
-          print('진입 확인');
           return_data[data.id]['like'].add(data_like.id);
         }
       }
 
       for (var data_view in record_view) {
-        print('비교');
-        print(data.id);
-        print(data_view.data['log_id']);
         if (data_view.data['log_id'] == data.id) {
-          print('진입 확인');
           return_data[data.id]['view'].add(data_view.id);
         }
       }
@@ -183,7 +177,6 @@ class PocketBaseData {
       return_data[data.id]['content'] = data.data['content'];
       return_data[data.id]['update'] = data.updated;
     }
-    print(return_data);
     return return_data;
   }
 
@@ -281,10 +274,6 @@ class PocketBaseData {
         follow['following'].add(follower);
       }
     }
-    print('팔로워 목록');
-    print(follow['follower']);
-    print('팔로잉 목록');
-    print(follow['following']);
     return follow;
   }
 
@@ -295,8 +284,6 @@ class PocketBaseData {
       for (var data in record) {
         if (data.data['following'] == target_id &&
             data.data['follower'] == performer_id) {
-          print('삭제 대상');
-          print(data);
           await pb.collection('follow').delete(data.id);
         }
       }
@@ -304,11 +291,13 @@ class PocketBaseData {
       for (var data in record) {
         if (data.data['follower'] == target_id &&
             data.data['following'] == performer_id) {
-          print('삭제 대상');
-          print(data);
           await pb.collection('follow').delete(data.id);
         }
       }
     }
+  }
+
+  Future<void> Withdraw(String user_id) async {
+    await pb.collection('users').delete(user_id);
   }
 }

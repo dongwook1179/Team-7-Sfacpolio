@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocketbase/pocketbase.dart';
 
 class Page_Controller with ChangeNotifier {
   int pagenum = 1;
@@ -20,6 +21,7 @@ class Page_Controller with ChangeNotifier {
   Map<String, dynamic> get_data_search = {};
   bool delete_state = false;
   Map<String, dynamic> follow_data = {};
+  AuthStore authStore = AuthStore();
 
   void Next(BuildContext context) {
     pagenum++;
@@ -135,16 +137,9 @@ class Page_Controller with ChangeNotifier {
   }
 
   void Delete_Follow(String type, String id) {
-    print('프린트 확인');
-    print(follow_data[type][0]);
     for (int index = 0; index < follow_data[type].length; index++) {
       if (follow_data[type][index]['id'] == id) {
-        print('삭제 이전');
-        print(follow_data[type]);
         follow_data[type].removeAt(index);
-        print('삭제 이후');
-        print(follow_data[type]);
-        print('$index 번 인덱스 ');
         notifyListeners();
       }
     }
