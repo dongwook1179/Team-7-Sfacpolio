@@ -8,6 +8,7 @@ class User_Data with ChangeNotifier {
   void Save_Auth(RecordAuth recordAuth, AuthStore authStore) {
     auth = authStore;
     record = recordAuth;
+
     notifyListeners();
   }
 

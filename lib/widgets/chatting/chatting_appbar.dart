@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:team_7_sfacpolio/screen/search.dart';
 
 class Chatting_Appbar extends StatelessWidget implements PreferredSizeWidget {
   const Chatting_Appbar({Key? key}) : super(key: key);
@@ -23,10 +24,16 @@ class Chatting_Appbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
-        SvgPicture.asset(
-          'assets/icons/search.svg',
-          width: 24,
-          height: 24,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Search()));
+          },
+          child: SvgPicture.asset(
+            'assets/icons/search.svg',
+            width: 24,
+            height: 24,
+          ),
         ),
         SizedBox(
           width: 20,
