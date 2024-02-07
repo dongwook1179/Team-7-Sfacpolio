@@ -86,7 +86,7 @@ class _QuestionTextState extends State<QuestionText> {
               ),
               GestureDetector(
                 onTap: () async {
-                  await PocketBaseData().Dummy();
+                  await PocketBaseData().Dummy_2();
                 },
                 child: Container(
                   width: 24,
