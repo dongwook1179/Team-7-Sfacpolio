@@ -18,7 +18,7 @@ class _Search_AppbarState extends State<Search_Appbar> {
         children: [
           GestureDetector(
             onTap: () {
-              // Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: Container(
               width: 48,

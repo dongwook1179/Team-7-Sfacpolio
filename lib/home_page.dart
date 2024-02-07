@@ -4,6 +4,7 @@ import 'package:team_7_sfacpolio/log_main_page.dart';
 import 'package:team_7_sfacpolio/main_page.dart';
 import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
 import 'package:team_7_sfacpolio/screen/chatting.dart';
+import 'package:team_7_sfacpolio/screen/commuitypage.dart';
 import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,7 +32,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return LogMainPage();
       case 2:
-        return Container();
+        return CommuityPage();
       case 3:
         return Chatting();
       case 4:

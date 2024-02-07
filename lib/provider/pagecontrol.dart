@@ -22,6 +22,9 @@ class Page_Controller with ChangeNotifier {
   bool delete_state = false;
   Map<String, dynamic> follow_data = {};
   AuthStore authStore = AuthStore();
+  String recent_page = 'page_1';
+  Map<String, bool> recent_filter_list = {};
+  String filter_text = 'update';
 
   void Next(BuildContext context) {
     pagenum++;
@@ -144,6 +147,32 @@ class Page_Controller with ChangeNotifier {
       }
     }
     print(follow_data);
+    notifyListeners();
+  }
+
+  void Change_Recent_page(String page) {
+    recent_page = page;
+    notifyListeners();
+  }
+
+  void Recent_Active(String text) {
+    if (!recent_filter_list.containsKey(text)) {
+      recent_filter_list[text] = false;
+    }
+    if (text == '전체') {
+      recent_filter_list.forEach((key, value) {
+        recent_filter_list[key] = false;
+      });
+      recent_filter_list['전체'] = true;
+    } else {
+      recent_filter_list['전체'] = false;
+      recent_filter_list[text] = !recent_filter_list[text]!;
+    }
+    notifyListeners();
+  }
+
+  void Drop_Down(String text) {
+    filter_text = text;
     notifyListeners();
   }
 }

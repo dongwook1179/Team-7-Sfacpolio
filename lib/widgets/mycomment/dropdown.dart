@@ -50,8 +50,6 @@ class _DropDown extends State<DropDown> {
             });
             if (dropdownValue == '최신순') {
               context.read<Page_Controller>().Drop_Down('update');
-            } else if (dropdownValue == '조회순') {
-              context.read<Page_Controller>().Drop_Down('view_num');
             } else if (dropdownValue == '좋아요순') {
               context.read<Page_Controller>().Drop_Down('like_num');
             }
@@ -66,22 +64,6 @@ class _DropDown extends State<DropDown> {
                     alignment: Alignment.center,
                     child: Text(
                       '최신순',
-                      style: TextStyle(
-                          fontFamily: 'Pretendard', color: Colors.black),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            PopupMenuItem(
-              value: '조회순',
-              child: Center(
-                child: IntrinsicWidth(
-                  child: Container(
-                    height: 40,
-                    alignment: Alignment.center,
-                    child: Text(
-                      '조회순',
                       style: TextStyle(
                           fontFamily: 'Pretendard', color: Colors.black),
                     ),

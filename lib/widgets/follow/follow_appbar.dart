@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:team_7_sfacpolio/pocketbase/data.dart';
+import 'package:team_7_sfacpolio/screen/search.dart';
 import 'package:team_7_sfacpolio/screen/withdrawal.dart';
 
 class Follow_Appbar extends StatefulWidget {
@@ -31,15 +31,8 @@ class _Follow_AppbarState extends State<Follow_Appbar> {
         ),
         GestureDetector(
           onTap: () async {
-            // PocketBaseData().Dummy_2();
-            await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    body: Withdrawal(),
-                    backgroundColor: Color(0xffffffff).withOpacity(0),
-                  );
-                });
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Search()));
           },
           child: SvgPicture.asset(
             'assets/icons/search.svg',
