@@ -82,7 +82,6 @@ class _NextButtonState extends State<NextButton> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // print(context.read<Page_Controller>().slot_active.length);
                 context.read<Page_Controller>().Next(context);
               },
               child: Container(
@@ -154,7 +153,7 @@ class _NextButtonState extends State<NextButton> {
                 ),
                 child: Center(
                   child: Text(
-                    '다음',
+                    context.watch<Page_Controller>().pagenum == 6 ? '완료' : '다음',
                     style: TextStyle(
                       color: context.watch<Page_Controller>().pagenum == 1
                           ? (context
