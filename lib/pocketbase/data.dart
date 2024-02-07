@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:team_7_sfacpolio/screen/commuitypage.dart';
 
 class PocketBaseData {
   final pb = PocketBase('http://3.36.50.35:8090');
@@ -59,7 +60,7 @@ class PocketBaseData {
     return data_conversion;
   }
 
-  Future<Map<String, dynamic>> Dummy() async {
+  Future<Map<String, dynamic>> Commuity() async {
     final collection_data = await pb.collection('community').getFullList(
           sort: '-created',
         );
