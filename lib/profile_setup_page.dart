@@ -5,47 +5,42 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/signup_onboarding_connection_page.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class ProfileSetupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ProfileSetupPage(
-        userId: '',
-        name: '',
-      ),
+      home: _ProfileSetupPage(),
     );
   }
 }
 
-class ProfileSetupPage extends StatefulWidget {
-  final String userId;
-  final String name;
-  const ProfileSetupPage({
+class _ProfileSetupPage extends StatefulWidget {
+  const _ProfileSetupPage({
     Key? key,
-    required this.userId,
-    required this.name,
   }) : super(key: key);
 
   @override
-  State<ProfileSetupPage> createState() => _ProfileSetupPageState();
+  State<_ProfileSetupPage> createState() => _ProfileSetupPageState();
 }
 
-class _ProfileSetupPageState extends State<ProfileSetupPage> {
+class _ProfileSetupPageState extends State<_ProfileSetupPage> {
   late File _image;
-  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _nicknameController = TextEditingController();
   final pb = PocketBase('http://3.36.50.35:8090');
 
   @override
   void initState() {
     super.initState();
     _image = File(""); // 기본적으로 빈 이미지 파일을 설정합니다.
-    print('User ID from sign-up: ${widget.userId}');
+    print('User ID from sign-up: ${User_Data}');
   }
 
   Future<void> _capturePhoto() async {
@@ -71,16 +66,17 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   }
 
   Future<void> _uploadData() async {
-    print('닉네임: ${_usernameController.text}');
+    print('닉네임: ${_nicknameController.text}');
     print('아바타: ${_image.uri}');
-    print('사용자 ID: ${widget.userId}');
+    print(
+        '사용자 ID: ${Provider.of<User_Data>(context, listen: false).record.record!.id}');
 
     try {
       Dio dio = Dio();
 
       // FormData 생성
       FormData formData = FormData.fromMap({
-        'username': _usernameController.text,
+        'nickname': _nicknameController.text,
       });
 
       // 이미지 파일 업로드
@@ -93,12 +89,12 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
       // POST 요청 보내기
       Response response = await dio.patch(
-        'http://3.36.50.35:8090/api/collections/users/records/${widget.userId}',
+        'http://3.36.50.35:8090/api/collections/users/records/${Provider.of<User_Data>(context, listen: false).record.record!.id}',
         data: formData,
       );
 
       Response imageResponse = await dio.patch(
-        'http://3.36.50.35:8090/api/collections/users/records/${widget.userId}',
+        'http://3.36.50.35:8090/api/collections/users/records/${Provider.of<User_Data>(context, listen: false).record.record!.id}',
         data: imageFormData,
       );
 
@@ -112,6 +108,14 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
         print('이미지 업로드 성공!');
       } else {
         print('이미지 업로드 오류. 상태 코드: ${imageResponse.statusCode}');
+      }
+      if (response.statusCode == 200 && imageResponse.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SignupOnboardingConnectionPage(),
+          ),
+        );
       }
     } catch (e) {
       print('전부 업로드 오류: $e');
@@ -196,7 +200,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 30),
                 child: TextField(
-                    controller: _usernameController,
+                    controller: _nicknameController,
                     decoration: InputDecoration(
                       hintText: '닉네임',
                       hintStyle: TextStyle(
@@ -216,33 +220,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                     )),
               ),
               SizedBox(
-                height: 205,
-              ),
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignupOnboardingConnectionPage(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      '건너뛰기',
-                      style: TextStyle(
-                        color: Color(0xFF747474),
-                        fontSize: 12,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ),
+                height: 224,
               ),
               SizedBox(
                 height: 10,

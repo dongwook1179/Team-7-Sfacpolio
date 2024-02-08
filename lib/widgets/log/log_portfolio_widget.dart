@@ -2,7 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:team_7_sfacpolio/widgets/tag_slot.dart';
 
 class LogportfolioWidget extends StatelessWidget {
-  const LogportfolioWidget({super.key});
+  final String title;
+  final String content;
+  final AssetImage? thumbnail;
+  final AssetImage? avatar;
+  final String nickname;
+  final String? tag1;
+  final String? tag2;
+  final String? tag3;
+  final String? tag4;
+
+  const LogportfolioWidget(
+      {super.key,
+      required this.title,
+      required this.content,
+      this.thumbnail,
+      required this.avatar,
+      required this.nickname,
+      this.tag1,
+      this.tag2,
+      this.tag3,
+      this.tag4});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +36,7 @@ class LogportfolioWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '2023년 개발자 포폴',
+                title,
                 style: TextStyle(
                   color: Color(0xFF020202),
                   fontSize: 14,
@@ -27,20 +47,38 @@ class LogportfolioWidget extends StatelessWidget {
               SizedBox(
                 height: 4,
               ),
-              SizedBox(
-                width: 232,
-                height: 37,
-                child: Text(
-                  overflow: TextOverflow.ellipsis,
-                  '이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일 부 차이가 있을 수 있습니다. 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일부 차이가 있을 수 있습니다.',
-                  style: TextStyle(
-                    color: Color(0xFF4C4C4C),
-                    fontSize: 12,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
+              if (thumbnail != null)
+                SizedBox(
+                  width: 232,
+                  height: 37,
+                  child: Text(
+                    content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Color(0xFF4C4C4C),
+                      fontSize: 12,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
-              ),
+              if (thumbnail == null)
+                SizedBox(
+                  width: 328,
+                  height: 37,
+                  child: Text(
+                    content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Color(0xFF4C4C4C),
+                      fontSize: 12,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
               SizedBox(
                 height: 8,
               ),
@@ -52,13 +90,16 @@ class LogportfolioWidget extends StatelessWidget {
                     decoration: ShapeDecoration(
                       color: Colors.grey,
                       shape: OvalBorder(),
+                      image: avatar != null
+                          ? DecorationImage(image: avatar!, fit: BoxFit.cover)
+                          : null,
                     ),
                   ),
                   SizedBox(
                     width: 12,
                   ),
                   Text(
-                    'qwerd4578',
+                    nickname,
                     style: TextStyle(
                       color: Color(0xFF4C4C4C),
                       fontSize: 12,
@@ -75,21 +116,33 @@ class LogportfolioWidget extends StatelessWidget {
               Container(
                 height: 20,
                 child: Row(
-                  children: [Tag_Slot("백엔드"), Tag_Slot("코딩"), Tag_Slot("JAVA")],
+                  children: [
+                    if (tag1 != null) Tag_Slot(tag1!),
+                    if (tag2 != null) Tag_Slot(tag2!),
+                    if (tag3 != null) Tag_Slot(tag3!),
+                    if (tag4 != null) Tag_Slot(tag4!),
+                  ],
                 ),
               ),
             ],
           ),
-          Container(
-            width: 72,
-            height: 72,
-            clipBehavior: Clip.antiAlias,
-            decoration: ShapeDecoration(
-              color: Colors.grey,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+          if (thumbnail != null)
+            SizedBox(
+              width: 24,
             ),
-          )
+          if (thumbnail != null)
+            Container(
+              width: 72,
+              height: 72,
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                color: Colors.grey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                image: DecorationImage(image: thumbnail!),
+              ),
+            ),
         ],
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:team_7_sfacpolio/log_write_page.dart';
@@ -39,7 +41,73 @@ class _LogMainPageState extends State<LogMainPage>
   int page_currentPage = 0;
   int _currentPage = 0;
   int _itemCount = 5;
-
+  List<LogCardWidget> logCardDataList = [
+    LogCardWidget(
+      backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
+      tag1: 'JAVA',
+      tag2: 'Python',
+      tag3: '',
+      title: '개발자가 되기 위한 5일의 기록',
+      logdate: DateTime.timestamp(),
+      avatar: AssetImage("assets/images/log/log_card_avatar.png"),
+      nickname: 'Master0332',
+      view: 22,
+      like: 999,
+      comment: 550,
+    ),
+    LogCardWidget(
+      backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
+      tag1: 'JAVA',
+      tag2: 'Python',
+      tag3: '',
+      title: '개발자가 되기 위한 5일의 기록',
+      logdate: DateTime.timestamp(),
+      avatar: AssetImage("assets/images/log/log_card_avatar.png"),
+      nickname: 'Master0332',
+      view: 22,
+      like: 999,
+      comment: 550,
+    ),
+    LogCardWidget(
+      backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
+      tag1: 'JAVA',
+      tag2: 'Python',
+      tag3: '',
+      title: '개발자가 되기 위한 5일의 기록',
+      logdate: DateTime.timestamp(),
+      avatar: AssetImage("assets/images/log/log_card_avatar.png"),
+      nickname: 'Master0332',
+      view: 22,
+      like: 999,
+      comment: 550,
+    ),
+    LogCardWidget(
+      backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
+      tag1: 'JAVA',
+      tag2: 'Python',
+      tag3: '',
+      title: '개발자가 되기 위한 5일의 기록',
+      logdate: DateTime.timestamp(),
+      avatar: AssetImage("assets/images/log/log_card_avatar.png"),
+      nickname: 'Master0332',
+      view: 22,
+      like: 999,
+      comment: 550,
+    ),
+    LogCardWidget(
+      backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
+      tag1: 'JAVA',
+      tag2: 'Python',
+      tag3: '',
+      title: '개발자가 되기 위한 5일의 기록',
+      logdate: DateTime.timestamp(),
+      avatar: AssetImage("assets/images/log/log_card_avatar.png"),
+      nickname: 'Master0332',
+      view: 22,
+      like: 999,
+      comment: 550,
+    ),
+  ];
   @override
   void initState() {
     super.initState();
@@ -55,7 +123,7 @@ class _LogMainPageState extends State<LogMainPage>
     return MaterialApp(
       home: Scaffold(
         floatingActionButton: Container(
-          margin: EdgeInsets.only(bottom: 75.0),
+          margin: EdgeInsets.only(bottom: 48.0),
           child: FloatingActionButton(
             onPressed: () {
               Navigator.push(
@@ -86,6 +154,7 @@ class _LogMainPageState extends State<LogMainPage>
           ),
         ),
         appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
           title: Text(
             'LOG',
             style: TextStyle(
@@ -114,7 +183,74 @@ class _LogMainPageState extends State<LogMainPage>
                 Container(
                   width: 328,
                   height: 142,
-                  color: Colors.grey,
+                  padding: EdgeInsets.only(top: 20, left: 16),
+                  decoration: ShapeDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/log/log_card.png"),
+                        fit: BoxFit.cover),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 242,
+                        child: SizedBox(
+                          width: 242,
+                          child: Text(
+                            '오늘의 로그를 기록해 사람들과\n소통해 보세요!',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          height: 32,
+                          width: 113,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(width: 1, color: Colors.white),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/pencil-alt.svg",
+                                color: Colors.white,
+                                width: 20,
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                '로그 작성하기',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 28,
@@ -150,13 +286,25 @@ class _LogMainPageState extends State<LogMainPage>
                   height: 20,
                 ),
                 Container(
-                  height: 300,
+                  height: 291,
                   child: PageView.builder(
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,
-                    itemCount: _itemCount,
+                    itemCount: logCardDataList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return LogCardWidget();
+                      LogCardWidget logcardWidget = logCardDataList[index];
+                      return LogCardWidget(
+                          backgroundimage: logcardWidget.backgroundimage,
+                          title: logcardWidget.title,
+                          tag1: logcardWidget.tag1,
+                          tag2: logcardWidget.tag2,
+                          tag3: logcardWidget.tag3,
+                          avatar: logcardWidget.avatar,
+                          logdate: logcardWidget.logdate,
+                          nickname: logcardWidget.nickname,
+                          view: logcardWidget.view,
+                          like: logcardWidget.like,
+                          comment: logcardWidget.comment);
                     },
                   ),
                 ),
@@ -236,7 +384,7 @@ class _LogMainPageState extends State<LogMainPage>
                   height: 16,
                 ),
                 Container(
-                  height: 725,
+                  height: 681,
                   child: TabBarView(
                     controller: tabController,
                     children: [
@@ -292,13 +440,45 @@ class _LogMainPageState extends State<LogMainPage>
                                     )
                                   ],
                                 ),
-                                LogportfolioWidget(),
+                                LogportfolioWidget(
+                                  title: '2023년 개발자의 회고',
+                                  content:
+                                      '로그 내용 적는 부분 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일 부 차이가 있을 수 있습니다. 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일부 차이가 있을 수 있습니다.',
+                                  avatar: AssetImage(
+                                      "assets/images/log/log_card_avatar.png"),
+                                  nickname: 'qwerd4578',
+                                  tag1: "백엔드",
+                                  tag2: "코딩",
+                                  tag3: "JAVA",
+                                ),
                                 Divider(height: 1, color: Color(0xFFE6E6E6)),
-                                LogportfolioWidget(),
+                                LogportfolioWidget(
+                                  title: '2023년 AI 트랜드',
+                                  content:
+                                      'AI가 점점 발전하고 있는 요즘 시대, 2023년의 AI는 어떻게 발전하고 있을까요? 요즘 시대의 AI는 하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일 부 차이가 있을 수 있습니다. 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일부 차이가 있을 수 있습니다.',
+                                  avatar: null,
+                                  thumbnail: AssetImage(
+                                      "assets/images/main/img_log.png"),
+                                  nickname: 'sfacdev',
+                                  tag1: "프론트엔드",
+                                  tag2: "HTML",
+                                  tag3: "CSS",
+                                  tag4: "JavaScript",
+                                ),
                                 Divider(height: 1, color: Color(0xFFE6E6E6)),
-                                LogportfolioWidget(),
+                                LogportfolioWidget(
+                                  title: '',
+                                  content: '',
+                                  avatar: null,
+                                  nickname: '',
+                                ),
                                 Divider(height: 1, color: Color(0xFFE6E6E6)),
-                                LogportfolioWidget(),
+                                LogportfolioWidget(
+                                  title: '',
+                                  content: '',
+                                  avatar: null,
+                                  nickname: '',
+                                ),
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 44),
@@ -435,4 +615,16 @@ class DotsIndicator extends StatelessWidget {
       }),
     );
   }
+}
+
+class CardData {
+  final AssetImage backgroundimage;
+  final String? title;
+  final String? subtitle;
+
+  CardData({
+    this.title,
+    this.subtitle,
+    required this.backgroundimage,
+  });
 }
