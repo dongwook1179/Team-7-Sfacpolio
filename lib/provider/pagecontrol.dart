@@ -25,6 +25,8 @@ class Page_Controller with ChangeNotifier {
   String recent_page = 'page_1';
   Map<String, bool> recent_filter_list = {};
   String filter_text = 'update';
+  bool post_delete_active = false;
+  List<String> post_delete_select = [];
 
   void Next(BuildContext context) {
     pagenum++;
@@ -173,6 +175,28 @@ class Page_Controller with ChangeNotifier {
 
   void Drop_Down(String text) {
     filter_text = text;
+    notifyListeners();
+  }
+
+  void Post_Delete_Active() {
+    post_delete_active = !post_delete_active;
+    notifyListeners();
+  }
+
+  void Post_Delete_Select(dynamic data) {
+    if (data.runtimeType == List<String>) {
+      if (data.length == post_delete_select.length) {
+        post_delete_select = [];
+      } else {
+        post_delete_select = data;
+      }
+    } else {
+      if (post_delete_select.contains(data)) {
+        post_delete_select.remove(data);
+      } else if (data.runtimeType == String) {
+        post_delete_select.add(data);
+      }
+    }
     notifyListeners();
   }
 }

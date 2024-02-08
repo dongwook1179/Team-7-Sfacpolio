@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:team_7_sfacpolio/screen/commuitypage.dart';
 
 class PocketBaseData {
   final pb = PocketBase('http://3.36.50.35:8090');
@@ -165,23 +164,18 @@ class PocketBaseData {
       return_data[data.id]['view_num'] = return_data[data.id]['view'].length;
       return_data[data.id]['like_num'] = return_data[data.id]['like'].length;
       return_data[data.id]['id'] = data.id;
-      return_data[data.id]['type'] = 'log';
+      return_data[data.id]['type'] = 'Log';
       final user = await pb.collection('users').getOne(data.data['user_id']);
       String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
       return_data[data.id]['avatar'] = user_image;
       return_data[data.id]['writer'] = user.data['nickname'];
-      if (data.data['type'] == '포트폴리오') {
-        return_data[data.id]['type'] = 'LOG';
-      } else {
-        return_data[data.id]['type'] = data.data['type'];
-      }
+
       String image = pb.files.getUrl(data, data.data['image']).toString();
       return_data[data.id]['image'] = image;
       return_data[data.id]['title'] = data.data['title'];
       return_data[data.id]['content'] = data.data['content'];
       return_data[data.id]['update'] = data.updated;
     }
-    print(return_data);
     return return_data;
   }
 
@@ -441,7 +435,6 @@ class PocketBaseData {
       final like = await pb
           .collection('community_comment_like')
           .getList(filter: "( comment_id ='${data.id}' )");
-      print('좋아요 확인 : ${like.items}');
 
       Map<String, dynamic> datas = {
         'id': data.id,
@@ -470,8 +463,186 @@ class PocketBaseData {
       comment[data.id] = datas;
     }
 
-    print('하나 확인 ${comment}');
-    print(comment.length);
     return comment;
+  }
+
+  Future<Map<String, dynamic>> Get_MyPost() async {
+    Map<String, dynamic> datas = {};
+    final community = await pb
+        .collection('community')
+        .getList(filter: "( user_id ='modeumi19950804' )");
+    final log = await pb
+        .collection('log')
+        .getList(filter: "( user_id ='modeumi19950804' )");
+    final project = await pb
+        .collection('project')
+        .getList(filter: "( user_id ='modeumi19950804' )");
+
+    for (var data in community.items) {
+      if (!datas.containsKey('community')) {
+        datas['community'] = [];
+      }
+      Map<String, dynamic> information = await Post_information(data);
+      for (String key in information.keys) {
+        data.data[key] = information[key];
+      }
+      datas['community'].add(data);
+      // print('커뮤니티 정보확인');
+      // print(data);
+    }
+
+    for (var data in log.items) {
+      if (!datas.containsKey('log')) {
+        datas['log'] = [];
+      }
+      Map<String, dynamic> information = await Post_information(data);
+      for (String key in information.keys) {
+        data.data[key] = information[key];
+      }
+      datas['log'].add(data);
+      // print('로그 정보확인');
+      // print(data);
+    }
+
+    for (var data in project.items) {
+      if (!datas.containsKey('project')) {
+        datas['project'] = [];
+      }
+      Map<String, dynamic> information = await Project_information(data);
+      for (String key in information.keys) {
+        data.data[key] = information[key];
+      }
+      datas['project'].add(data);
+      print('프로젝트 정보확인');
+      print(data);
+    }
+    return datas;
+  }
+
+  Future<Map<String, dynamic>> Project_information(
+      RecordModel recordModel) async {
+    Map<String, dynamic> project_information = {};
+    List<String> develop_list = [];
+    List<String> language_list = [];
+
+    final develop_type = await pb
+        .collection('project_develop_type')
+        .getList(filter: "( project_id ='${recordModel.id}' )");
+    for (var data in develop_type.items) {
+      for (String id in data.data['develop_type_id']) {
+        final develop_types =
+            await pb.collection('develop_type_list').getOne(id);
+        develop_list.add(develop_types.data['develop_type']);
+      }
+    }
+    project_information['develop_type'] = develop_list;
+
+    final language = await pb
+        .collection('project_language')
+        .getList(filter: "( project_id ='${recordModel.id}' )");
+    for (var data in language.items) {
+      for (String id in data.data['language_id']) {
+        final languages = await pb.collection('language_list').getOne(id);
+        language_list.add(languages.data['language']);
+      }
+    }
+
+    project_information['language'] = language_list;
+
+    final users = await pb
+        .collection('users')
+        .getList(filter: "( id ='${recordModel.data['user_id']}' )");
+    for (var data in users.items) {
+      project_information['nickname'] = data.data['nickname'];
+      project_information['email'] = data.data['email'];
+      project_information['user_id'] = data.id;
+      final avatar_url = pb.files.getUrl(data, data.data['avatar']).toString();
+      project_information['avatar'] = avatar_url;
+    }
+
+    return project_information;
+  }
+
+  Future<Map<String, dynamic>> Post_information(RecordModel recordModel) async {
+    String collectionname = recordModel.collectionName;
+    String recordid = recordModel.id;
+    String userid = recordModel.data['user_id'];
+    List<dynamic> recomment_list = [];
+    List<dynamic> develop_list = [];
+    List<dynamic> language_list = [];
+    List<String> image_list = [];
+
+    Map<String, dynamic> post_information = {};
+
+    final comment = await pb
+        .collection('${collectionname}_comment')
+        .getList(filter: "( ${collectionname}_id ='${recordid}' )");
+    for (var item in comment.items) {
+      final recomment = await pb
+          .collection('${collectionname}_recomment')
+          .getList(filter: "( comment_id = '${item.id}' )");
+      for (var item2 in recomment.items) {
+        recomment_list.add(item2);
+      }
+    }
+    final like = await pb
+        .collection('${collectionname}_like')
+        .getList(filter: "( ${collectionname}_id ='${recordid}' )");
+    final view = await pb
+        .collection('${collectionname}_like')
+        .getList(filter: "( ${collectionname}_id ='${recordid}' )");
+
+    final develop_type = await pb
+        .collection('${collectionname}_develop_type')
+        .getList(filter: "( ${collectionname}_id ='${recordid}' )");
+
+    for (var data in develop_type.items) {
+      for (String id in data.data['develop_type_id']) {
+        final develop_types =
+            await pb.collection('develop_type_list').getOne(id);
+        develop_list.add(develop_types.data['develop_type']);
+      }
+    }
+
+    final language = await pb
+        .collection('${collectionname}_language')
+        .getList(filter: "( ${collectionname}_id ='${recordid}' )");
+
+    for (var data in language.items) {
+      for (String id in data.data['language_id']) {
+        final languages = await pb.collection('language_list').getOne(id);
+        language_list.add(languages.data['language']);
+      }
+    }
+
+    final users =
+        await pb.collection('users').getList(filter: "( id ='${userid}' )");
+    for (var data in users.items) {
+      post_information['nickname'] = data.data['nickname'];
+      post_information['email'] = data.data['email'];
+      post_information['user_id'] = data.id;
+      final avatar_url = pb.files.getUrl(data, data.data['avatar']).toString();
+      post_information['avatar'] = avatar_url;
+    }
+    if (recordModel.data['image'].runtimeType == List<dynamic>) {
+      for (var image in recordModel.data['image']) {
+        final image_url = pb.files.getUrl(recordModel, image).toString();
+        image_list.add(image_url);
+        post_information['image'] = image_list;
+      }
+    } else {
+      final image_url =
+          pb.files.getUrl(recordModel, recordModel.data['image']).toString();
+      post_information['image'] = image_url;
+    }
+
+    post_information['develop_type'] = develop_list;
+    post_information['language'] = language_list;
+    post_information['comment'] = comment.items;
+    post_information['recomment'] = recomment_list;
+    post_information['like'] = like.items;
+    post_information['view'] = view.items;
+
+    return post_information;
   }
 }
