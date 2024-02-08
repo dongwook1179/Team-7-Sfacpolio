@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/mycomment/mycomment_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/mycomment/mycomment_body.dart';
 import 'package:team_7_sfacpolio/widgets/mycomment/mycomment_tabbar.dart';
@@ -23,6 +24,7 @@ class _MyCommentState extends State<MyComment> {
           children: [MyComment_Appbar(), MyComment_Tabbar(), MyComment_Body()],
         ),
       ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

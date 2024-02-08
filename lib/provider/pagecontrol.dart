@@ -30,10 +30,9 @@ class Page_Controller with ChangeNotifier {
 
   void Next(BuildContext context) {
     pagenum++;
-    if (pagenum == 7) {
-      pagenum = 1;
-      // Navigator.push(context, CupertinoPageRoute(builder: (context)=> ));
-    }
+    // if (pagenum == 7) {
+    //   pagenum = 1;
+    // }
     notifyListeners();
   }
 

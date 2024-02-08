@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:team_7_sfacpolio/widgets/dropdown.dart';
+import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/recent/recent_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/recent/recent_body.dart';
 import 'package:team_7_sfacpolio/widgets/recent/recent_tabbar.dart';
-import 'package:team_7_sfacpolio/widgets/recent/recent_tabbar_de.dart';
-import 'package:team_7_sfacpolio/widgets/recent/recent_category.dart';
 
 class Recent extends StatefulWidget {
   const Recent({super.key});
@@ -42,6 +40,7 @@ class _RecentState extends State<Recent> {
               ),
             ],
           ),
+          bottomNavigationBar: BottomNavBar(),
         ),
       ),
     ));

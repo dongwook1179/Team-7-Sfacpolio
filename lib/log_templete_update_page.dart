@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:team_7_sfacpolio/widgets/log/log_career_widget.dart';
+import 'package:team_7_sfacpolio/widgets/log/log_career_modal_widget.dart';
 
 void main() {
   runApp(MyApp());

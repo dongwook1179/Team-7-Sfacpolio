@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/follow/follow_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/follow/follow_body.dart';
 import 'package:team_7_sfacpolio/widgets/follow/follow_tabbar.dart';
@@ -60,6 +61,7 @@ class _FollowState extends State<Follow> {
                     ),
                   ],
                 ),
+                bottomNavigationBar: BottomNavBar(),
               ),
             ),
           )

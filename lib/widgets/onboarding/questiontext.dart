@@ -84,16 +84,6 @@ class _QuestionTextState extends State<QuestionText> {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () async {
-                  await PocketBaseData().Dummy_2();
-                },
-                child: Container(
-                  width: 24,
-                  height: 24,
-                  child: SvgPicture.asset('assets/icons/x.svg'),
-                ),
-              )
             ],
           ),
           SizedBox(

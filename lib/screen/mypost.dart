@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
+import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/mypost/mypost_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/mypost/mypost_body.dart';
 import 'package:team_7_sfacpolio/widgets/mypost/mypost_tabbar.dart';
@@ -34,41 +35,41 @@ class _MyPostState extends State<MyPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: page_load
-            ? Container(
-                width: 360,
-                height: 740,
-                padding:
-                    EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                decoration: BoxDecoration(color: Color(0xfffffffff)),
-                child: DefaultTabController(
-                  length: 3,
-                  child: Scaffold(
-                    appBar: PreferredSize(
-                      preferredSize: Size.fromHeight(84),
-                      child: AppBar(
-                        title: MyPost_Appbar(),
-                        bottom: MyPost_Tabbar(),
-                      ),
-                    ),
-                    body: TabBarView(
-                      children: [
-                        Container(
-                          child: MyPost_Body('log', (data['log'] ?? [])),
-                        ),
-                        Container(
-                          child: MyPost_Body(
-                              'community', (data['community'] ?? [])),
-                        ),
-                        Container(
-                          child:
-                              MyPost_Body('project', (data['project'] ?? [])),
-                        ),
-                      ],
+      body: page_load
+          ? Container(
+              width: 360,
+              height: 740,
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+              decoration: BoxDecoration(color: Color(0xfffffffff)),
+              child: DefaultTabController(
+                length: 3,
+                child: Scaffold(
+                  appBar: PreferredSize(
+                    preferredSize: Size.fromHeight(84),
+                    child: AppBar(
+                      title: MyPost_Appbar(),
+                      bottom: MyPost_Tabbar(),
                     ),
                   ),
+                  body: TabBarView(
+                    children: [
+                      Container(
+                        child: MyPost_Body('log', (data['log'] ?? [])),
+                      ),
+                      Container(
+                        child:
+                            MyPost_Body('community', (data['community'] ?? [])),
+                      ),
+                      Container(
+                        child: MyPost_Body('project', (data['project'] ?? [])),
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            : Container());
+              ),
+            )
+          : Container(),
+      bottomNavigationBar: BottomNavBar(),
+    );
   }
 }
