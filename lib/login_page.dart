@@ -51,6 +51,7 @@ class _LoginPageState extends State<_LoginPage> {
             idController.text,
             passwordController.text,
           );
+
       print('로그인 성공!');
       print('토큰111: ${pb.authStore}');
       print('토큰: ${pb.authStore.token}');

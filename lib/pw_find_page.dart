@@ -136,7 +136,7 @@ class _PwFindPageState extends State<PwFindPage> {
                           print('${emailController.text}');
                           await pb
                               .collection('users')
-                              .requestVerification(email);
+                              .requestPasswordReset(email);
                         } catch (e) {
                           print('Error sending verification request: $e');
                         }

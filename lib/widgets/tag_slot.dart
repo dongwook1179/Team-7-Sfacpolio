@@ -21,15 +21,16 @@ class _Tag_SlotState extends State<Tag_Slot> {
           borderRadius: BorderRadius.circular(6),
         ),
         child: Center(
-            child: Text(
-          widget.text,
-          style: TextStyle(
-            color: Color(0xFF0059FF),
-            fontSize: 11,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w500,
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              color: Color(0xFF0059FF),
+              fontSize: 11,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

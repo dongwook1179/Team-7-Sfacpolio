@@ -1,8 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:team_7_sfacpolio/widgets/tag_slot.dart';
 
 class LogCardWidget extends StatelessWidget {
+  final AssetImage backgroundimage;
+  final String? tag1;
+  final String? tag2;
+  final String? tag3;
+  final String title;
+  final DateTime logdate;
+  final AssetImage? avatar;
+  final String nickname;
+  final int view;
+  final int like;
+  final int comment;
+
+  const LogCardWidget(
+      {super.key,
+      required this.backgroundimage,
+      this.tag1,
+      this.tag2,
+      this.tag3,
+      required this.title,
+      required this.logdate,
+      this.avatar,
+      required this.nickname,
+      required this.view,
+      required this.like,
+      required this.comment});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,6 +47,7 @@ class LogCardWidget extends StatelessWidget {
             alignment: Alignment.topLeft,
             decoration: ShapeDecoration(
               color: Colors.grey,
+              image: DecorationImage(image: backgroundimage, fit: BoxFit.cover),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8),
@@ -31,11 +57,71 @@ class LogCardWidget extends StatelessWidget {
             ),
             child: Container(
               margin: EdgeInsets.only(left: 12, top: 12),
-              child: Wrap(
-                direction: Axis.horizontal,
+              child: Row(
                 children: [
-                  Tag_Slot("JAVA"),
-                  Tag_Slot("Python"),
+                  if (tag1 != "")
+                    Container(
+                      margin: EdgeInsets.only(right: 4),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE5EEFF),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Center(
+                        child: Text(
+                          tag1!,
+                          style: TextStyle(
+                            color: Color(0xFF0059FF),
+                            fontSize: 10.3,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (tag2 != "")
+                    Container(
+                      margin: EdgeInsets.only(right: 4),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE5EEFF),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Center(
+                        child: Text(
+                          tag2!,
+                          style: TextStyle(
+                            color: Color(0xFF0059FF),
+                            fontSize: 10.3,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (tag3 != "")
+                    Container(
+                      margin: EdgeInsets.only(right: 4),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE5EEFF),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Center(
+                        child: Text(
+                          tag3!,
+                          style: TextStyle(
+                            color: Color(0xFF0059FF),
+                            fontSize: 10.3,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -48,7 +134,7 @@ class LogCardWidget extends StatelessWidget {
                 SizedBox(
                   width: 296,
                   child: Text(
-                    '개발자가 되기 위한 5일의 기록',
+                    title,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -61,7 +147,7 @@ class LogCardWidget extends StatelessWidget {
                   height: 6,
                 ),
                 Text(
-                  '2024.01.20',
+                  "${logdate.year}.${logdate.month}.${logdate.day}",
                   style: TextStyle(
                     color: Color(0xFF7F7F7F),
                     fontSize: 11,
@@ -81,19 +167,20 @@ class LogCardWidget extends StatelessWidget {
                         Container(
                           width: 24,
                           height: 24,
-                          clipBehavior: Clip.antiAlias,
                           decoration: ShapeDecoration(
                             color: Colors.grey,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(34.29),
-                            ),
+                            shape: OvalBorder(),
+                            image: avatar != null
+                                ? DecorationImage(
+                                    image: avatar!, fit: BoxFit.cover)
+                                : null,
                           ),
                         ),
                         SizedBox(
                           width: 6,
                         ),
                         Text(
-                          'Master0332',
+                          nickname,
                           style: TextStyle(
                             color: Color(0xFF020202),
                             fontSize: 12,
@@ -115,7 +202,7 @@ class LogCardWidget extends StatelessWidget {
                           width: 2,
                         ),
                         Text(
-                          '2.7k',
+                          view.toString(),
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             color: Color(0xFF7F7F7F),
@@ -137,7 +224,7 @@ class LogCardWidget extends StatelessWidget {
                           width: 2,
                         ),
                         Text(
-                          '999+',
+                          like.toString(),
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             color: Color(0xFF7F7F7F),
@@ -159,7 +246,7 @@ class LogCardWidget extends StatelessWidget {
                           width: 2,
                         ),
                         Text(
-                          '220',
+                          comment.toString(),
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             color: Color(0xFF7F7F7F),

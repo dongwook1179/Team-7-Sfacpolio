@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:team_7_sfacpolio/home_page.dart';
+import 'package:team_7_sfacpolio/screen/onboarding.dart';
 
 void main() {
   runApp(MyApp());
@@ -82,12 +84,12 @@ class SignupOnboardingConnectionPage extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 30),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => (),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Onboarding(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(10),
@@ -120,12 +122,12 @@ class SignupOnboardingConnectionPage extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 30),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => (),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,

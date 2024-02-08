@@ -1,12 +1,12 @@
-import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/login_page.dart';
 import 'package:team_7_sfacpolio/privacy_policy_page.dart';
 import 'package:team_7_sfacpolio/profile_setup_page.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,8 +16,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SignUpPage(),
+    return ChangeNotifierProvider(
+      create: (context) => User_Data(),
+      child: MaterialApp(
+        home: SignUpPage(),
+      ),
     );
   }
 }
@@ -152,42 +155,36 @@ class _SignUpPageState extends State<SignUpPage> {
   // Function to handle the sign-up button press
   Future<void> handleSignUp() async {
     try {
-      // Check if password and confirm password match
       if (passwordController.text != PasswordconfirmController.text) {
-        // Passwords do not match
         print('Passwords do not match.');
-        return;
-      }
-      final updaterecord = await pb.collection('users').getOne(
-            record.id,
-          );
-      print(updaterecord.data['verified']);
-
-      if (updaterecord.data['verified'] == false) {
-        print('verified가 false임');
         return;
       }
 
       final body = <String, dynamic>{
         "name": nameController.text,
+        "email": emailController.text,
         "password": passwordController.text,
         "passwordConfirm": PasswordconfirmController.text,
-        "oldPassword": 1234567891,
+        //"verified": true,
+        "emailVisibility": true,
       };
 
-      print("record: ${updaterecord}");
-      print(body);
-      final updateRecord =
-          await pb.collection('users').update(record.id, body: body);
+      print("record: ${body}");
+      final record = await pb.collection('users').create(body: body);
       print('Sign-up successful!');
-      print('User ID: ${updateRecord}');
+      print('User ID: ${record}');
+      final authData = await pb.collection('users').authWithPassword(
+            emailController.text,
+            passwordController.text,
+          );
+
+      print("로그인 : ${authData}");
+      Provider.of<User_Data>(context, listen: false)
+          .Save_Auth(authData, pb.authStore);
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProfileSetupPage(
-            userId: updateRecord.id,
-            name: nameController.text,
-          ),
+          builder: (context) => ProfileSetupPage(),
         ),
       );
     } catch (e) {
@@ -197,663 +194,669 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFF8F8F9),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        clipBehavior: Clip.antiAlias,
-        backgroundColor: Color(0xFFF8F8F9),
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  handleEmailDelete();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
+    return ChangeNotifierProvider(
+      create: (context) => User_Data(),
+      child: MaterialApp(
+        home: Scaffold(
+          backgroundColor: Color(0xFFF8F8F9),
+          appBar: AppBar(
+            surfaceTintColor: Color(0xFFF8F8F9),
+            automaticallyImplyLeading: false,
+            clipBehavior: Clip.antiAlias,
+            backgroundColor: Color(0xFFF8F8F9),
+            title: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      handleEmailDelete();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                      size: 20,
                     ),
-                  );
-                },
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black,
-                  size: 20,
-                ),
+                  ),
+                  SizedBox(
+                    width: 100,
+                  ),
+                  Text(
+                    '회원가입',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                width: 100,
-              ),
-              Text(
-                '회원가입',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 24,
-              ),
-              Text(
-                "이름",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  hintText: '이름',
-                  hintStyle: TextStyle(
-                    color: Color(0xFFB3B3B3),
-                    fontSize: 14,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 24,
                   ),
-                  contentPadding:
-                      EdgeInsets.only(left: 12, top: 14, bottom: 10),
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 11,
-              ),
-              Text(
-                "이메일",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Container(
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: isEmailValid
-                        ? BorderSide.none
-                        : BorderSide(color: Colors.red, width: 1),
-                  ),
-                ),
-                child: TextField(
-                  onTap: () {
-                    setState(() {
-                      if (!isEmailValid) {
-                        isEmailValid = true;
-                      }
-                    });
-                  },
-                  controller: emailController,
-                  focusNode: emailFocusNode,
-                  enableInteractiveSelection: false,
-                  style: TextStyle(
-                    color: isEmailValid ? Color(0xFF020202) : Colors.red,
-                    fontSize: 14,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'sfaclog@gmail.com',
-                    hintStyle: TextStyle(
-                      color: Color(0xFFB3B3B3),
+                  Text(
+                    "이름",
+                    style: TextStyle(
+                      color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w400,
                     ),
-                    contentPadding:
-                        EdgeInsets.only(left: 12, top: 14, bottom: 10),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: Container(
-                      width: 64,
-                      height: 32,
-                      margin: EdgeInsets.only(top: 6, bottom: 6, right: 4),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 9, vertical: 4),
-                      decoration: ShapeDecoration(
-                        color: Color(0xFF0059FF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      hintText: '이름',
+                      hintStyle: TextStyle(
+                        color: Color(0xFFB3B3B3),
+                        fontSize: 14,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
                       ),
-                      child: GestureDetector(
-                        onTap: () {
-                          print("되냐");
-                          handleSendEmail();
-                        },
-                        child: Center(
-                          child: Text(
-                            '인증요청',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w700,
+                      contentPadding:
+                          EdgeInsets.only(left: 12, top: 14, bottom: 10),
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 11,
+                  ),
+                  Text(
+                    "이메일",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: isEmailValid
+                            ? BorderSide.none
+                            : BorderSide(color: Colors.red, width: 1),
+                      ),
+                    ),
+                    child: TextField(
+                      onTap: () {
+                        setState(() {
+                          if (!isEmailValid) {
+                            isEmailValid = true;
+                          }
+                        });
+                      },
+                      controller: emailController,
+                      focusNode: emailFocusNode,
+                      enableInteractiveSelection: false,
+                      style: TextStyle(
+                        color: isEmailValid ? Color(0xFF020202) : Colors.red,
+                        fontSize: 14,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'sfaclog@gmail.com',
+                        hintStyle: TextStyle(
+                          color: Color(0xFFB3B3B3),
+                          fontSize: 14,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        contentPadding:
+                            EdgeInsets.only(left: 12, top: 14, bottom: 10),
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: Container(
+                          width: 64,
+                          height: 32,
+                          margin: EdgeInsets.only(top: 6, bottom: 6, right: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 9, vertical: 4),
+                          decoration: ShapeDecoration(
+                            color: Color(0xFF0059FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              print("되냐");
+                              handleSendEmail();
+                            },
+                            child: Center(
+                              child: Text(
+                                '인증요청',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              TextField(
-                controller: verificationCodeController,
-                decoration: InputDecoration(
-                  hintText: '인증번호 입력',
-                  hintStyle: TextStyle(
-                    color: Color(0xFFB3B3B3),
-                    fontSize: 14,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
+                  SizedBox(
+                    height: 6,
                   ),
-                  contentPadding:
-                      EdgeInsets.only(left: 12, top: 14, bottom: 10),
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    if (!isVerificationCodeValid) {
-                      isVerificationCodeValid = true;
-                    }
-                  });
-                },
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              if (!isEmailValid)
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    '잘못된 이메일 형식입니다. 다시 입력해주세요.',
-                    style: TextStyle(
-                      color: Color(0xFFFF0000),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
+                  TextField(
+                    controller: verificationCodeController,
+                    decoration: InputDecoration(
+                      hintText: '인증번호 입력',
+                      hintStyle: TextStyle(
+                        color: Color(0xFFB3B3B3),
+                        fontSize: 14,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      contentPadding:
+                          EdgeInsets.only(left: 12, top: 14, bottom: 10),
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
+                    onTap: () {
+                      setState(() {
+                        if (!isVerificationCodeValid) {
+                          isVerificationCodeValid = true;
+                        }
+                      });
+                    },
                   ),
-                ),
-              if (!isVerificationCodeValid)
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    '잘못된 인증번호입니다. 다시 인증해주세요.',
-                    style: TextStyle(
-                      color: Color(0xFFFF0000),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
+                  SizedBox(
+                    height: 8,
+                  ),
+                  if (!isEmailValid)
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '잘못된 이메일 형식입니다. 다시 입력해주세요.',
+                        style: TextStyle(
+                          color: Color(0xFFFF0000),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
+                  if (!isVerificationCodeValid)
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '잘못된 인증번호입니다. 다시 인증해주세요.',
+                        style: TextStyle(
+                          color: Color(0xFFFF0000),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  SizedBox(
+                    height: 25,
                   ),
-                ),
-              SizedBox(
-                height: 25,
-              ),
-              Text(
-                '비밀번호',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Container(
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: isPasswordValid
-                        ? BorderSide.none
-                        : BorderSide(color: Colors.red, width: 1),
-                  ),
-                ),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: obscureText1,
-                  focusNode: passwordFocusNode,
-                  enableInteractiveSelection: false,
-                  style: TextStyle(
-                    color: isPasswordValid ? Color(0xFF020202) : Colors.red,
-                    fontSize: 14,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  onTap: () {
-                    setState(() {
-                      if (!isPasswordValid) {
-                        isPasswordValid = true;
-                      }
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: '비밀번호를 입력해주세요',
-                    hintStyle: TextStyle(
-                      color: Color(0xFFB3B3B3),
+                  Text(
+                    '비밀번호',
+                    style: TextStyle(
+                      color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w400,
                     ),
-                    contentPadding:
-                        EdgeInsets.only(left: 12, top: 14, bottom: 10),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: isPasswordValid
+                            ? BorderSide.none
+                            : BorderSide(color: Colors.red, width: 1),
+                      ),
                     ),
-                    suffixIcon: GestureDetector(
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: obscureText1,
+                      focusNode: passwordFocusNode,
+                      enableInteractiveSelection: false,
+                      style: TextStyle(
+                        color: isPasswordValid ? Color(0xFF020202) : Colors.red,
+                        fontSize: 14,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                      ),
                       onTap: () {
                         setState(() {
-                          obscureText1 = !obscureText1;
+                          if (!isPasswordValid) {
+                            isPasswordValid = true;
+                          }
                         });
                       },
-                      child: Container(
-                        margin: EdgeInsets.all(12),
-                        child: SvgPicture.asset(
-                          obscureText1
-                              ? "assets/icons/eye.svg"
-                              : "assets/icons/eye-off.svg",
-                          width: 16,
-                          height: 16,
+                      decoration: InputDecoration(
+                        hintText: '비밀번호를 입력해주세요',
+                        hintStyle: TextStyle(
+                          color: Color(0xFFB3B3B3),
+                          fontSize: 14,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        contentPadding:
+                            EdgeInsets.only(left: 12, top: 14, bottom: 10),
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              obscureText1 = !obscureText1;
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(12),
+                            child: SvgPicture.asset(
+                              obscureText1
+                                  ? "assets/icons/eye.svg"
+                                  : "assets/icons/eye-off.svg",
+                              width: 16,
+                              height: 16,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              if (isPasswordValid)
-                Text(
-                  "(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~6자)",
-                  style: TextStyle(
-                    color: Color(0xFFB3B3B3),
-                    fontSize: 12,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
+                  SizedBox(
+                    height: 2,
                   ),
-                ),
-              if (!isPasswordValid)
-                Container(
-                  padding: EdgeInsets.only(top: 5),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '조건에 맞지 않는 비밀번호입니다. 다시 입력해주세요.',
-                    style: TextStyle(
-                      color: Color(0xFFFF0000),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
+                  if (isPasswordValid)
+                    Text(
+                      "(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~6자)",
+                      style: TextStyle(
+                        color: Color(0xFFB3B3B3),
+                        fontSize: 12,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
+                  if (!isPasswordValid)
+                    Container(
+                      padding: EdgeInsets.only(top: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '조건에 맞지 않는 비밀번호입니다. 다시 입력해주세요.',
+                        style: TextStyle(
+                          color: Color(0xFFFF0000),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  SizedBox(
+                    height: 12,
                   ),
-                ),
-              SizedBox(
-                height: 12,
-              ),
-              Text(
-                '비밀번호 확인',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Container(
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: isPasswordConfirmValid
-                        ? BorderSide.none
-                        : BorderSide(color: Colors.red, width: 1),
-                  ),
-                ),
-                child: TextField(
-                  controller: PasswordconfirmController,
-                  focusNode: passwordConfirmFocusNode,
-                  enableInteractiveSelection: false,
-                  obscureText: obscureText2,
-                  onTap: () {
-                    setState(() {
-                      if (!isPasswordConfirmValid) {
-                        isPasswordConfirmValid = true;
-                      }
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: '비밀번호를 한번 더 입력해주세요.',
-                    hintStyle: TextStyle(
-                      color: Color(0xFFB3B3B3),
+                  Text(
+                    '비밀번호 확인',
+                    style: TextStyle(
+                      color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w400,
                     ),
-                    contentPadding:
-                        EdgeInsets.only(left: 12, top: 14, bottom: 10),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: isPasswordConfirmValid
+                            ? BorderSide.none
+                            : BorderSide(color: Colors.red, width: 1),
+                      ),
                     ),
-                    suffixIcon: GestureDetector(
+                    child: TextField(
+                      controller: PasswordconfirmController,
+                      focusNode: passwordConfirmFocusNode,
+                      enableInteractiveSelection: false,
+                      obscureText: obscureText2,
                       onTap: () {
                         setState(() {
-                          obscureText2 = !obscureText2;
+                          if (!isPasswordConfirmValid) {
+                            isPasswordConfirmValid = true;
+                          }
                         });
                       },
-                      child: Container(
-                        margin: EdgeInsets.all(12),
-                        child: SvgPicture.asset(
-                          obscureText2
-                              ? "assets/icons/eye.svg"
-                              : "assets/icons/eye-off.svg",
-                          width: 16,
-                          height: 16,
+                      decoration: InputDecoration(
+                        hintText: '비밀번호를 한번 더 입력해주세요.',
+                        hintStyle: TextStyle(
+                          color: Color(0xFFB3B3B3),
+                          fontSize: 14,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        contentPadding:
+                            EdgeInsets.only(left: 12, top: 14, bottom: 10),
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              obscureText2 = !obscureText2;
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(12),
+                            child: SvgPicture.asset(
+                              obscureText2
+                                  ? "assets/icons/eye.svg"
+                                  : "assets/icons/eye-off.svg",
+                              width: 16,
+                              height: 16,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              if (!isPasswordConfirmValid)
-                Container(
-                  padding: EdgeInsets.only(top: 5),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '조건에 맞지 않는 비밀번호입니다. 다시 입력해주세요.',
-                    style: TextStyle(
-                      color: Color(0xFFFF0000),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
+                  if (!isPasswordConfirmValid)
+                    Container(
+                      padding: EdgeInsets.only(top: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '조건에 맞지 않는 비밀번호입니다. 다시 입력해주세요.',
+                        style: TextStyle(
+                          color: Color(0xFFFF0000),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
 
-              SizedBox(
-                height: 24,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                  SizedBox(
+                    height: 24,
+                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                checked1 = !checked1;
+                                checked2 = !checked2;
+                                checked3 = !checked3;
+                                checked4 = !checked4;
+                                checked5 = !checked5;
+                              });
+                            },
+                            child: checked1
+                                ? SvgPicture.asset(
+                                    'assets/icons/check-circle-checked.svg',
+                                    width: 24,
+                                    height: 24,
+                                  )
+                                : SvgPicture.asset(
+                                    'assets/icons/check-circle.svg',
+                                    width: 24,
+                                    height: 24,
+                                    color: Color(0xFFE6E6E6),
+                                  ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            '약관 전체동의합니다.',
+                            style: TextStyle(
+                              color: Color(0xFF020202),
+                              fontSize: 13,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            checked1 = !checked1;
-                            checked2 = !checked2;
-                            checked3 = !checked3;
-                            checked4 = !checked4;
-                            checked5 = !checked5;
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PrivacyPolicyPage(),
+                            ),
+                          );
                         },
-                        child: checked1
-                            ? SvgPicture.asset(
-                                'assets/icons/check-circle-checked.svg',
-                                width: 24,
-                                height: 24,
-                              )
-                            : SvgPicture.asset(
-                                'assets/icons/check-circle.svg',
-                                width: 24,
-                                height: 24,
-                                color: Color(0xFFE6E6E6),
-                              ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        '약관 전체동의합니다.',
-                        style: TextStyle(
-                          color: Color(0xFF020202),
-                          fontSize: 13,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
+                        child: SvgPicture.asset(
+                          'assets/icons/chevron-right.svg', // SVG 파일의 경로
+                          width: 20,
+                          height: 20,
                         ),
                       ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PrivacyPolicyPage(),
+                  SizedBox(
+                    height: 13,
+                  ),
+                  Container(
+                    width: 360,
+                    height: 1,
+                    decoration: BoxDecoration(color: Color(0xFFE6E6E6)),
+                  ),
+                  // CupertinoTextField(
+                  //   controller: phoneController,
+                  //   placeholder: 'sfaclog@gmail.com',
+                  //   keyboardType: TextInputType.phone,
+                  // ),
+
+                  SizedBox(height: 16.0),
+                  Row(
+                    children: [
+                      buildCheckbox('개인정보 수집 이용 동의', checked2),
+                      Text(
+                        "개인정보 수집 이용 동의",
+                        style: TextStyle(
+                          color: Color(0xFF020202),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
                         ),
-                      );
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        '(필수)',
+                        style: TextStyle(
+                          color: Color(0xFF999999),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      buildCheckbox('고유식별 정보처리 동의', checked3),
+                      Text(
+                        "고유식별 정보처리 동의",
+                        style: TextStyle(
+                          color: Color(0xFF020202),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        '(필수)',
+                        style: TextStyle(
+                          color: Color(0xFF999999),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      buildCheckbox('통신사 이용약관 동의', checked4),
+                      Text(
+                        "통신사 이용약관 동의",
+                        style: TextStyle(
+                          color: Color(0xFF020202),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        '(필수)',
+                        style: TextStyle(
+                          color: Color(0xFF999999),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      buildCheckbox('서비스 이용약관 동의', checked5),
+                      Text(
+                        "서비스 이용약관 동의",
+                        style: TextStyle(
+                          color: Color(0xFF020202),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        '(필수)',
+                        style: TextStyle(
+                          color: Color(0xFF999999),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: 24,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (checked1) {
+                        setState(() {
+                          // 즉시 업데이트
+                          handleSignUp();
+                        });
+
+                        // 약간의 딜레이를 주고 나서 다시 업데이트
+                        await Future.delayed(Duration(milliseconds: 0));
+                        setState(() {});
+                      }
                     },
-                    child: SvgPicture.asset(
-                      'assets/icons/chevron-right.svg', // SVG 파일의 경로
-                      width: 20,
-                      height: 20,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          checked1 ? Color(0xFF0059FF) : Color(0xFFE6E6E6),
+                      foregroundColor:
+                          checked1 ? Color(0xFF0059FF) : Color(0xFFE6E6E6),
+                      fixedSize: Size(300, 50),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 13,
-              ),
-              Container(
-                width: 360,
-                height: 1,
-                decoration: BoxDecoration(color: Color(0xFFE6E6E6)),
-              ),
-              // CupertinoTextField(
-              //   controller: phoneController,
-              //   placeholder: 'sfaclog@gmail.com',
-              //   keyboardType: TextInputType.phone,
-              // ),
-
-              SizedBox(height: 16.0),
-              Row(
-                children: [
-                  buildCheckbox('개인정보 수집 이용 동의', checked2),
-                  Text(
-                    "개인정보 수집 이용 동의",
-                    style: TextStyle(
-                      color: Color(0xFF020202),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Text(
-                    '(필수)',
-                    style: TextStyle(
-                      color: Color(0xFF999999),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  buildCheckbox('고유식별 정보처리 동의', checked3),
-                  Text(
-                    "고유식별 정보처리 동의",
-                    style: TextStyle(
-                      color: Color(0xFF020202),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Text(
-                    '(필수)',
-                    style: TextStyle(
-                      color: Color(0xFF999999),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  buildCheckbox('통신사 이용약관 동의', checked4),
-                  Text(
-                    "통신사 이용약관 동의",
-                    style: TextStyle(
-                      color: Color(0xFF020202),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Text(
-                    '(필수)',
-                    style: TextStyle(
-                      color: Color(0xFF999999),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  buildCheckbox('서비스 이용약관 동의', checked5),
-                  Text(
-                    "서비스 이용약관 동의",
-                    style: TextStyle(
-                      color: Color(0xFF020202),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Text(
-                    '(필수)',
-                    style: TextStyle(
-                      color: Color(0xFF999999),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                height: 24,
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (checked1) {
-                    setState(() {
-                      // 즉시 업데이트
-                      handleSignUp();
-                    });
-
-                    // 약간의 딜레이를 주고 나서 다시 업데이트
-                    await Future.delayed(Duration(milliseconds: 0));
-                    setState(() {});
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      checked1 ? Color(0xFF0059FF) : Color(0xFFE6E6E6),
-                  foregroundColor:
-                      checked1 ? Color(0xFF0059FF) : Color(0xFFE6E6E6),
-                  fixedSize: Size(300, 50),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                child: Container(
-                  child: Center(
-                    child: Text(
-                      '다음',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: checked1 ? Colors.white : Color(0xFF999999),
-                        fontSize: 14,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w700,
+                    child: Container(
+                      child: Center(
+                        child: Text(
+                          '다음',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: checked1 ? Colors.white : Color(0xFF999999),
+                            fontSize: 14,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  SizedBox(
+                    height: 67,
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 67,
-              ),
-            ],
+            ),
           ),
         ),
       ),
