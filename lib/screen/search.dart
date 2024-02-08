@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/dropdown.dart';
 import 'package:team_7_sfacpolio/widgets/search/data_slot.dart';
 import 'package:team_7_sfacpolio/widgets/search/search_appbar.dart';
@@ -99,7 +100,7 @@ class _SearchState extends State<Search> {
                             ),
                           ),
                         )
-                      : Container()
+                      : Container(),
                 ],
               ),
             ),

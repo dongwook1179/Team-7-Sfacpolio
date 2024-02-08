@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:team_7_sfacpolio/log_write_page.dart';
+import 'package:team_7_sfacpolio/screen/search.dart';
+import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_card_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_portfolio_widget.dart';
 
@@ -167,7 +169,14 @@ class _LogMainPageState extends State<LogMainPage>
           ),
           actions: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Search(),
+                  ),
+                );
+              },
               child: SvgPicture.asset("assets/icons/search.svg"),
             )
           ],
@@ -571,6 +580,7 @@ class _LogMainPageState extends State<LogMainPage>
             ),
           ),
         ),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }

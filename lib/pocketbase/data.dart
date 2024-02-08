@@ -645,4 +645,115 @@ class PocketBaseData {
 
     return post_information;
   }
+
+  Future<void> Set_UserData(String user_id, Map<String, dynamic> data) async {
+    print('받은 데이터 ');
+    print(user_id);
+    print(data);
+    data.forEach((key, value) {
+      print(data[key]);
+    });
+
+    if (data.containsKey('develop')) {
+      List<String> develop_type_list = [];
+      for (String key in data['develop']) {
+        final develop = await pb
+            .collection('develop_type_list')
+            .getList(filter: " develop_type =  '${key}' ");
+        for (var item in develop.items) {
+          develop_type_list.add(item.id);
+        }
+      }
+      final body = <String, dynamic>{
+        "user_id": user_id,
+        "develop_type_id": develop_type_list
+      };
+      await pb.collection('develop_type').create(body: body);
+    }
+
+    if (data.containsKey('language')) {
+      List<String> language_list = [];
+      for (String key in data['language']) {
+        final language = await pb
+            .collection('language_list')
+            .getList(filter: " language =  '${key}' ");
+        if (language.items.length == 0) {
+          final body = <String, dynamic>{
+            "user_id": user_id,
+            "language": key,
+          };
+          await pb.collection('language_custom').create(body: body);
+        } else {
+          for (var item in language.items) {
+            language_list.add(item.id);
+          }
+        }
+      }
+      final body = <String, dynamic>{
+        "user_id": "${user_id}",
+        "language_id": language_list
+      };
+
+      await pb.collection('language').create(body: body);
+    }
+
+    if (data.containsKey('career_type') &&
+        data.containsKey('career_company') &&
+        data.containsKey('career_period')) {
+      String type = '';
+      if (data['career_type'][0] == '신입입니다') {
+        type = 'education';
+      } else if (data['career_type'][0] == '경력자입니다') {
+        type = 'company';
+      }
+      final body = <String, dynamic>{
+        "user_id": "${user_id}",
+        "type": type,
+        "company": data['career_company'][0],
+        "period": data['career_period'][0],
+      };
+
+      await pb.collection('career').create(body: body);
+    }
+
+    if (data.containsKey('condition_type') &&
+        data.containsKey('condition_period')) {
+      String type = '';
+      if (data['condition_type'][0] == '온라인') {
+        type = 'online';
+      } else if (data['condition_type'][0] == '오프라인') {
+        type = 'offline';
+      }
+      final body = <String, dynamic>{
+        "work_type": type,
+        "preferred_project_period": data['condition_period'][0]
+      };
+      await pb.collection('users').update(user_id, body: body);
+    }
+
+    if (data.containsKey('service')) {
+      List<String> service_list = [];
+
+      for (String key in data['service']) {
+        final language = await pb
+            .collection('service_list')
+            .getList(filter: " service =  '${key}' ");
+        for (var item in language.items) {
+          service_list.add(item.id);
+        }
+      }
+      final body = <String, dynamic>{
+        "user_id": user_id,
+        "service": service_list
+      };
+      await pb.collection('service').create(body: body);
+    }
+
+    if (data.containsKey('mbti')) {
+      final body = <String, dynamic>{
+        "mbti": data['mbti'][0],
+      };
+      await pb.collection('users').update(user_id, body: body);
+    }
+  }
 }

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/home_page.dart';
+import 'package:team_7_sfacpolio/log_main_page.dart';
+import 'package:team_7_sfacpolio/main_page.dart';
 import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
+import 'package:team_7_sfacpolio/screen/chatting.dart';
+import 'package:team_7_sfacpolio/screen/commuitypage.dart';
 
 class BottomNavBar extends StatelessWidget {
   @override
@@ -33,6 +38,51 @@ class BottomNavBar extends StatelessWidget {
       ),
       onTap: (index) {
         context.read<NavigationProvider>().setIndex(index);
+
+        switch (index) {
+          case 0:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
+          case 1:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
+          case 2:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
+          case 3:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
+          case 4:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
+          default:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainPage(),
+              ),
+            );
+        }
       },
       items: [
         _buildBottomNavigationBarItem(

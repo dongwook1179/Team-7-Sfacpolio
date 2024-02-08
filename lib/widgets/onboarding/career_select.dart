@@ -55,6 +55,18 @@ class _Career_SelectState extends State<Career_Select> {
             for (String text in career_text)
               GestureDetector(
                 onTap: () {
+                  context
+                      .read<Page_Controller>()
+                      .select_info
+                      .remove('career_type');
+                  context
+                      .read<Page_Controller>()
+                      .select_info
+                      .remove('career_period');
+                  context
+                      .read<Page_Controller>()
+                      .select_info
+                      .remove('career_company');
                   Button_Active(text);
                   if (context
                           .read<Page_Controller>()

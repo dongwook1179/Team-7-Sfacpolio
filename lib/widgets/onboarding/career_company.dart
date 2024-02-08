@@ -49,12 +49,20 @@ class _Career_CompanyState extends State<Career_Company> {
                 ),
                 child: TextField(
                   onChanged: (text) {
-                    context
-                        .read<Page_Controller>()
-                        .select_info['career_company'] = [];
-                    context
-                        .read<Page_Controller>()
-                        .Add_Information('career_company', text);
+                    if (text.length == 0) {
+                      context
+                          .read<Page_Controller>()
+                          .select_info
+                          .remove('career_company');
+                    } else {
+                      context
+                          .read<Page_Controller>()
+                          .select_info['career_company'] = [];
+                      context
+                          .read<Page_Controller>()
+                          .Add_Information('career_company', text);
+                    }
+                    print(context.read<Page_Controller>().select_info);
                   },
                   style: TextStyle(
                     color: Color(0xFF020202),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:team_7_sfacpolio/screen/search.dart';
+import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/community/community_portfolio_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_portfolio_widget.dart';
 import 'package:team_7_sfacpolio/widgets/main/main_banner_widget.dart';
@@ -169,7 +171,14 @@ class _MainPageState extends State<MainPage> {
           Container(
             margin: EdgeInsets.only(right: 16, top: 12, bottom: 12),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Search(),
+                  ),
+                );
+              },
               child: SvgPicture.asset("assets/icons/search.svg"),
             ),
           )
@@ -557,6 +566,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

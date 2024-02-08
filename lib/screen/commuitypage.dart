@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team_7_sfacpolio/screen/community_list.dart';
+import 'package:team_7_sfacpolio/screen/search.dart';
+import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 
 class CommuityPage extends StatefulWidget {
   @override
@@ -148,7 +150,14 @@ class _CommuityPageState extends State<CommuityPage> {
                     width: 110,
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Search(),
+                        ),
+                      );
+                    },
                     icon: Icon(
                       Icons.search,
                       size: 24,
@@ -252,6 +261,7 @@ class _CommuityPageState extends State<CommuityPage> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
