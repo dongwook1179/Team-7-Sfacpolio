@@ -99,11 +99,17 @@ class _Setting_SNSState extends State<Setting_SNS> {
                       ),
                     ),
                     Spacer(),
-                    SvgPicture.asset(
-                      'assets/icons/chevron-down.svg',
-                      width: 16,
-                      height: 16,
-                    ),
+                    page_open
+                        ? SvgPicture.asset(
+                            'assets/icons/chevron-up.svg',
+                            width: 16,
+                            height: 16,
+                          )
+                        : SvgPicture.asset(
+                            'assets/icons/chevron-down.svg',
+                            width: 16,
+                            height: 16,
+                          ),
                     SizedBox(
                       width: 8,
                     )
