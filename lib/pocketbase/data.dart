@@ -756,4 +756,66 @@ class PocketBaseData {
       await pb.collection('users').update(user_id, body: body);
     }
   }
+
+  // Future<void> Get_SNS(String user_id) async{
+  Future<Map<String, dynamic>> Get_SNS() async {
+    Map<String, dynamic> sns_list = {};
+    int etc_count = 1;
+    // final sns = await pb
+    //     .collection('sns')
+    //     .getList(filter: " user_id =  '${user_id}' ");
+    final sns = await pb
+        .collection('sns')
+        .getList(filter: " user_id =  'oe2f8x7krb4rwsb' ");
+
+    for (var data in sns.items) {
+      if (data.data['type'] == 'etc') {
+        sns_list['${data.data['type']}_$etc_count'] = data.data['account'];
+        etc_count++;
+      } else {
+        sns_list[data.data['type']] = data.data['account'];
+      }
+    }
+    return sns_list;
+  }
+
+  // Future<void> Delete_SNS(String user_id,String account) async{
+  Future<void> Delete_SNS(String account) async {
+    // final sns = await pb
+    //     .collection('sns')
+    //     .getList(filter: " user_id =  '${user_id}', account = '${account}' ");
+
+    final sns = await pb.collection('sns').getList(
+        filter: " user_id =  'oe2f8x7krb4rwsb'&& account = '${account}' ");
+    String id = sns.items[0].id;
+    await pb.collection('sns').delete(id);
+  }
+
+  // Future<void> Update_SNS(String user_id, Map<String,dynamic> data) async{
+  Future<void> Update_SNS(Map<String, dynamic> data) async {
+    final sns = await pb
+        .collection('sns')
+        .getList(filter: " user_id =  'oe2f8x7krb4rwsb' ");
+    for (var item in sns.items) {
+      Delete_SNS(item.data['account']);
+    }
+    for (String type in data.keys) {
+      String account = data[type];
+      print('저장 정보 확인');
+      print(type);
+      print(account);
+      if (type.contains('etc') || type.contains('new')) {
+        type = 'etc';
+      }
+      final body = <String, dynamic>{
+        // "user_id": user_id,
+        "user_id": "oe2f8x7krb4rwsb",
+        "type": type,
+        "account": account
+      };
+      print('바디 상태 확인');
+      print(body);
+      await pb.collection('sns').create(body: body);
+    }
+  }
 }

@@ -25,8 +25,13 @@ class Page_Controller with ChangeNotifier {
   String recent_page = 'page_1';
   Map<String, bool> recent_filter_list = {};
   String filter_text = 'update';
+  String filter_text_kor = '최신순';
   bool post_delete_active = false;
   List<String> post_delete_select = [];
+
+  void Page_Reload() {
+    notifyListeners();
+  }
 
   void Next(BuildContext context) {
     pagenum++;
@@ -174,6 +179,11 @@ class Page_Controller with ChangeNotifier {
 
   void Drop_Down(String text) {
     filter_text = text;
+    notifyListeners();
+  }
+
+  void Drop_Down_kor(String text) {
+    filter_text_kor = text;
     notifyListeners();
   }
 

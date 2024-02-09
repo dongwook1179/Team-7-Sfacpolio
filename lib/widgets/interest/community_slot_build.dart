@@ -50,7 +50,14 @@ class _Community_Slot_BuildState extends State<Community_Slot_Build> {
     return GestureDetector(
         child: Container(
       width: MediaQuery.of(context).size.width,
-      height: 289,
+      height: 291,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          width: 1,
+          color: Color(0xFFE6E6E6),
+        ),
+      ),
       margin: EdgeInsets.symmetric(vertical: 12),
       child: Column(
         children: [
@@ -91,6 +98,8 @@ class _Community_Slot_BuildState extends State<Community_Slot_Build> {
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w700,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(
                   height: 6,

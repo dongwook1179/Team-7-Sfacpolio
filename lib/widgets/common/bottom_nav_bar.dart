@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/home_page.dart';
-import 'package:team_7_sfacpolio/log_main_page.dart';
 import 'package:team_7_sfacpolio/main_page.dart';
 import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
-import 'package:team_7_sfacpolio/screen/chatting.dart';
-import 'package:team_7_sfacpolio/screen/commuitypage.dart';
 
 class BottomNavBar extends StatelessWidget {
   @override

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
-import 'package:team_7_sfacpolio/widgets/dropdown.dart';
 import 'package:team_7_sfacpolio/widgets/interest/community_slot_build.dart';
+import 'package:team_7_sfacpolio/widgets/interest/interest_bottom_sheet.dart';
 
 class Interest_Body extends StatefulWidget {
   final String type;
@@ -94,11 +95,40 @@ class _Interest_BodyState extends State<Interest_Body> {
                               ),
                             ),
                           ),
-                          Container(
-                            height: 32,
-                            child: Center(
-                              child: DropDown(),
-                            ),
+                          GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Interest_Bottom_Sheet();
+                                },
+                              );
+                            },
+                            child: Container(
+                                height: 32,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      context
+                                          .read<Page_Controller>()
+                                          .filter_text_kor,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/icons/Property 2=Outline, Property 3=chevron-down.svg',
+                                      width: 16,
+                                      height: 16,
+                                    )
+                                  ],
+                                )),
                           ),
                         ],
                       ),
