@@ -10,7 +10,7 @@ class Setting_Proposal extends StatefulWidget {
 
 class _Setting_ProposalState extends State<Setting_Proposal> {
   bool page_open = false;
-  Map<String, bool> alarm_state = {
+  Map<String, bool> proposal_state = {
     '채용 제안 받기': false,
     '의견 제안 받기': false,
     '프로젝트 제안 받기': false,
@@ -49,11 +49,17 @@ class _Setting_ProposalState extends State<Setting_Proposal> {
                       ),
                     ),
                     Spacer(),
-                    SvgPicture.asset(
-                      'assets/icons/chevron-down.svg',
-                      width: 16,
-                      height: 16,
-                    ),
+                    page_open
+                        ? SvgPicture.asset(
+                            'assets/icons/chevron-up.svg',
+                            width: 16,
+                            height: 16,
+                          )
+                        : SvgPicture.asset(
+                            'assets/icons/chevron-down.svg',
+                            width: 16,
+                            height: 16,
+                          ),
                     SizedBox(
                       width: 8,
                     )
@@ -63,12 +69,12 @@ class _Setting_ProposalState extends State<Setting_Proposal> {
             ),
             AnimatedContainer(
               duration: Duration(milliseconds: 150),
-              height: page_open ? 250 : 0,
+              height: page_open ? 48 * proposal_state.length.toDouble() : 0,
               margin: EdgeInsets.symmetric(vertical: 10),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    for (String key in alarm_state.keys)
+                    for (String key in proposal_state.keys)
                       Container(
                         width: 316,
                         height: 48,
@@ -88,7 +94,7 @@ class _Setting_ProposalState extends State<Setting_Proposal> {
                             ),
                             Spacer(),
                             Switch(
-                              value: alarm_state[key]!,
+                              value: proposal_state[key]!,
                               activeColor: Color(0xffFFFFFF),
                               activeTrackColor: Color(0xff0059FF),
                               inactiveThumbColor: Color(0xffFFFFFF),
@@ -104,7 +110,7 @@ class _Setting_ProposalState extends State<Setting_Proposal> {
                               ),
                               onChanged: (value) {
                                 setState(() {
-                                  alarm_state[key] = value;
+                                  proposal_state[key] = value;
                                 });
                               },
                             )

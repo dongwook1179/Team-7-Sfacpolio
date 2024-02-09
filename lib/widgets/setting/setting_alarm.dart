@@ -51,11 +51,17 @@ class _Setting_AlarmState extends State<Setting_Alarm> {
                       ),
                     ),
                     Spacer(),
-                    SvgPicture.asset(
-                      'assets/icons/chevron-down.svg',
-                      width: 16,
-                      height: 16,
-                    ),
+                    page_open
+                        ? SvgPicture.asset(
+                            'assets/icons/chevron-up.svg',
+                            width: 16,
+                            height: 16,
+                          )
+                        : SvgPicture.asset(
+                            'assets/icons/chevron-down.svg',
+                            width: 16,
+                            height: 16,
+                          ),
                     SizedBox(
                       width: 8,
                     )
