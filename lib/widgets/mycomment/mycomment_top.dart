@@ -3,21 +3,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 
-class MyPost_Top extends StatefulWidget {
+class MyComment_Top extends StatefulWidget {
   final List<String> data_key;
-  const MyPost_Top(this.data_key);
+  const MyComment_Top(this.data_key);
 
   @override
-  State<MyPost_Top> createState() => _MyPost_TopState();
+  State<MyComment_Top> createState() => _MyComment_TopState();
 }
 
-class _MyPost_TopState extends State<MyPost_Top> {
+class _MyComment_TopState extends State<MyComment_Top> {
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Container(
         width: 360,
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        padding: EdgeInsets.symmetric(
+          vertical: 16,
+        ),
         child: context.watch<Page_Controller>().post_delete_active
             ? Row(
                 children: [
@@ -130,7 +132,7 @@ class _MyPost_TopState extends State<MyPost_Top> {
                     ),
                   ),
                   Text(
-                    '의 게시글',
+                    '의 댓글',
                     style: TextStyle(
                       color: Color(0xFF020202),
                       fontSize: 12,
