@@ -20,17 +20,15 @@ class _MyComment_BodyState extends State<MyComment_Body> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<Page_Controller>(builder: (context, pageController, _) {
-      return Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              for (String text in widget.data.keys)
-                MyComment_Slot_Build(widget.data[text])
-            ],
-          ),
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            for (String text in widget.data.keys)
+              MyComment_Slot_Build(widget.data[text])
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }

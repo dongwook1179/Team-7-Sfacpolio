@@ -32,8 +32,9 @@ class _MyComment_Slot_BuildState extends State<MyComment_Slot_Build> {
       like_active = false;
     });
     print(widget.data['user_id']);
+    String id = context.read<User_Data>().record.record!.id;
     for (var data in widget.data['like']) {
-      if ('modeumi19950804' == data.data['user_id']) {
+      if (id == data.data['user_id']) {
         setState(() {
           like_active = true;
         });
@@ -49,7 +50,12 @@ class _MyComment_Slot_BuildState extends State<MyComment_Slot_Build> {
     return Consumer<Page_Controller>(builder: (context, pageController, _) {
       return GestureDetector(
         onTap: () {
-          context.read<Page_Controller>().Post_Delete_Select(widget.data['id']);
+          if (Provider.of<Page_Controller>(context, listen: false)
+              .post_delete_active) {
+            context
+                .read<Page_Controller>()
+                .Post_Delete_Select(widget.data['id']);
+          }
         },
         child: Container(
           width: 360,

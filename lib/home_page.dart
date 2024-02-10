@@ -5,6 +5,7 @@ import 'package:team_7_sfacpolio/main_page.dart';
 import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
 import 'package:team_7_sfacpolio/screen/chatting.dart';
 import 'package:team_7_sfacpolio/screen/commuitypage.dart';
+import 'package:team_7_sfacpolio/screen/mypage.dart';
 import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       case 3:
         return Chatting();
       case 4:
-        return Container();
+        return MyPage();
       default:
         return MainPage();
     }

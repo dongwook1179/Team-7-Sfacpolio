@@ -30,7 +30,6 @@ class _Community_Slot_BuildState extends State<Community_Slot_Build> {
         widget.data['image'] = widget.data['image'][0];
       });
     }
-    print('이미지 확인 : ${widget.data['image']}');
 
     setState(() {
       date = formattedDate;

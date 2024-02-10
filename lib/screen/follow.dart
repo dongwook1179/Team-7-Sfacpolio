@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/follow/follow_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/follow/follow_body.dart';
@@ -25,7 +26,8 @@ class _FollowState extends State<Follow> {
   }
 
   void Get_Follow() async {
-    Map<String, dynamic> follow_data = await PocketBaseData().Get_Follow();
+    String id = context.read<User_Data>().record.record!.id;
+    Map<String, dynamic> follow_data = await PocketBaseData().Get_Follow(id);
     Provider.of<Page_Controller>(context, listen: false)
         .Get_Follow(follow_data);
     setState(() {

@@ -197,7 +197,7 @@ class Page_Controller with ChangeNotifier {
       if (data.length == post_delete_select.length) {
         post_delete_select = [];
       } else {
-        post_delete_select = data;
+        post_delete_select = List.from(data);
       }
     } else {
       if (post_delete_select.contains(data)) {

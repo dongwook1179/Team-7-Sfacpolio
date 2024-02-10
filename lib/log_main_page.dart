@@ -580,7 +580,6 @@ class _LogMainPageState extends State<LogMainPage>
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }

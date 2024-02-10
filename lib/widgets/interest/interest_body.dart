@@ -3,12 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/interest/community_slot_build.dart';
 import 'package:team_7_sfacpolio/widgets/interest/interest_bottom_sheet.dart';
 
 class Interest_Body extends StatefulWidget {
-  final String type;
-  const Interest_Body(this.type);
+  final Map<String, dynamic> data;
+  const Interest_Body(this.data);
 
   @override
   State<Interest_Body> createState() => _Interest_BodyState();
@@ -28,21 +29,12 @@ class _Interest_BodyState extends State<Interest_Body> {
     Get_Data();
   }
 
-  void Get_Data() async {
-    Map<String, dynamic> data_load = {};
-    if (widget.type == 'log') {
-      data_load = await PocketBaseData().Get_Log();
-    } else if (widget.type == 'community') {
-      data_load = await PocketBaseData().Get_Community();
-    }
-    context.read<Page_Controller>().Drop_Down('update');
-
+  void Get_Data() {
     setState(() {
-      data = data_load;
+      data = widget.data;
       data_keys = data.keys.toList();
       page_load = true;
     });
-    print('데이터 확인 : ${data}');
     Sort_Data();
     Widget_Build();
   }
@@ -56,7 +48,6 @@ class _Interest_BodyState extends State<Interest_Body> {
 
   void Sort_Data() {
     String sort = context.read<Page_Controller>().filter_text;
-    print(sort);
     data_keys.sort(
       (a, b) {
         int compare = data[b][sort].compareTo(data[a][sort]);

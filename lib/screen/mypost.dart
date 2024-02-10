@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/mypost/mypost_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/mypost/mypost_body.dart';
@@ -25,7 +27,9 @@ class _MyPostState extends State<MyPost> {
   }
 
   void Get_Data() async {
-    Map<String, dynamic> get_data = await PocketBaseData().Get_MyPost();
+    String id = context.read<User_Data>().record.record!.id;
+
+    Map<String, dynamic> get_data = await PocketBaseData().Get_MyPost(id);
     setState(() {
       data = get_data;
       page_load = true;
@@ -47,6 +51,7 @@ class _MyPostState extends State<MyPost> {
                   appBar: PreferredSize(
                     preferredSize: Size.fromHeight(84),
                     child: AppBar(
+                      automaticallyImplyLeading: false,
                       title: MyPost_Appbar(),
                       bottom: MyPost_Tabbar(),
                     ),

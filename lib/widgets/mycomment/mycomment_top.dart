@@ -12,6 +12,24 @@ class MyComment_Top extends StatefulWidget {
 }
 
 class _MyComment_TopState extends State<MyComment_Top> {
+  List<String> data_key = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Data_Input();
+  }
+
+  void Data_Input() {
+    setState(() {
+      data_key = widget.data_key;
+    });
+    print('진입 데이터 확인');
+    print(widget.data_key);
+    print(data_key);
+  }
+
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
@@ -27,7 +45,7 @@ class _MyComment_TopState extends State<MyComment_Top> {
                     onTap: () {
                       context
                           .read<Page_Controller>()
-                          .Post_Delete_Select(widget.data_key);
+                          .Post_Delete_Select(data_key);
                     },
                     child: Row(
                       children: [
@@ -47,11 +65,11 @@ class _MyComment_TopState extends State<MyComment_Top> {
                           width: 18,
                           height: 18,
                           decoration: BoxDecoration(
-                              color: context
-                                          .watch<Page_Controller>()
+                              color: Provider.of<Page_Controller>(context,
+                                              listen: false)
                                           .post_delete_select
                                           .length ==
-                                      widget.data_key.length
+                                      data_key.length
                                   ? Color(0xFF0059FF)
                                   : Color(0xffffffff),
                               shape: BoxShape.circle),
@@ -64,7 +82,7 @@ class _MyComment_TopState extends State<MyComment_Top> {
                                         .watch<Page_Controller>()
                                         .post_delete_select
                                         .length ==
-                                    widget.data_key.length
+                                    data_key.length
                                 ? Color(0xffffffff)
                                 : Color(0xFFCCCCCC),
                           )),
@@ -92,7 +110,16 @@ class _MyComment_TopState extends State<MyComment_Top> {
                     width: 24,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      print('프로바이더 갯수');
+                      print(Provider.of<Page_Controller>(context, listen: false)
+                          .post_delete_select
+                          .length);
+                      print('위젯데이터 갯수');
+                      print(widget.data_key.length);
+                      print('데이터 갯수');
+                      print(data_key.length);
+                    },
                     child: Text(
                       '삭제',
                       style: TextStyle(
