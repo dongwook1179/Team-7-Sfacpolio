@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_7_sfacpolio/screen/community_list.dart';
+import 'package:team_7_sfacpolio/screen/project.dart';
 import 'package:team_7_sfacpolio/screen/search.dart';
 import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 
@@ -14,7 +15,7 @@ class _CommuityPageState extends State<CommuityPage> {
   bool isLateSelected = false;
   bool isPopularSelected = false;
   bool isLikedSelected = false;
-
+  int page_num = 0;
   void _showSortingOptionsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -110,158 +111,168 @@ class _CommuityPageState extends State<CommuityPage> {
     ];
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30),
-        child: Container(
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Container(
           width: 360,
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  DefaultTabController(
-                    length: 2,
-                    child: Container(
-                      width: 200,
-                      height: 50,
-                      child: TabBar(
-                        indicatorColor: Colors.black,
-                        labelPadding: EdgeInsets.symmetric(
-                          horizontal: 1,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        tabs: [
-                          Tab(
-                            text: '커뮤니티',
-                          ),
-                          Tab(
-                            text: '프로젝트',
-                          ),
-                        ],
-                      ),
+              DefaultTabController(
+                length: 2,
+                child: Container(
+                  width: 180,
+                  height: 50,
+                  child: TabBar(
+                    indicatorColor: Colors.black,
+                    labelPadding: EdgeInsets.symmetric(
+                      horizontal: 1,
                     ),
-                  ),
-                  SizedBox(
-                    width: 110,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Search(),
-                        ),
-                      );
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    tabs: [
+                      Tab(
+                        text: '커뮤니티',
+                      ),
+                      Tab(
+                        text: '프로젝트',
+                      ),
+                    ],
+                    onTap: (value) {
+                      setState(() {
+                        page_num = value;
+                      });
                     },
-                    icon: Icon(
-                      Icons.search,
-                      size: 24,
-                    ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(buttonData.length, (index) {
-                          // double buttonWidth =
-                          //     buttonData[index]['text'].length * 25.0;
-                          return Container(
-                            width: 48,
-                            height: 32,
-                            margin: EdgeInsets.all(5),
-                            child: OutlinedButton(
-                                onPressed: () {},
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      buttonData[index]['text'],
-                                      style: TextStyle(
-                                        color: selectedButton == index
-                                            ? Color(0xFF0059FF)
-                                            : Color(0xFF7F7F7F),
-                                        fontSize: 12,
-                                        fontFamily: 'Pretendard',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                  padding: EdgeInsets.all(5),
-                                  side: BorderSide(
-                                    width: 1,
-                                    color: Color(0xFFB3B3B3),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                )),
-                          );
-                        }),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Text(
-                      '개의 최신글',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 190,
-                    ),
-                    Text(
-                      '최신순',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        _showSortingOptionsModal(context);
-                      },
-                      icon: Icon(
-                        Icons.expand_more,
-                        size: 16,
-                      ),
-                    ),
-                  ],
                 ),
               ),
-              Expanded(child: InfiniteScrollPage()),
+              Spacer(),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Search(),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.search,
+                  size: 24,
+                ),
+              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+      body: page_num == 0
+          ? Container(
+              width: 360,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List.generate(buttonData.length, (index) {
+                              // double buttonWidth =
+                              //     buttonData[index]['text'].length * 25.0;
+                              return Container(
+                                width: 48,
+                                height: 32,
+                                margin: EdgeInsets.all(5),
+                                child: OutlinedButton(
+                                    onPressed: () {},
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          buttonData[index]['text'],
+                                          style: TextStyle(
+                                            color: selectedButton == index
+                                                ? Color(0xFF0059FF)
+                                                : Color(0xFF7F7F7F),
+                                            fontSize: 12,
+                                            fontFamily: 'Pretendard',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    style: OutlinedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      side: BorderSide(
+                                        width: 1,
+                                        color: Color(0xFFB3B3B3),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    )),
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        Text(
+                          '개의 최신글',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 190,
+                        ),
+                        Text(
+                          '최신순',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            _showSortingOptionsModal(context);
+                          },
+                          icon: Icon(
+                            Icons.expand_more,
+                            size: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(child: InfiniteScrollPage()),
+                ],
+              ),
+            )
+          : Project(),
     );
   }
 }

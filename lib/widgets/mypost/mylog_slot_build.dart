@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/tag_slot.dart';
 
 class MyLog_slot_build extends StatefulWidget {
@@ -15,7 +16,7 @@ class MyLog_slot_build extends StatefulWidget {
 
 class _MyLog_slot_buildState extends State<MyLog_slot_build> {
   String date = '';
-
+  bool like_state = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -35,8 +36,18 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
     }
 
     setState(() {
+      String id = context.read<User_Data>().record.record!.id;
+
+      for (var data in widget.data.data['like']) {
+        if (data.data['user_id'].contains(id)) {
+          like_state = true;
+        }
+      }
+
       date = formattedDate;
     });
+    print('아이디들 확인 : $like_state');
+    print('조회수 확인 : ${widget.data.data['view']}');
   }
 
   String _twoDigits(int n) {
@@ -174,11 +185,17 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
                             ),
                           ),
                           Spacer(),
-                          SvgPicture.asset(
-                            'assets/icons/like.svg',
-                            width: 16,
-                            height: 16,
-                          ),
+                          like_state
+                              ? SvgPicture.asset(
+                                  'assets/icons/Property 2=Outline, Property 3=heart, Property 4=active.svg',
+                                  width: 16,
+                                  height: 16,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/icons/like.svg',
+                                  width: 16,
+                                  height: 16,
+                                ),
                           SizedBox(
                             width: 2,
                           ),

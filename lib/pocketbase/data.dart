@@ -179,6 +179,268 @@ class PocketBaseData {
     return return_data;
   }
 
+  Future<Map<String, dynamic>> Get_Interest_Log(String user_id) async {
+    Map<String, dynamic> return_data = {};
+    final interest = await pb
+        .collection('log_like')
+        .getList(filter: " user_id = '$user_id' ");
+    for (var data in interest.items) {
+      final record_log = await pb.collection('log').getOne(data.data['log_id']);
+      return_data[record_log.id] = {};
+      return_data[record_log.id]['language'] = [];
+      return_data[record_log.id]['develop_type'] = [];
+      return_data[record_log.id]['like'] = [];
+      return_data[record_log.id]['view'] = [];
+      return_data[record_log.id]['comment'] = {};
+      final record_lan = await pb
+          .collection('log_language')
+          .getList(filter: " log_id = '${record_log.id}'");
+      final record_dev = await pb
+          .collection('log_develop_type')
+          .getList(filter: " log_id = '${record_log.id}'");
+      final record_like = await pb
+          .collection('log_like')
+          .getList(filter: " log_id = '${record_log.id}'");
+      final record_view = await pb
+          .collection('log_view')
+          .getList(filter: " log_id = '${record_log.id}'");
+      final record_com = await pb
+          .collection('log_comment')
+          .getList(filter: " log_id = '${record_log.id}'");
+
+      for (var data_lan in record_lan.items) {
+        // 언어가 멀티플이므로 반복문을 통해
+        for (var language_id in data_lan.data['language_id']) {
+          final language =
+              await pb.collection('language_list').getOne(language_id);
+          return_data[record_log.id]['language'].add(language.data['language']);
+        }
+      }
+
+      for (var data_dev in record_dev.items) {
+        for (var develop_id in data_dev.data['develop_type_id']) {
+          final develop_type =
+              await pb.collection('develop_type_list').getOne(develop_id);
+          return_data[record_log.id]['develop_type']
+              .add(develop_type.data['develop_type']);
+        }
+      }
+
+      for (var data_like in record_like.items) {
+        return_data[record_log.id]['like'].add(data_like.id);
+      }
+
+      for (var data_view in record_view.items) {
+        return_data[record_log.id]['view'].add(data_view.id);
+      }
+
+      for (var data_com in record_com.items) {
+        return_data[record_log.id]['comment'] = [
+          {
+            'user': data_com.data['user_id'],
+            'content': data_com.data['content']
+          }
+        ];
+      }
+
+      return_data[record_log.id]['comment_num'] =
+          return_data[record_log.id]['comment'].length;
+      return_data[record_log.id]['view_num'] =
+          return_data[record_log.id]['view'].length;
+      return_data[record_log.id]['like_num'] =
+          return_data[record_log.id]['like'].length;
+      return_data[record_log.id]['id'] = record_log.id;
+      return_data[record_log.id]['type'] = 'Log';
+      final user =
+          await pb.collection('users').getOne(record_log.data['user_id']);
+      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
+      return_data[record_log.id]['avatar'] = user_image;
+      return_data[record_log.id]['writer'] = user.data['nickname'];
+
+      String image =
+          pb.files.getUrl(record_log, record_log.data['image']).toString();
+      return_data[record_log.id]['image'] = image;
+      return_data[record_log.id]['title'] = record_log.data['title'];
+      return_data[record_log.id]['content'] = record_log.data['content'];
+      return_data[record_log.id]['update'] = record_log.updated;
+    }
+
+    return return_data;
+  }
+
+  Future<Map<String, dynamic>> Get_Interest_Community(String user_id) async {
+    Map<String, dynamic> return_data = {};
+    final interest = await pb
+        .collection('community_like')
+        .getList(filter: " user_id = '$user_id' ");
+    for (var data in interest.items) {
+      final record_log =
+          await pb.collection('community').getOne(data.data['community_id']);
+      return_data[record_log.id] = {};
+      return_data[record_log.id]['language'] = [];
+      return_data[record_log.id]['develop_type'] = [];
+      return_data[record_log.id]['like'] = [];
+      return_data[record_log.id]['view'] = [];
+      return_data[record_log.id]['comment'] = {};
+      final record_lan = await pb
+          .collection('community_language')
+          .getList(filter: " community_id = '${record_log.id}'");
+      final record_dev = await pb
+          .collection('community_develop_type')
+          .getList(filter: " community_id = '${record_log.id}'");
+      final record_like = await pb
+          .collection('community_like')
+          .getList(filter: " community_id = '${record_log.id}'");
+      final record_view = await pb
+          .collection('community_view')
+          .getList(filter: " community_id = '${record_log.id}'");
+      final record_com = await pb
+          .collection('community_comment')
+          .getList(filter: " community_id = '${record_log.id}'");
+
+      for (var data_lan in record_lan.items) {
+        for (var language_id in data_lan.data['language_id']) {
+          final language =
+              await pb.collection('language_list').getOne(language_id);
+          return_data[record_log.id]['language'].add(language.data['language']);
+        }
+      }
+
+      for (var data_dev in record_dev.items) {
+        for (var develop_id in data_dev.data['develop_type_id']) {
+          final develop_type =
+              await pb.collection('develop_type_list').getOne(develop_id);
+          return_data[record_log.id]['develop_type']
+              .add(develop_type.data['develop_type']);
+        }
+      }
+
+      for (var data_like in record_like.items) {
+        return_data[record_log.id]['like'].add(data_like.id);
+      }
+
+      for (var data_view in record_view.items) {
+        return_data[record_log.id]['view'].add(data_view.id);
+      }
+
+      for (var data_com in record_com.items) {
+        return_data[record_log.id]['comment'] = [
+          {
+            'user': data_com.data['user_id'],
+            'content': data_com.data['content']
+          }
+        ];
+      }
+
+      return_data[record_log.id]['comment_num'] =
+          return_data[record_log.id]['comment'].length;
+      return_data[record_log.id]['view_num'] =
+          return_data[record_log.id]['view'].length;
+      return_data[record_log.id]['like_num'] =
+          return_data[record_log.id]['like'].length;
+      return_data[record_log.id]['id'] = record_log.id;
+      return_data[record_log.id]['type'] = 'Log';
+      final user =
+          await pb.collection('users').getOne(record_log.data['user_id']);
+      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
+      return_data[record_log.id]['avatar'] = user_image;
+      return_data[record_log.id]['writer'] = user.data['nickname'];
+
+      return_data[record_log.id]['image'] = [];
+      for (var image in record_log.data["image"]) {
+        String url = pb.files.getUrl(record_log, image).toString();
+        return_data[record_log.id]['image'].add(url);
+      }
+
+      return_data[record_log.id]['title'] = record_log.data['title'];
+      return_data[record_log.id]['content'] = record_log.data['content'];
+      return_data[record_log.id]['update'] = record_log.updated;
+    }
+
+    return return_data;
+  }
+
+  Future<Map<String, dynamic>> Get_My_Log(String user_id) async {
+    Map<String, dynamic> return_data = {};
+    final record_log =
+        await pb.collection('log').getList(filter: " user_id = '$user_id' ");
+    final record_lan = await pb.collection('log_language').getFullList();
+    final record_dev = await pb.collection('log_develop_type').getFullList();
+    final record_like = await pb.collection('log_like').getFullList();
+    final record_view = await pb.collection('log_view').getFullList();
+    final record_com = await pb.collection('log_comment').getFullList();
+
+    for (var data in record_log.items) {
+      return_data[data.id] = {};
+      return_data[data.id]['language'] = [];
+      return_data[data.id]['develop_type'] = [];
+      return_data[data.id]['like'] = [];
+      return_data[data.id]['view'] = [];
+      return_data[data.id]['comment'] = {};
+
+      for (var data_lan in record_lan) {
+        //로그 id 에 맞는 언어 가져오기
+        if (data_lan.data['log_id'] == data.id) {
+          // 언어가 멀티플이므로 반복문을 통해
+          for (var language_id in data_lan.data['language_id']) {
+            final language =
+                await pb.collection('language_list').getOne(language_id);
+            return_data[data.id]['language'].add(language.data['language']);
+          }
+        }
+      }
+      for (var data_dev in record_dev) {
+        if (data_dev.data['log_id'] == data.id) {
+          for (var develop_id in data_dev.data['develop_type_id']) {
+            final develop_type =
+                await pb.collection('develop_type_list').getOne(develop_id);
+            return_data[data.id]['develop_type']
+                .add(develop_type.data['develop_type']);
+          }
+        }
+      }
+
+      for (var data_like in record_like) {
+        if (data_like.data['log_id'] == data.id) {
+          return_data[data.id]['like'].add(data_like.id);
+        }
+      }
+
+      for (var data_view in record_view) {
+        if (data_view.data['log_id'] == data.id) {
+          return_data[data.id]['view'].add(data_view.id);
+        }
+      }
+      for (var data_com in record_com) {
+        if (data_com.data['log_id'] == data.id) {
+          return_data[data.id]['comment'] = [
+            {
+              'user': data_com.data['user_id'],
+              'content': data_com.data['content']
+            }
+          ];
+        }
+      }
+      return_data[data.id]['comment_num'] =
+          return_data[data.id]['comment'].length;
+      return_data[data.id]['view_num'] = return_data[data.id]['view'].length;
+      return_data[data.id]['like_num'] = return_data[data.id]['like'].length;
+      return_data[data.id]['id'] = data.id;
+      return_data[data.id]['type'] = 'Log';
+      final user = await pb.collection('users').getOne(data.data['user_id']);
+      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
+      return_data[data.id]['avatar'] = user_image;
+      return_data[data.id]['writer'] = user.data['nickname'];
+
+      String image = pb.files.getUrl(data, data.data['image']).toString();
+      return_data[data.id]['image'] = image;
+      return_data[data.id]['title'] = data.data['title'];
+      return_data[data.id]['content'] = data.data['content'];
+      return_data[data.id]['update'] = data.updated;
+    }
+    return return_data;
+  }
+
   Future<Map<String, dynamic>> Data_Filter(
       String text, Map<String, dynamic> condition) async {
     Map<String, dynamic> datas = await Get_Log();
@@ -234,10 +496,8 @@ class PocketBaseData {
     return filter_data;
   }
 
-  // Future<void> Get_Follow(String user_id) async { // 해당부분 로그인 연결후 본인 id 가져오도록 설계
-  Future<Map<String, dynamic>> Get_Follow() async {
+  Future<Map<String, dynamic>> Get_Follow(String user_id) async {
     final record = await pb.collection('follow').getFullList();
-    String user_id = 'modeumi19950804'; //  해당부분 로그인 연결후 본인 id 가져오도록 설계
     Map<String, dynamic> follow = {'follower': [], 'following': []};
     for (var data in record) {
       if (data.data['following'] == user_id) {
@@ -246,7 +506,6 @@ class PocketBaseData {
         String image = pb.files
             .getUrl(follower_data, follower_data.data['avatar'])
             .toString();
-        print(follower_data);
         Map<String, dynamic> follower = {
           'my_id': user_id,
           'id': data.data['follower'],
@@ -382,21 +641,105 @@ class PocketBaseData {
     return return_data;
   }
 
-  // Future<void> Get_MyComment(String user_id) async {
-  Future<Map<String, dynamic>> Get_MyComment() async {
+  Future<Map<String, dynamic>> Get_My_Community(String user_id) async {
+    Map<String, dynamic> return_data = {};
+    final record_log = await pb
+        .collection('community')
+        .getList(filter: " user_id = '$user_id' ");
+    final record_lan = await pb.collection('community_language').getFullList();
+    final record_dev =
+        await pb.collection('community_develop_type').getFullList();
+    final record_like = await pb.collection('community_like').getFullList();
+    final record_view = await pb.collection('community_view').getFullList();
+    final record_com = await pb.collection('community_comment').getFullList();
+
+    for (var data in record_log.items) {
+      return_data[data.id] = {};
+      return_data[data.id]['language'] = [];
+      return_data[data.id]['develop_type'] = [];
+      return_data[data.id]['like'] = [];
+      return_data[data.id]['view'] = [];
+      return_data[data.id]['comment'] = [];
+
+      for (var data_lan in record_lan) {
+        if (data_lan.data['community_id'] == data.id) {
+          for (var language_id in data_lan.data['language_id']) {
+            final language =
+                await pb.collection('language_list').getOne(language_id);
+            return_data[data.id]['language'].add(language.data['language']);
+          }
+        }
+      }
+      for (var data_dev in record_dev) {
+        if (data_dev.data['community_id'] == data.id) {
+          for (var develop_id in data_dev.data['develop_type_id']) {
+            final develop_type =
+                await pb.collection('develop_type_list').getOne(develop_id);
+            return_data[data.id]['develop_type']
+                .add(develop_type.data['develop_type']);
+          }
+        }
+      }
+
+      for (var data_like in record_like) {
+        if (data_like.data['community_id'] == data.id) {
+          return_data[data.id]['like'].add(data_like.id);
+        }
+      }
+
+      for (var data_view in record_view) {
+        if (data_view.data['community_id'] == data.id) {
+          return_data[data.id]['view'].add(data_view.id);
+        }
+      }
+      for (var data_com in record_com) {
+        if (data_com.data['community_id'] == data.id) {
+          return_data[data.id]['comment'].add({
+            'user': data_com.data['user_id'],
+            'content': data_com.data['content']
+          });
+        }
+      }
+      return_data[data.id]['comment_num'] =
+          return_data[data.id]['comment'].length;
+      return_data[data.id]['view_num'] = return_data[data.id]['view'].length;
+      return_data[data.id]['like_num'] = return_data[data.id]['like'].length;
+      return_data[data.id]['id'] = data.id;
+      return_data[data.id]['type'] = 'community';
+      final user = await pb.collection('users').getOne(data.data['user_id']);
+      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
+      return_data[data.id]['avatar'] = user_image;
+      return_data[data.id]['writer'] = user.data['nickname'];
+      if (data.data['type'] == '포트폴리오') {
+        return_data[data.id]['type'] = 'LOG';
+      }
+      return_data[data.id]['image'] = [];
+      for (var image in data.data["image"]) {
+        String url = pb.files.getUrl(data, image).toString();
+        return_data[data.id]['image'].add(url);
+      }
+      return_data[data.id]['title'] = data.data['title'];
+      return_data[data.id]['content'] = data.data['content'];
+      return_data[data.id]['update'] = data.updated;
+    }
+    return return_data;
+  }
+
+  Future<Map<String, dynamic>> Get_MyComment(String user_id) async {
+    // Future<Map<String, dynamic>> Get_MyComment() async {
     Map<String, dynamic> comment = {};
     final record_lc = await pb
         .collection('log_comment')
-        .getList(filter: "( user_id ='modeumi19950804' )");
+        .getList(filter: "( user_id ='${user_id}' )");
     final record_lrc = await pb
         .collection('log_recomment')
-        .getList(filter: "( user_id ='modeumi19950804' )");
+        .getList(filter: "( user_id ='${user_id}' )");
     final record_cc = await pb
         .collection('community_comment')
-        .getList(filter: "( user_id ='modeumi19950804' )");
+        .getList(filter: "( user_id ='${user_id}' )");
     final record_crc = await pb
         .collection('community_recomment')
-        .getList(filter: "( user_id ='modeumi19950804' )");
+        .getList(filter: "( user_id ='${user_id}' )");
 
     for (var data in record_lc.items) {
       final like = await pb
@@ -466,17 +809,17 @@ class PocketBaseData {
     return comment;
   }
 
-  Future<Map<String, dynamic>> Get_MyPost() async {
+  Future<Map<String, dynamic>> Get_MyPost(String user_id) async {
     Map<String, dynamic> datas = {};
     final community = await pb
         .collection('community')
-        .getList(filter: "( user_id ='modeumi19950804' )");
-    final log = await pb
-        .collection('log')
-        .getList(filter: "( user_id ='modeumi19950804' )");
+        .getList(filter: "( user_id ='${user_id}' )");
+    final log =
+        await pb.collection('log').getList(filter: "( user_id ='${user_id}' )");
+
     final project = await pb
         .collection('project')
-        .getList(filter: "( user_id ='modeumi19950804' )");
+        .getList(filter: "( user_id ='${user_id}' )");
 
     for (var data in community.items) {
       if (!datas.containsKey('community')) {
@@ -513,10 +856,189 @@ class PocketBaseData {
         data.data[key] = information[key];
       }
       datas['project'].add(data);
-      print('프로젝트 정보확인');
-      print(data);
     }
     return datas;
+  }
+
+  Future<Map<String, dynamic>> Get_Recent_Log(String user_id) async {
+    Map<String, dynamic> return_data = {};
+    final interest = await pb
+        .collection('log_view')
+        .getList(filter: " user_id = '$user_id' ");
+    for (var data in interest.items) {
+      final record_log = await pb.collection('log').getOne(data.data['log_id']);
+      return_data[record_log.id] = {};
+      return_data[record_log.id]['language'] = [];
+      return_data[record_log.id]['develop_type'] = [];
+      return_data[record_log.id]['like'] = [];
+      return_data[record_log.id]['view'] = [];
+      return_data[record_log.id]['comment'] = {};
+      final record_lan = await pb
+          .collection('log_language')
+          .getList(filter: " log_id = '${record_log.id}'");
+      final record_dev = await pb
+          .collection('log_develop_type')
+          .getList(filter: " log_id = '${record_log.id}'");
+      final record_like = await pb
+          .collection('log_like')
+          .getList(filter: " log_id = '${record_log.id}'");
+      final record_view = await pb
+          .collection('log_view')
+          .getList(filter: " log_id = '${record_log.id}'");
+      final record_com = await pb
+          .collection('log_comment')
+          .getList(filter: " log_id = '${record_log.id}'");
+
+      for (var data_lan in record_lan.items) {
+        // 언어가 멀티플이므로 반복문을 통해
+        for (var language_id in data_lan.data['language_id']) {
+          final language =
+              await pb.collection('language_list').getOne(language_id);
+          return_data[record_log.id]['language'].add(language.data['language']);
+        }
+      }
+
+      for (var data_dev in record_dev.items) {
+        for (var develop_id in data_dev.data['develop_type_id']) {
+          final develop_type =
+              await pb.collection('develop_type_list').getOne(develop_id);
+          return_data[record_log.id]['develop_type']
+              .add(develop_type.data['develop_type']);
+        }
+      }
+
+      for (var data_like in record_like.items) {
+        return_data[record_log.id]['like'].add(data_like.id);
+      }
+
+      for (var data_view in record_view.items) {
+        return_data[record_log.id]['view'].add(data_view.id);
+      }
+
+      for (var data_com in record_com.items) {
+        return_data[record_log.id]['comment'] = [
+          {
+            'user': data_com.data['user_id'],
+            'content': data_com.data['content']
+          }
+        ];
+      }
+
+      return_data[record_log.id]['comment_num'] =
+          return_data[record_log.id]['comment'].length;
+      return_data[record_log.id]['view_num'] =
+          return_data[record_log.id]['view'].length;
+      return_data[record_log.id]['like_num'] =
+          return_data[record_log.id]['like'].length;
+      return_data[record_log.id]['id'] = record_log.id;
+      return_data[record_log.id]['type'] = 'Log';
+      final user =
+          await pb.collection('users').getOne(record_log.data['user_id']);
+      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
+      return_data[record_log.id]['avatar'] = user_image;
+      return_data[record_log.id]['writer'] = user.data['nickname'];
+
+      String image =
+          pb.files.getUrl(record_log, record_log.data['image']).toString();
+      return_data[record_log.id]['image'] = image;
+      return_data[record_log.id]['title'] = record_log.data['title'];
+      return_data[record_log.id]['content'] = record_log.data['content'];
+      return_data[record_log.id]['update'] = data.created;
+    }
+
+    return return_data;
+  }
+
+  Future<Map<String, dynamic>> Get_Recent_Community(String user_id) async {
+    Map<String, dynamic> return_data = {};
+    final interest = await pb
+        .collection('community_view')
+        .getList(filter: " user_id = '$user_id' ");
+    for (var data in interest.items) {
+      final record_log =
+          await pb.collection('community').getOne(data.data['community_id']);
+      return_data[record_log.id] = {};
+      return_data[record_log.id]['language'] = [];
+      return_data[record_log.id]['develop_type'] = [];
+      return_data[record_log.id]['like'] = [];
+      return_data[record_log.id]['view'] = [];
+      return_data[record_log.id]['comment'] = {};
+      final record_lan = await pb
+          .collection('community_language')
+          .getList(filter: " community_id = '${record_log.id}'");
+      final record_dev = await pb
+          .collection('community_develop_type')
+          .getList(filter: " community_id = '${record_log.id}'");
+      final record_like = await pb
+          .collection('community_like')
+          .getList(filter: " community_id = '${record_log.id}'");
+      final record_view = await pb
+          .collection('community_view')
+          .getList(filter: " community_id = '${record_log.id}'");
+      final record_com = await pb
+          .collection('community_comment')
+          .getList(filter: " community_id = '${record_log.id}'");
+
+      for (var data_lan in record_lan.items) {
+        for (var language_id in data_lan.data['language_id']) {
+          final language =
+              await pb.collection('language_list').getOne(language_id);
+          return_data[record_log.id]['language'].add(language.data['language']);
+        }
+      }
+
+      for (var data_dev in record_dev.items) {
+        for (var develop_id in data_dev.data['develop_type_id']) {
+          final develop_type =
+              await pb.collection('develop_type_list').getOne(develop_id);
+          return_data[record_log.id]['develop_type']
+              .add(develop_type.data['develop_type']);
+        }
+      }
+
+      for (var data_like in record_like.items) {
+        return_data[record_log.id]['like'].add(data_like.id);
+      }
+
+      for (var data_view in record_view.items) {
+        return_data[record_log.id]['view'].add(data_view.id);
+      }
+
+      for (var data_com in record_com.items) {
+        return_data[record_log.id]['comment'] = [
+          {
+            'user': data_com.data['user_id'],
+            'content': data_com.data['content']
+          }
+        ];
+      }
+
+      return_data[record_log.id]['comment_num'] =
+          return_data[record_log.id]['comment'].length;
+      return_data[record_log.id]['view_num'] =
+          return_data[record_log.id]['view'].length;
+      return_data[record_log.id]['like_num'] =
+          return_data[record_log.id]['like'].length;
+      return_data[record_log.id]['id'] = record_log.id;
+      return_data[record_log.id]['type'] = 'Log';
+      final user =
+          await pb.collection('users').getOne(record_log.data['user_id']);
+      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
+      return_data[record_log.id]['avatar'] = user_image;
+      return_data[record_log.id]['writer'] = user.data['nickname'];
+
+      return_data[record_log.id]['image'] = [];
+      for (var image in record_log.data["image"]) {
+        String url = pb.files.getUrl(record_log, image).toString();
+        return_data[record_log.id]['image'].add(url);
+      }
+
+      return_data[record_log.id]['title'] = record_log.data['title'];
+      return_data[record_log.id]['content'] = record_log.data['content'];
+      return_data[record_log.id]['update'] = data.created;
+    }
+
+    return return_data;
   }
 
   Future<Map<String, dynamic>> Project_information(
@@ -588,8 +1110,9 @@ class PocketBaseData {
     final like = await pb
         .collection('${collectionname}_like')
         .getList(filter: "( ${collectionname}_id ='${recordid}' )");
+
     final view = await pb
-        .collection('${collectionname}_like')
+        .collection('${collectionname}_view')
         .getList(filter: "( ${collectionname}_id ='${recordid}' )");
 
     final develop_type = await pb
@@ -817,5 +1340,20 @@ class PocketBaseData {
       print(body);
       await pb.collection('sns').create(body: body);
     }
+  }
+
+  Future<Map<String, dynamic>> Get_Projcet() async {
+    Map<String, dynamic> send_data = {};
+
+    final record = await pb.collection('project').getFullList();
+
+    for (var data in record) {
+      send_data[data.id] = data;
+      Map<String, dynamic> information = await Project_information(data);
+      for (String key in information.keys) {
+        send_data[data.id].data[key] = information[key];
+      }
+    }
+    return send_data;
   }
 }

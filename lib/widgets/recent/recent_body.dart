@@ -3,8 +3,8 @@ import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/widgets/recent/community_slot_build.dart';
 
 class Recent_Body extends StatefulWidget {
-  final String type;
-  const Recent_Body(this.type);
+  final Map<String, dynamic> data;
+  const Recent_Body(this.data);
 
   @override
   State<Recent_Body> createState() => _Recent_BodyState();
@@ -24,15 +24,8 @@ class _Recent_BodyState extends State<Recent_Body> {
   }
 
   void Get_Data() async {
-    Map<String, dynamic> data_load = {};
-    if (widget.type == 'log') {
-      data_load = await PocketBaseData().Get_Log();
-    } else if (widget.type == 'community') {
-      data_load = await PocketBaseData().Get_Community();
-    }
-
     setState(() {
-      data = data_load;
+      data = widget.data;
       page_load = true;
     });
 
@@ -43,9 +36,13 @@ class _Recent_BodyState extends State<Recent_Body> {
   void Data_Division() {
     DateTime now = DateTime.now();
 
-    for (String key in data.keys) {
+    Map<String, dynamic> data_sort = Map.fromEntries(data.entries.toList()
+      ..sort((a, b) => b.value['update'].compareTo(a.value['update'])));
+
+    for (String key in data_sort.keys) {
       DateTime date = DateTime.parse(data[key]['update']);
       Duration difference = now.difference(date);
+
       if (difference.inHours < 24) {
         if (!data_division.containsKey('오늘')) {
           data_division['오늘'] = [];

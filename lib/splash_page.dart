@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/social_signup_page.dart';
@@ -11,6 +12,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => Page_Controller()),
         ChangeNotifierProvider(create: (_) => User_Data()),
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
       ],
       child: MaterialApp(
         color: Color(0xFFFFFFFF),

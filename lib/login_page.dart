@@ -2,39 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/home_page.dart';
-import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
+// import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/pw_find_page.dart';
 import 'package:team_7_sfacpolio/signup_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-void main() {
-  runApp(
-    LoginPage(),
-  );
-}
+// void main() {
+//   runApp(
+//     LoginPage(),
+//   );
+// }
 
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => NavigationProvider(),
-      child: MaterialApp(
-        home: ChangeNotifierProvider(
-          create: (context) => User_Data(),
-          child: _LoginPage(),
-        ),
-      ),
-    );
-  }
-}
+// class LoginPage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider(
+//       create: (context) => NavigationProvider(),
+//       child: MaterialApp(
+//         home: ChangeNotifierProvider(
+//           create: (context) => User_Data(),
+//           child: _LoginPage(),
 
-class _LoginPage extends StatefulWidget {
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class _LoginPage extends StatefulWidget {
+//   @override
+//   _LoginPageState createState() => _LoginPageState();
+// }
+
+class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<_LoginPage> {
+// class _LoginPageState extends State<_LoginPage> {
+class _LoginPageState extends State<LoginPage> {
   final pb = PocketBase('http://3.36.50.35:8090');
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -58,6 +65,9 @@ class _LoginPageState extends State<_LoginPage> {
       print('사용자 ID: ${pb.authStore.model.id}');
       Provider.of<User_Data>(context, listen: false)
           .Save_Auth(authData, pb.authStore);
+      print('저장확인 ');
+      print(context.read<User_Data>().record);
+      print(context.read<User_Data>().auth);
       Navigator.push(
         context,
         MaterialPageRoute(

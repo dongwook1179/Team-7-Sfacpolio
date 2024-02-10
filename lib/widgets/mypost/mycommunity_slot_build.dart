@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/mypost/tag_slot.dart';
 
 class MyCommunity_Slot_Build extends StatefulWidget {
@@ -16,6 +17,7 @@ class MyCommunity_Slot_Build extends StatefulWidget {
 
 class _MyCommunity_Slot_BuildState extends State<MyCommunity_Slot_Build> {
   String time = '';
+  bool like_state = false;
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class _MyCommunity_Slot_BuildState extends State<MyCommunity_Slot_Build> {
     Duration difference = now.difference(dateTime);
     setState(() {
       if (difference.inDays >= 1) {
-        time = DateFormat('MM/dd').format(widget.data.created); // 날짜 형태로 표시
+        time = DateFormat('MM/dd').format(dateTime); // 날짜 형태로 표시
       } else if (difference.inHours >= 2) {
         time = '${difference.inHours}시간 전';
       } else if (difference.inHours >= 1) {
@@ -40,6 +42,13 @@ class _MyCommunity_Slot_BuildState extends State<MyCommunity_Slot_Build> {
         time = '${difference.inMinutes}분 전';
       } else {
         time = '방금 전';
+      }
+      String id = context.read<User_Data>().record.record!.id;
+
+      for (var data in widget.data.data['like']) {
+        if (data.data['user_id'].contains(id)) {
+          like_state = true;
+        }
       }
     });
   }
@@ -196,11 +205,17 @@ class _MyCommunity_Slot_BuildState extends State<MyCommunity_Slot_Build> {
             ),
             Row(
               children: [
-                SvgPicture.asset(
-                  'assets/icons/like.svg',
-                  width: 16,
-                  height: 16,
-                ),
+                like_state
+                    ? SvgPicture.asset(
+                        'assets/icons/Property 2=Outline, Property 3=heart, Property 4=active.svg',
+                        width: 16,
+                        height: 16,
+                      )
+                    : SvgPicture.asset(
+                        'assets/icons/like.svg',
+                        width: 16,
+                        height: 16,
+                      ),
                 SizedBox(
                   width: 2,
                 ),
