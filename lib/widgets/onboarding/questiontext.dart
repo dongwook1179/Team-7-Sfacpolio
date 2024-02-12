@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import '../../provider/pagecontrol.dart';
 
 class QuestionText extends StatefulWidget {

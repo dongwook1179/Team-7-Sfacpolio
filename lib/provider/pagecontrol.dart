@@ -28,6 +28,7 @@ class Page_Controller with ChangeNotifier {
   String filter_text_kor = '최신순';
   bool post_delete_active = false;
   List<String> post_delete_select = [];
+  Map<String, String> project_applicant_type = {};
 
   void Page_Reload() {
     notifyListeners();
@@ -35,9 +36,7 @@ class Page_Controller with ChangeNotifier {
 
   void Next(BuildContext context) {
     pagenum++;
-    // if (pagenum == 7) {
-    //   pagenum = 1;
-    // }
+
     notifyListeners();
   }
 
@@ -206,6 +205,11 @@ class Page_Controller with ChangeNotifier {
         post_delete_select.add(data);
       }
     }
+    notifyListeners();
+  }
+
+  void Project_Change_Type(String type, String content) {
+    project_applicant_type[type] = content;
     notifyListeners();
   }
 }

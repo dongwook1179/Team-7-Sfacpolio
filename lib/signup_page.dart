@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/login_page.dart';
+import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/privacy_policy_page.dart';
 import 'package:team_7_sfacpolio/profile_setup_page.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
@@ -179,8 +180,12 @@ class _SignUpPageState extends State<SignUpPage> {
           );
 
       print("로그인 : ${authData}");
-      Provider.of<User_Data>(context, listen: false)
-          .Save_Auth(authData, pb.authStore);
+      Map<String, dynamic> user_data =
+          await PocketBaseData().Get_UserData(authData.record!.id);
+
+      Provider.of<User_Data>(context, listen: false).Save_Auth(authData,
+          pb.authStore, user_data['language'], user_data['develop_type']);
+
       Navigator.push(
         context,
         MaterialPageRoute(

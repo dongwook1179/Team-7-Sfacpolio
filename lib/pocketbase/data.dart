@@ -44,6 +44,15 @@ class PocketBaseData {
     return data_conversion;
   }
 
+  Future<List<String>> Language_Load() async {
+    final collection_data = await pb.collection('language_list').getFullList();
+    List<String> data_conversion = [];
+    for (int i = 0; i < collection_data.length; i++) {
+      data_conversion.add(collection_data[i].data['language']);
+    }
+    return data_conversion;
+  }
+
   Future<Map<String, dynamic>> Service_Load() async {
     final collection_data = await pb.collection('service_list').getFullList();
     Map<String, dynamic> data_conversion = {};
@@ -1045,7 +1054,7 @@ class PocketBaseData {
       RecordModel recordModel) async {
     Map<String, dynamic> project_information = {};
     List<String> develop_list = [];
-    List<String> language_list = [];
+    List<Map<String, String>> language_list = [];
 
     final develop_type = await pb
         .collection('project_develop_type')
@@ -1065,7 +1074,13 @@ class PocketBaseData {
     for (var data in language.items) {
       for (String id in data.data['language_id']) {
         final languages = await pb.collection('language_list').getOne(id);
-        language_list.add(languages.data['language']);
+        String logo =
+            await pb.files.getUrl(languages, languages.data['logo']).toString();
+        Map<String, String> lan_data = {
+          'language': languages.data['language'],
+          'logo': logo
+        };
+        language_list.add(lan_data);
       }
     }
 
@@ -1080,6 +1095,24 @@ class PocketBaseData {
       project_information['user_id'] = data.id;
       final avatar_url = pb.files.getUrl(data, data.data['avatar']).toString();
       project_information['avatar'] = avatar_url;
+    }
+
+    final like = await pb
+        .collection('project_like')
+        .getList(filter: "(  project_id =  '${recordModel.id}' )");
+    project_information['like'] = [];
+    for (var data in like.items) {
+      project_information['like'].add(data.data['user_id']);
+    }
+
+    final recruit = await pb
+        .collection('project_recruit')
+        .getList(filter: "(  project_id =  '${recordModel.id}' )");
+    project_information['recruit_number'] = 0;
+    project_information['recruit'] = {};
+    for (var data in recruit.items) {
+      project_information['recruit'][data.id] = data.data;
+      project_information['recruit_number'] += data.data['number'];
     }
 
     return project_information;
@@ -1134,6 +1167,7 @@ class PocketBaseData {
     for (var data in language.items) {
       for (String id in data.data['language_id']) {
         final languages = await pb.collection('language_list').getOne(id);
+
         language_list.add(languages.data['language']);
       }
     }
@@ -1355,5 +1389,47 @@ class PocketBaseData {
       }
     }
     return send_data;
+  }
+
+  Future<Map<String, dynamic>> Get_UserData(String user_id) async {
+    Map<String, dynamic> data = {};
+    List<Map<String, String>> language_list = [];
+    List<Map<String, String>> develop_list = [];
+
+    final language = await pb
+        .collection('language')
+        .getList(filter: "( user_id = '${user_id}' )");
+    final develop_type = await pb
+        .collection('develop_type')
+        .getList(filter: "( user_id = '${user_id}' )");
+
+    for (var data in language.items) {
+      for (String id in data.data['language_id']) {
+        Map<String, String> language_data = {};
+        final lan_info = await pb.collection('language_list').getOne(id);
+        final image =
+            pb.files.getUrl(lan_info, lan_info.data['logo']).toString();
+        language_data['id'] = lan_info.id;
+        language_data['language'] = lan_info.data['language'];
+        language_data['logo'] = image;
+        language_list.add(language_data);
+      }
+    }
+
+    data['language'] = language_list;
+
+    for (var data in develop_type.items) {
+      for (String id in data.data['develop_type_id']) {
+        Map<String, String> develop_data = {};
+        final dev_info = await pb.collection('develop_type_list').getOne(id);
+        develop_data['id'] = dev_info.id;
+        develop_data['develop_type'] = dev_info.data['develop_type'];
+        develop_list.add(develop_data);
+      }
+    }
+
+    data['develop_type'] = develop_list;
+
+    return data;
   }
 }
