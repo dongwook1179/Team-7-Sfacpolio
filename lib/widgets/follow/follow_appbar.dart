@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:team_7_sfacpolio/screen/search.dart';
-import 'package:team_7_sfacpolio/screen/withdrawal.dart';
 
 class Follow_Appbar extends StatefulWidget {
   const Follow_Appbar({super.key});

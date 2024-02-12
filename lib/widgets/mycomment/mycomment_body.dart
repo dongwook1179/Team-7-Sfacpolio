@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 import 'package:team_7_sfacpolio/widgets/mycomment/mycomment_slot.dart';
 
 class MyComment_Body extends StatefulWidget {

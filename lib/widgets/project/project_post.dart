@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_slot_build.dart';
 
 class Project_Post extends StatefulWidget {
