@@ -7,6 +7,7 @@ import 'package:team_7_sfacpolio/screen/chatting.dart';
 import 'package:team_7_sfacpolio/screen/follow.dart';
 import 'package:team_7_sfacpolio/screen/interest.dart';
 import 'package:team_7_sfacpolio/screen/mycomment.dart';
+import 'package:team_7_sfacpolio/screen/mypage.dart';
 import 'package:team_7_sfacpolio/screen/mypost.dart';
 import 'package:team_7_sfacpolio/screen/onboarding.dart';
 import 'package:team_7_sfacpolio/screen/project.dart';
@@ -22,7 +23,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => User_Data()),
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
       ],
-      child: MaterialApp(color: Color(0xFFFFFFFF), home: Setting()),
+      child: MaterialApp(color: Color(0xFFFFFFFF), home: MyPage()),
     ),
   );
 }

@@ -112,6 +112,8 @@ class _CommuityPageState extends State<CommuityPage> {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.white,
         titleSpacing: 0,
         title: Container(
           width: 360,
