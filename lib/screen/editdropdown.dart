@@ -106,7 +106,7 @@ class _EditDropDownState extends State<EditDropDown> {
                       hintText: '직장',
                       hintStyle: TextStyle(
                         color: Color(0xFF020202),
-                        fontSize: 14,
+                        fontSize: 14.0,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w400,
                       ),
