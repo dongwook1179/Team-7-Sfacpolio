@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/tag_slot.dart';
 
 class Community_Slot_Build extends StatefulWidget {
@@ -12,6 +14,7 @@ class Community_Slot_Build extends StatefulWidget {
 
 class _Community_Slot_BuildState extends State<Community_Slot_Build> {
   String date = '';
+  bool like_state = false;
 
   @override
   void initState() {
@@ -30,9 +33,14 @@ class _Community_Slot_BuildState extends State<Community_Slot_Build> {
         widget.data['image'] = widget.data['image'][0];
       });
     }
-
+    String id = context.read<User_Data>().record.record!.id;
     setState(() {
       date = formattedDate;
+      for (String data in widget.data['like']) {
+        if (data == id) {
+          like_state = true;
+        }
+      }
     });
   }
 
@@ -140,11 +148,17 @@ class _Community_Slot_BuildState extends State<Community_Slot_Build> {
                       ),
                     ),
                     Spacer(),
-                    SvgPicture.asset(
-                      'assets/icons/like.svg',
-                      width: 16,
-                      height: 16,
-                    ),
+                    like_state
+                        ? SvgPicture.asset(
+                            'assets/icons/Property 2=Outline, Property 3=heart, Property 4=active.svg',
+                            width: 16,
+                            height: 16,
+                          )
+                        : SvgPicture.asset(
+                            'assets/icons/like.svg',
+                            width: 16,
+                            height: 16,
+                          ),
                     SizedBox(
                       width: 2,
                     ),

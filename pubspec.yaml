@@ -74,6 +74,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icon/
     - assets/jsons/
     - assets/images/chatting/
     - assets/images/log/
@@ -81,6 +82,7 @@ flutter:
     - assets/images/service/
     - assets/images/main/
     - assets/images/programing_logo/
+    - assets/programing logo/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

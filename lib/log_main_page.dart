@@ -177,7 +177,9 @@ class _LogMainPageState extends State<LogMainPage>
                   ),
                 );
               },
-              child: SvgPicture.asset("assets/icons/search.svg"),
+              child: Container(
+                  margin: EdgeInsets.only(right: 16),
+                  child: SvgPicture.asset("assets/icons/search.svg")),
             )
           ],
         ),

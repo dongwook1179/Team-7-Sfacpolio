@@ -33,7 +33,7 @@ class _ChattingState extends State<Chatting> {
               Chatting_Body('project'),
               Chatting_Body('employment'),
               Container(
-                child: Text('개인'),
+                child: Center(child: Text('진행중인 대화가 없습니다.')),
               ),
             ],
           ),

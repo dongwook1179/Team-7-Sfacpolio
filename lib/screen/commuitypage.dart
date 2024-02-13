@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/screen/community_list.dart';
 import 'package:team_7_sfacpolio/screen/project.dart';
 import 'package:team_7_sfacpolio/screen/search.dart';
@@ -16,6 +18,24 @@ class _CommuityPageState extends State<CommuityPage> {
   bool isPopularSelected = false;
   bool isLikedSelected = false;
   int page_num = 0;
+  Map<String, dynamic> data = {};
+  bool page_load = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Load_data();
+  }
+
+  void Load_data() async {
+    Map<String, dynamic> newData = await PocketBaseData().Community();
+    setState(() {
+      data = newData;
+      page_load = true;
+    });
+  }
+
   void _showSortingOptionsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -152,8 +172,8 @@ class _CommuityPageState extends State<CommuityPage> {
                 ),
               ),
               Spacer(),
-              IconButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -161,119 +181,142 @@ class _CommuityPageState extends State<CommuityPage> {
                     ),
                   );
                 },
-                icon: Icon(
-                  Icons.search,
-                  size: 24,
+                child: Container(
+                  margin: EdgeInsets.only(right: 16),
+                  child: SvgPicture.asset(
+                    'assets/icons/search.svg',
+                    width: 24,
+                    height: 24,
+                  ),
                 ),
               ),
+              // IconButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => Search(),
+              //       ),
+              //     );
+              //   },
+              //   icon: Icon(
+              //     Icons.search,
+              //     size: 24,
+              //   ),
+              // ),
             ],
           ),
         ),
       ),
       body: page_num == 0
-          ? Container(
-              width: 360,
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Column(
+          ? page_load
+              ? Container(
+                  width: 360,
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: List.generate(buttonData.length, (index) {
-                              // double buttonWidth =
-                              //     buttonData[index]['text'].length * 25.0;
-                              return Container(
-                                width: 48,
-                                height: 32,
-                                margin: EdgeInsets.all(5),
-                                child: OutlinedButton(
-                                    onPressed: () {},
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          buttonData[index]['text'],
-                                          style: TextStyle(
-                                            color: selectedButton == index
-                                                ? Color(0xFF0059FF)
-                                                : Color(0xFF7F7F7F),
-                                            fontSize: 12,
-                                            fontFamily: 'Pretendard',
-                                            fontWeight: FontWeight.w400,
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children:
+                                    List.generate(buttonData.length, (index) {
+                                  // double buttonWidth =
+                                  //     buttonData[index]['text'].length * 25.0;
+                                  return Container(
+                                    width: 48,
+                                    height: 32,
+                                    margin: EdgeInsets.all(5),
+                                    child: OutlinedButton(
+                                        onPressed: () {},
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              buttonData[index]['text'],
+                                              style: TextStyle(
+                                                color: selectedButton == index
+                                                    ? Color(0xFF0059FF)
+                                                    : Color(0xFF7F7F7F),
+                                                fontSize: 12,
+                                                fontFamily: 'Pretendard',
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                          padding: EdgeInsets.all(5),
+                                          side: BorderSide(
+                                            width: 1,
+                                            color: Color(0xFFB3B3B3),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                    style: OutlinedButton.styleFrom(
-                                      padding: EdgeInsets.all(5),
-                                      side: BorderSide(
-                                        width: 1,
-                                        color: Color(0xFFB3B3B3),
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    )),
-                              );
-                            }),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                        )),
+                                  );
+                                }),
+                              ),
+                            ),
                           ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${data.length}개의 최신글',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Spacer(),
+                            Text(
+                              '최신순',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                _showSortingOptionsModal(context);
+                              },
+                              icon: Icon(
+                                Icons.expand_more,
+                                size: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      Expanded(child: InfiniteScrollPage(data)),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        Text(
-                          '개의 최신글',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 190,
-                        ),
-                        Text(
-                          '최신순',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _showSortingOptionsModal(context);
-                          },
-                          icon: Icon(
-                            Icons.expand_more,
-                            size: 16,
-                          ),
-                        ),
-                      ],
-                    ),
+                )
+              : Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xFF0059FF),
                   ),
-                  Expanded(child: InfiniteScrollPage()),
-                ],
-              ),
-            )
+                )
           : Project(),
     );
   }

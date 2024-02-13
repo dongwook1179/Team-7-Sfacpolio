@@ -5,7 +5,6 @@ import 'package:team_7_sfacpolio/widgets/project/projcet_calendar_select.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_Language_slot.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_period_select.dart';
-import 'package:team_7_sfacpolio/widgets/project/project_create_type_select.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_type_slot.dart';
 import 'package:team_7_sfacpolio/widgets/project/title_text.dart';
 
@@ -489,6 +488,9 @@ class _Project_CreateState extends State<Project_Create> {
                         )
                     ],
                   ),
+                  SizedBox(
+                    height: 30,
+                  )
                 ],
               ),
             ),
