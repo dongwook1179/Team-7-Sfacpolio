@@ -59,7 +59,7 @@ class LogCardWidget extends StatelessWidget {
               margin: EdgeInsets.only(left: 12, top: 12),
               child: Row(
                 children: [
-                  if (tag1 != "")
+                  if (tag1 != "" && tag1 != null)
                     Container(
                       margin: EdgeInsets.only(right: 4),
                       padding: EdgeInsets.symmetric(horizontal: 5),
@@ -80,7 +80,7 @@ class LogCardWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (tag2 != "")
+                  if (tag2 != "" && tag2 != null)
                     Container(
                       margin: EdgeInsets.only(right: 4),
                       padding: EdgeInsets.symmetric(horizontal: 5),
@@ -101,7 +101,7 @@ class LogCardWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (tag3 != "")
+                  if (tag3 != "" && tag3 != null)
                     Container(
                       margin: EdgeInsets.only(right: 4),
                       padding: EdgeInsets.symmetric(horizontal: 5),

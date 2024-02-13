@@ -1,28 +1,152 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:team_7_sfacpolio/widgets/log/bring_mylog_modal_widget.dart';
+import 'package:team_7_sfacpolio/widgets/log/log_career_card_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_career_modal_widget.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LogTempleteUpdatePage(),
-    );
-  }
-}
+import 'package:team_7_sfacpolio/widgets/log/log_project_modal_widget.dart';
 
 class LogTempleteUpdatePage extends StatefulWidget {
-  const LogTempleteUpdatePage({super.key});
+  final String? careerDate;
+  final String? careerProject;
+  final String? projectDate;
+  final String? projectName;
+  final String? projectTag;
+  final List? projectPicturelist;
+  final String? projectContent;
+
+  LogTempleteUpdatePage({
+    Key? key,
+    this.careerDate,
+    this.careerProject,
+    this.projectDate,
+    this.projectName,
+    this.projectTag,
+    this.projectPicturelist,
+    this.projectContent,
+  }) : super(key: key);
 
   @override
   State<LogTempleteUpdatePage> createState() => _LogTempleteUpdatePageState();
 }
 
 class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
+  late File _image;
+  String careerdate = "";
+  String careerproject = "";
+  String projectdate = "";
+  String projectname = "";
+  String projecttag = "";
+  List projectpicturelist = [];
+  String projectcontent = "";
+
+  List<Experience> experiences = [];
+  List<Project> projects = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _image = File("");
+    careerdate = widget.careerDate ?? "";
+    careerproject = widget.careerProject ?? "";
+  }
+
+  void addExperience(String date, String project) {
+    if (date.isNotEmpty && project.isNotEmpty) {
+      setState(() {
+        experiences.add(Experience(date: date, project: project));
+        print(experiences);
+      });
+    }
+  }
+
+  void EditExperience(String date, String project, int index) {
+    if (date.isNotEmpty && project.isNotEmpty) {
+      setState(() {
+        experiences[index] = Experience(date: date, project: project);
+        print(experiences);
+      });
+    }
+  }
+
+  void deleteExperience(int index) {
+    setState(() {
+      experiences.removeAt(index);
+      print(experiences);
+    });
+  }
+
+  void addProject(String date, String projectname, String tag, List picturelist,
+      String content) {
+    if (date.isNotEmpty && projectname.isNotEmpty) {
+      String formattedDate = formatDateStringRange(date);
+      setState(() {
+        projects.add(Project(
+            date: formattedDate,
+            projectname: projectname,
+            tag: tag,
+            picturelist: picturelist,
+            content: content));
+      });
+      print('Data received in addProject:');
+      print('Date: $date');
+      print('Dateformat: $formattedDate');
+      print('Project Name: $projectname');
+      print('Tag: $tag');
+      print('Picture List: $picturelist');
+      print('Content: $content');
+      print('cc: ${projects}');
+    }
+  }
+
+  String formatDateStringRange(String dateRangeString) {
+    List<String> dateParts = dateRangeString.split(' ~ ');
+    print(dateParts);
+
+    if (dateParts.length != 2) {
+      print('Error: Unable to split date range string');
+      print('Original String: $dateRangeString');
+      print('Split Parts: $dateParts');
+      return ''; // 형식화된 날짜를 반환할 수 없는 경우 빈 문자열 또는 다른 기본값을 반환할 수 있습니다.
+    }
+
+    // 각 날짜를 형식화
+    String formattedStartDate = formatDateString(dateParts[0]);
+    String formattedEndDate = formatDateString(dateParts[1]);
+    print(formattedStartDate);
+    print(formattedEndDate);
+    // 형식화된 날짜를 합쳐서 반환
+    return '$formattedStartDate ~ $formattedEndDate';
+  }
+
+  String formatDateString(String dateString) {
+    // "년 월 일"을 공백을 기준으로 분리
+    List<String> dateWords = dateString.split(' ');
+
+    // '년', '월', '일'을 제거하고 날짜를 "yyyy.MM.dd" 형식으로 변환
+    String formattedDate = dateWords[0].replaceAll('년', '') +
+        '.' +
+        dateWords[1].replaceAll('월', '') +
+        '.' +
+        dateWords[2].replaceAll('일', '');
+
+    return formattedDate;
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -88,6 +212,9 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 6,
+              ),
               Container(
                 width: 328,
                 height: 42,
@@ -139,6 +266,9 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 6,
+              ),
               Container(
                 width: 328,
                 height: 129,
@@ -155,7 +285,9 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                   //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _pickImage();
+                      },
                       child: Container(
                         width: 101,
                         height: 104,
@@ -165,30 +297,38 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                                 BorderSide(width: 1, color: Color(0xFFE6E6E6)),
                             borderRadius: BorderRadius.circular(8),
                           ),
+                          image: _image.existsSync()
+                              ? DecorationImage(
+                                  image: FileImage(_image),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/camera-filled.svg",
-                              width: 32,
-                              height: 32,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              '프로필 사진 첨부',
-                              style: TextStyle(
-                                color: Color(0xFF999999),
-                                fontSize: 12,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w400,
+                        child: _image.existsSync()
+                            ? null
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/icons/camera-filled.svg",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    '프로필 사진 첨부',
+                                    style: TextStyle(
+                                      color: Color(0xFF999999),
+                                      fontSize: 12,
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                     SizedBox(
@@ -269,7 +409,17 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        LogCareerModalWidget(context);
+                        LogCareerModalWidget(
+                          context,
+                          onAddExperience: (date, project) {
+                            addExperience(date, project);
+                          },
+                          onEditExperience: (date, project) {
+                            // 빈 함수 또는 다른 로직을 수행할 수 있음
+                          },
+                          initialDate: '',
+                          initialProject: '',
+                        );
                       },
                       child: Container(
                         width: 48,
@@ -311,34 +461,61 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
               SizedBox(
                 height: 6,
               ),
-              Container(
-                width: 328,
-                height: 78,
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(12),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Color(0xFFCCCCCC)),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: SizedBox(
-                  width: 126,
-                  child: Center(
-                    child: Text(
-                      '나의 경력을 추가해주세요.',
-                      style: TextStyle(
-                        color: Color(0xFF4C4C4C),
-                        fontSize: 12,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
+              experiences.isEmpty
+                  ? Container(
+                      width: 328,
+                      height: 78,
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(12),
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(width: 1, color: Color(0xFFCCCCCC)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
+                      child: SizedBox(
+                        width: 126,
+                        child: Center(
+                          child: Text(
+                            '나의 경력을 추가해주세요.',
+                            style: TextStyle(
+                              color: Color(0xFF4C4C4C),
+                              fontSize: 12,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: experiences.asMap().entries.map((entry) {
+                        final int index = entry.key;
+                        final Experience experience = entry.value;
+                        return LogCareerCardWidget(
+                          careerdate: experience.date,
+                          careerproject: experience.project,
+                          onDelete: () => deleteExperience(index),
+                          onEdit: () {
+                            LogCareerModalWidget(
+                              isEditing: true,
+                              context,
+                              onAddExperience: (date, project) {},
+                              onEditExperience: (updatedDate, updatedProject) {
+                                setState(() {
+                                  EditExperience(
+                                      updatedDate, updatedProject, index);
+                                });
+                              },
+                              initialDate: experiences[index].date,
+                              initialProject: experiences[index].project,
+                            );
+                          },
+                        );
+                      }).toList(),
                     ),
-                  ),
-                ),
-              ),
               SizedBox(
                 height: 11,
               ),
@@ -380,7 +557,16 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        LogProjectModalWidget(
+                          context,
+                          onAddProject:
+                              (date, projectname, tag, picturelist, content) {
+                            addProject(
+                                date, projectname, tag, picturelist, content);
+                          },
+                        );
+                      },
                       child: Container(
                         width: 48,
                         height: 24,
@@ -421,39 +607,173 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
               SizedBox(
                 height: 6,
               ),
-              Container(
-                width: 328,
-                height: 78,
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(12),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Color(0xFFCCCCCC)),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: SizedBox(
-                  width: 126,
-                  child: Center(
-                    child: Text(
-                      '프로젝트를 추가해주세요.',
-                      style: TextStyle(
-                        color: Color(0xFF4C4C4C),
-                        fontSize: 12,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
+              projects.isEmpty
+                  ? Container(
+                      width: 328,
+                      height: 78,
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(12),
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(width: 1, color: Color(0xFFCCCCCC)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: 126,
+                        child: Center(
+                          child: Text(
+                            '프로젝트를 추가해주세요.',
+                            style: TextStyle(
+                              color: Color(0xFF4C4C4C),
+                              fontSize: 12,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: projects.map((Project project) {
+                          return Column(
+                            children: [
+                              Container(
+                                width: 328,
+                                height: 42,
+                                padding: const EdgeInsets.all(12),
+                                clipBehavior: Clip.antiAlias,
+                                decoration: ShapeDecoration(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        width: 1, color: Color(0xFFCCCCCC)),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Text(
+                                  '${project.projectname}',
+                                  style: TextStyle(
+                                    color: Color(0xFF999999),
+                                    fontSize: 12,
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 9,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 20),
+                                decoration: ShapeDecoration(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        width: 1, color: Color(0xFFCCCCCC)),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 86,
+                                      height: 86,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 14),
+                                      decoration: ShapeDecoration(
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              width: 1,
+                                              color: Color(0xFFE6E6E6)),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/icons/camera-filled.svg",
+                                            width: 32,
+                                            height: 32,
+                                          ),
+                                          SizedBox(
+                                            height: 6,
+                                          ),
+                                          Text(
+                                            '사진 첨부(${project.picturelist.length}/5)',
+                                            style: TextStyle(
+                                              color: Color(0xFF999999),
+                                              fontSize: 12,
+                                              fontFamily: 'Pretendard',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 296,
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 12),
+                                      decoration: ShapeDecoration(
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            width: 1,
+                                            strokeAlign:
+                                                BorderSide.strokeAlignCenter,
+                                            color: Color(0xFFE6E6E6),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "${project.date}",
+                                      style: TextStyle(
+                                        color: Color(0xFF999999),
+                                        fontSize: 12,
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${project.content}",
+                                      style: TextStyle(
+                                        color: Color(0xFF999999),
+                                        fontSize: 12,
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              )
+                            ],
+                          );
+                        }).toList(),
                       ),
                     ),
-                  ),
-                ),
-              ),
               SizedBox(
                 height: 8,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  BringMyLogModalWidget(context);
+                },
                 child: Container(
                   width: 328,
                   padding: EdgeInsets.all(12),
@@ -743,5 +1063,38 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
         ),
       ),
     );
+  }
+}
+
+class Experience {
+  final String date;
+  final String project;
+
+  Experience({required this.date, required this.project});
+
+  @override
+  String toString() {
+    return 'Experience(date: $date, project: $project)';
+  }
+}
+
+class Project {
+  final String date;
+  final String projectname;
+  final String tag;
+  final List picturelist;
+  final String content;
+
+  Project({
+    required this.date,
+    required this.projectname,
+    required this.tag,
+    required this.picturelist,
+    required this.content,
+  });
+
+  @override
+  String toString() {
+    return 'Project(date: $date, project: $projectname, tag: $tag, picturelist: $picturelist,content: $content)';
   }
 }
