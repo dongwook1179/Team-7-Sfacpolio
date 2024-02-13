@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import '/widgets/onboarding/onboardingbody.dart';
+import 'package:team_7_sfacpolio/provider/pageloader.dart';
 import '/widgets/onboarding/nextbutton.dart';
 import '/widgets/onboarding/progressbar.dart';
 import '/widgets/onboarding/questiontext.dart';
@@ -16,23 +15,19 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: ChangeNotifierProvider(
-      create: (BuildContext context) => PageController(),
-      child: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.only(top: 45),
-          padding: EdgeInsets.zero,
-          child: Column(children: [
-            Container(height: 1, child: ProgressBar()),
-            Container(child: QuestionText()),
-            Container(child: OnboardingBody()),
-            Container(
-                alignment: Alignment.bottomCenter,
-                height: 50,
-                child: NextButton()),
-          ]),
-        ),
+    return CupertinoPageScaffold(
+        child: ChangeNotifierProvider(
+      create: (BuildContext context) => PageLoader(),
+      child: Container(
+        margin: EdgeInsets.only(top: 46),
+        child: Column(children: [
+          ProgressBar(),
+          QuestionText(),
+          Container(
+            height: 450,
+          ),
+          NextButton(),
+        ]),
       ),
     ));
   }
