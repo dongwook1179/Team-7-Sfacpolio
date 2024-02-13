@@ -68,33 +68,17 @@ class PocketBaseData {
     return data_conversion;
   }
 
-  Future<Map<String, dynamic>> Commuity() async {
-    final collection_data = await pb.collection('community').getFullList(
-          sort: '-created',
-        );
-
-    Map<String, dynamic> data_conversion = {};
-    List<String> url = [];
-    for (int i = 0; i < collection_data.length; i++) {
-      for (String name in collection_data[i].data['image']) {
-        String image = pb.files.getUrl(collection_data[i], name).toString();
-        url.add(image);
+  Future<Map<String, dynamic>> Community() async {
+    Map<String, dynamic> datas = {};
+    final community = await pb.collection('community').getFullList();
+    for (var data in community) {
+      Map<String, dynamic> information = await Post_information(data);
+      for (String key in information.keys) {
+        data.data[key] = information[key];
+        datas[data.id] = data;
       }
-
-      data_conversion[collection_data[i].id] = {
-        'user_id': collection_data[i].data['user_id'],
-        'topic': collection_data[i].data['topic'],
-        'image': url,
-        'title': collection_data[i].data['title'],
-        'content': collection_data[i].data['content'],
-        'created': collection_data[i].created,
-        'updated': collection_data[i].updated,
-        'id': collection_data[i].id,
-      };
     }
-    print(collection_data);
-    print(data_conversion);
-    return data_conversion;
+    return datas;
   }
 
   Future<void> Dummy_2() async {
@@ -236,7 +220,7 @@ class PocketBaseData {
       }
 
       for (var data_like in record_like.items) {
-        return_data[record_log.id]['like'].add(data_like.id);
+        return_data[record_log.id]['like'].add(data_like.data['user_id']);
       }
 
       for (var data_view in record_view.items) {
@@ -325,7 +309,7 @@ class PocketBaseData {
       }
 
       for (var data_like in record_like.items) {
-        return_data[record_log.id]['like'].add(data_like.id);
+        return_data[record_log.id]['like'].add(data_like.data['user_id']);
       }
 
       for (var data_view in record_view.items) {
@@ -1191,6 +1175,18 @@ class PocketBaseData {
       final image_url =
           pb.files.getUrl(recordModel, recordModel.data['image']).toString();
       post_information['image'] = image_url;
+    }
+    final user_develop = await pb
+        .collection('develop_type')
+        .getList(filter: "( user_id = '${userid}')");
+    post_information['user_develop_type'] = [];
+    for (var data in user_develop.items) {
+      for (String id in data.data['develop_type_id']) {
+        final develop_types =
+            await pb.collection('develop_type_list').getOne(id);
+        post_information['user_develop_type']
+            .add(develop_types.data['develop_type']);
+      }
     }
 
     post_information['develop_type'] = develop_list;

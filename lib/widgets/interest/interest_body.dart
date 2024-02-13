@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/interest/community_slot_build.dart';
 import 'package:team_7_sfacpolio/widgets/interest/interest_bottom_sheet.dart';
 
@@ -19,6 +20,7 @@ class _Interest_BodyState extends State<Interest_Body> {
   Map<String, dynamic> data_division = {};
   Map<String, Widget> data_widget = {};
   List<String> data_keys = [];
+  bool like_state = false;
 
   @override
   void initState() {
@@ -28,10 +30,19 @@ class _Interest_BodyState extends State<Interest_Body> {
   }
 
   void Get_Data() {
+    String id = context.read<User_Data>().record.record!.id;
+
     setState(() {
       data = widget.data;
       data_keys = data.keys.toList();
       page_load = true;
+      for (String datas in data.keys) {
+        for (String likes in data[datas]['like']) {
+          if (likes == id) {
+            like_state = true;
+          }
+        }
+      }
     });
     Sort_Data();
     Widget_Build();

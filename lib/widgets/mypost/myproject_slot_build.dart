@@ -16,6 +16,7 @@ class MyProject_Slot_Build extends StatefulWidget {
 
 class _MyProject_Slot_BuildState extends State<MyProject_Slot_Build> {
   String time = '';
+  bool like_state = false;
 
   @override
   void initState() {
@@ -28,6 +29,10 @@ class _MyProject_Slot_BuildState extends State<MyProject_Slot_Build> {
     DateTime now = DateTime.now();
     DateTime dateTime = DateTime.parse(widget.data.data['start_time']);
     Duration difference = dateTime.difference(now);
+
+    String id = context.read<User_Data>().record.record!.id;
+    print(widget.data.data['like']);
+
     setState(() {
       if (difference.inDays >= 1) {
         time = 'D-${difference.inDays}';
@@ -36,6 +41,11 @@ class _MyProject_Slot_BuildState extends State<MyProject_Slot_Build> {
       } else {
         time = '마감';
       }
+      //   for (String data in widget.data['like']) {
+      //   if (data == id) {
+      //     like_state = true;
+      //   }
+      // }
     });
   }
 

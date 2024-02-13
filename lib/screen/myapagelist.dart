@@ -689,8 +689,7 @@ class _MyPageListState extends State<MyPageList> {
                     ),
                     Row(
                       children: [
-                        SvgPicture.asset(
-                            'assets/images/programing_logo/icon list.svg'),
+                        SvgPicture.asset('assets/icons/briefcase.svg'),
                         SizedBox(
                           width: 10,
                         ),
@@ -724,8 +723,7 @@ class _MyPageListState extends State<MyPageList> {
                     ),
                     Row(
                       children: [
-                        SvgPicture.asset(
-                            'assets/images/programing_logo/academic-cap.svg'),
+                        SvgPicture.asset('assets/icons/academic-cap.svg'),
                         SizedBox(
                           width: 10,
                         ),

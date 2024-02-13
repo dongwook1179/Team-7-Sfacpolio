@@ -46,8 +46,6 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
 
       date = formattedDate;
     });
-    print('아이디들 확인 : $like_state');
-    print('조회수 확인 : ${widget.data.data['view']}');
   }
 
   String _twoDigits(int n) {

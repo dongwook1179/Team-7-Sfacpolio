@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:team_7_sfacpolio/screen/editprofile.dart';
-import 'package:team_7_sfacpolio/screen/myactive.dart';
+import 'package:team_7_sfacpolio/screen/follow.dart';
 import 'package:team_7_sfacpolio/screen/myactivity.dart';
 import 'package:team_7_sfacpolio/screen/myapagelist.dart';
-import 'package:team_7_sfacpolio/screen/onboarding.dart';
+import 'package:team_7_sfacpolio/screen/mypost.dart';
+import 'package:team_7_sfacpolio/screen/setting.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -43,7 +44,12 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             SizedBox(
               width: 20,
             ),
-            SvgPicture.asset('assets/icon/cog.svg'),
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Setting()));
+                },
+                child: SvgPicture.asset('assets/icon/cog.svg')),
             SizedBox(
               width: 10,
             ),
@@ -120,71 +126,89 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Column(
-                    children: [
-                      Text(
-                        '내 게시물',
-                        style: TextStyle(
-                          color: Color(0xFF020202),
-                          fontSize: 12,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w400,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyPost()));
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '내 게시물',
+                          style: TextStyle(
+                            color: Color(0xFF020202),
+                            fontSize: 12,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '23',
-                        style: TextStyle(
-                          color: Color(0xFF333333),
-                          fontSize: 18,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ],
+                        Text(
+                          '23',
+                          style: TextStyle(
+                            color: Color(0xFF333333),
+                            fontSize: 18,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        '팔로우',
-                        style: TextStyle(
-                          color: Color(0xFF020202),
-                          fontSize: 12,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w400,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Follow(1)));
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '팔로우',
+                          style: TextStyle(
+                            color: Color(0xFF020202),
+                            fontSize: 12,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '100',
-                        style: TextStyle(
-                          color: Color(0xFF333333),
-                          fontSize: 18,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ],
+                        Text(
+                          '100',
+                          style: TextStyle(
+                            color: Color(0xFF333333),
+                            fontSize: 18,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        '팔로잉',
-                        style: TextStyle(
-                          color: Color(0xFF020202),
-                          fontSize: 12,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w400,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Follow(0)));
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '팔로잉',
+                          style: TextStyle(
+                            color: Color(0xFF020202),
+                            fontSize: 12,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '121',
-                        style: TextStyle(
-                          color: Color(0xFF333333),
-                          fontSize: 18,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ],
+                        Text(
+                          '121',
+                          style: TextStyle(
+                            color: Color(0xFF333333),
+                            fontSize: 18,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -102,6 +102,27 @@ class _MyCommunity_Slot_BuildState extends State<MyCommunity_Slot_Build> {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
+                  SizedBox(
+                    width: 6,
+                  ),
+                  Container(
+                    width: 2,
+                    height: 2,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFFB3B3B3)),
+                  ),
+                  SizedBox(
+                    width: 6,
+                  ),
+                  Text(
+                    '${widget.data.data['user_develop_type'][0]}',
+                    style: TextStyle(
+                      color: Color(0xFF999999),
+                      fontSize: 12,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                   Spacer(),
                   context.watch<Page_Controller>().post_delete_active
                       ? Container(
