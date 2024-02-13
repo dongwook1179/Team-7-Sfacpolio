@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:team_7_sfacpolio/provider/pageloader.dart';
+import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 
 class ProgressBar extends StatefulWidget {
   const ProgressBar({super.key});
@@ -13,7 +13,7 @@ class _ProgressBarState extends State<ProgressBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 16, right: 16, top: 18),
+      margin: EdgeInsets.only(left: 16, right: 16),
       width: 328,
       height: 1,
       decoration: BoxDecoration(
@@ -21,7 +21,7 @@ class _ProgressBarState extends State<ProgressBar> {
       ),
       child: FractionallySizedBox(
         alignment: Alignment.topLeft,
-        widthFactor: context.watch<PageLoader>().pagenum / 4,
+        widthFactor: context.watch<Page_Controller>().pagenum / 6,
         heightFactor: 1,
         child: Container(
           decoration: BoxDecoration(
