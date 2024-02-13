@@ -79,7 +79,7 @@ class MainProjectCardWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              if (tag1 != null)
+              if (tag1 != "" && tag1 != null)
                 Container(
                   margin: EdgeInsets.only(right: 4),
                   padding: EdgeInsets.symmetric(horizontal: 5),
@@ -100,7 +100,7 @@ class MainProjectCardWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (tag2 != null)
+              if (tag2 != "" && tag2 != null)
                 Container(
                   margin: EdgeInsets.only(right: 4),
                   padding: EdgeInsets.symmetric(horizontal: 5),
@@ -121,7 +121,7 @@ class MainProjectCardWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (tag3 != null)
+              if (tag3 != "" && tag3 != null)
                 Container(
                   margin: EdgeInsets.only(right: 4),
                   padding: EdgeInsets.symmetric(horizontal: 5),

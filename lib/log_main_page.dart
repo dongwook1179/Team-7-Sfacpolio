@@ -157,27 +157,33 @@ class _LogMainPageState extends State<LogMainPage>
         ),
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
-          title: Text(
-            'LOG',
-            style: TextStyle(
-              color: Color(0xFF020202),
-              fontSize: 18,
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w700,
-              height: 0.08,
+          title: Container(
+            margin: EdgeInsets.only(left: 3),
+            child: Text(
+              'LOG',
+              style: TextStyle(
+                color: Color(0xFF020202),
+                fontSize: 18,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w700,
+                height: 0.08,
+              ),
             ),
           ),
           actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Search(),
-                  ),
-                );
-              },
-              child: SvgPicture.asset("assets/icons/search.svg"),
+            Container(
+              margin: EdgeInsets.only(right: 16),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Search(),
+                    ),
+                  );
+                },
+                child: SvgPicture.asset("assets/icons/search.svg"),
+              ),
             )
           ],
         ),

@@ -26,12 +26,7 @@ class PrivacyPolicyPage extends StatelessWidget {
           margin: EdgeInsets.only(right: 14),
           child: FloatingActionButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SignUpPage(),
-                ),
-              );
+              Navigator.pop(context);
             },
             backgroundColor: Color(0xFF0059FF),
             foregroundColor: Color(0xFF0059FF),

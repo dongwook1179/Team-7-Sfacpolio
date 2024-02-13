@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:team_7_sfacpolio/log_templete_update_page.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_templete_card_half_widget.dart';
 import 'package:team_7_sfacpolio/widgets/tag_slot.dart';
 
@@ -96,7 +97,16 @@ class LogTempletePreviewPage extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    Tag_Slot("템플릿 수정하기"),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LogTempleteUpdatePage(),
+                            ),
+                          );
+                        },
+                        child: Tag_Slot("템플릿 수정하기")),
                   ],
                 ),
                 SizedBox(
