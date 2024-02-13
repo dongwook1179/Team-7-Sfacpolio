@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_banner.dart';
+import 'package:team_7_sfacpolio/widgets/project/project_floationg_button.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_post.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_select_box.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_top.dart';
@@ -39,6 +40,7 @@ class _ProjectState extends State<Project> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Floating_Button(),
       body: page_load
           ? Container(
               width: 360,
@@ -54,6 +56,9 @@ class _ProjectState extends State<Project> {
                     Project_Select_Box(),
                     Project_Top(data.length),
                     Project_Post(data),
+                    SizedBox(
+                      height: 60,
+                    )
                   ],
                 ),
               ),

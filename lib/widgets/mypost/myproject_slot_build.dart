@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
+import 'package:team_7_sfacpolio/widgets/project/project_deadline.dart';
 import 'package:team_7_sfacpolio/widgets/tag_slot.dart';
 
 class MyProject_Slot_Build extends StatefulWidget {
@@ -118,43 +120,7 @@ class _MyProject_Slot_BuildState extends State<MyProject_Slot_Build> {
                                 : Color(0xFFCCCCCC),
                           )),
                         )
-                      : IntrinsicWidth(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6),
-                            height: 23,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              border: Border.all(
-                                width: 1,
-                                color: time == '마감'
-                                    ? Color(0xFF999999)
-                                    : time == '마감일'
-                                        ? Color(0xFFFFAFAF)
-                                        : Color(0xFF7FACFF),
-                              ),
-                              color: time == '마감'
-                                  ? Color(0xFFE6E6E6)
-                                  : time == '마감일'
-                                      ? Color(0xFFFFEAEA)
-                                      : Color(0xFFE5EEFF),
-                            ),
-                            child: Center(
-                              child: Text(
-                                time,
-                                style: TextStyle(
-                                  color: time == '마감'
-                                      ? Color(0xFF999999)
-                                      : time == '마감일'
-                                          ? Color(0xFFFF0000)
-                                          : Color(0xFF0059FF),
-                                  fontSize: 10,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
+                      : Project_DeadLine(widget.data.data['start_time'])
                 ],
               ),
               SizedBox(
@@ -188,7 +154,7 @@ class _MyProject_Slot_BuildState extends State<MyProject_Slot_Build> {
                 child: Row(
                   children: [
                     Text(
-                      '${widget.data.data['recruit']}명',
+                      '${widget.data.data['recruit_number']}명',
                       style: TextStyle(
                         color: Color(0xFF020202),
                         fontSize: 12,
@@ -209,14 +175,25 @@ class _MyProject_Slot_BuildState extends State<MyProject_Slot_Build> {
                       ),
                     ),
                     Spacer(),
-                    Container(
-                      width: 24,
-                      height: 24,
-                      child: SvgPicture.asset(
-                        'assets/icons/Property 2=Outline, Property 3=heart, Property 4=active.svg',
-                        fit: BoxFit.cover,
-                      ),
-                    )
+                    widget.data.data['like'].contains(
+                            context.read<User_Data>().record.record!.id)
+                        ? Container(
+                            width: 24,
+                            height: 24,
+                            child: SvgPicture.asset(
+                              'assets/icons/Property 2=Outline, Property 3=heart, Property 4=active.svg',
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(
+                            width: 24,
+                            height: 24,
+                            child: SvgPicture.asset(
+                              'assets/icons/heart.svg',
+                              color: Color(0xff999999),
+                              fit: BoxFit.cover,
+                            ),
+                          )
                   ],
                 ),
               )

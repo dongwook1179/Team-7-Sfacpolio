@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/home_page.dart';
+import 'package:team_7_sfacpolio/pocketbase/data.dart';
 // import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/pw_find_page.dart';
@@ -58,13 +59,15 @@ class _LoginPageState extends State<LoginPage> {
             idController.text,
             passwordController.text,
           );
-
       print('로그인 성공!');
       print('토큰111: ${pb.authStore}');
       print('토큰: ${pb.authStore.token}');
       print('사용자 ID: ${pb.authStore.model.id}');
-      Provider.of<User_Data>(context, listen: false)
-          .Save_Auth(authData, pb.authStore);
+      Map<String, dynamic> user_data =
+          await PocketBaseData().Get_UserData(authData.record!.id);
+
+      Provider.of<User_Data>(context, listen: false).Save_Auth(authData,
+          pb.authStore, user_data['language'], user_data['develop_type']);
       print('저장확인 ');
       print(context.read<User_Data>().record);
       print(context.read<User_Data>().auth);

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/navigation_provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/social_signup_page.dart';
 
-void main() {
+void main() async {
+  await initializeDateFormatting('ko-KR', null);
+
   runApp(
     MultiProvider(
       providers: [

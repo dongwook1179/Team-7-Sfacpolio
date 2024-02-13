@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Project_Banner extends StatefulWidget {
   const Project_Banner({super.key});
