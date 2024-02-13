@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pocketbase/pocketbase.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/log/bring_mylog_modal_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_career_card_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_career_modal_widget.dart';
@@ -45,6 +49,32 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
 
   List<Experience> experiences = [];
   List<Project> projects = [];
+  bool showsns = false;
+  late ResultList<RecordModel> snsList;
+  final pb = PocketBase('http://3.36.50.35:8090');
+  bool _isSnsChecked = true;
+
+  Future<void> fetchSnsData(String user_id) async {
+    try {
+      final snsList = await pb.collection('sns').getList(
+            filter: "user_id ='$user_id'",
+          );
+      for (var item in snsList.items) {
+        print("${item.data['account']}");
+      }
+      setState(() {
+        this.snsList = snsList; // 이 부분을 추가
+      });
+    } catch (error) {
+      // 에러 처리
+      print('Error fetching SNS data: $error');
+      // 빈 리스트를 반환하거나 다른 기본 값으로 처리
+      setState(() {
+        this.snsList = ResultList<RecordModel>(
+            page: 1, perPage: 30, totalItems: 0, totalPages: 0, items: []);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -52,6 +82,12 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
     _image = File("");
     careerdate = widget.careerDate ?? "";
     careerproject = widget.careerProject ?? "";
+    snsList = ResultList<RecordModel>(
+        page: 1,
+        perPage: 30,
+        totalItems: 0,
+        totalPages: 0,
+        items: []); // 이 부분을 추가
   }
 
   void addExperience(String date, String project) {
@@ -948,33 +984,114 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
               SizedBox(
                 height: 6,
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: 328,
-                  margin: EdgeInsets.symmetric(horizontal: 16),
-                  padding: EdgeInsets.all(12),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFE5EEFF),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0x00CCCCCC)),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '마이 프로필 SNS 연동하기',
-                      style: TextStyle(
-                        color: Color(0xFF0059FF),
-                        fontSize: 12,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w700,
+              Column(
+                children: [
+                  if (!showsns)
+                    GestureDetector(
+                      onTap: () async {
+                        await fetchSnsData(
+                            context.read<User_Data>().record.record!.id);
+                        setState(() {
+                          showsns = true;
+                        });
+                      },
+                      child: Container(
+                        width: 328,
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.all(12),
+                        clipBehavior: Clip.antiAlias,
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFE5EEFF),
+                          shape: RoundedRectangleBorder(
+                            side:
+                                BorderSide(width: 1, color: Color(0x00CCCCCC)),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '마이 프로필 SNS 연동하기',
+                            style: TextStyle(
+                              color: Color(0xFF0059FF),
+                              fontSize: 12,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  if (showsns && snsList != null)
+                    Container(
+                      width: 328,
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: snsList.items.map((item) {
+                          return Container(
+                            width: 328,
+                            margin: EdgeInsets.symmetric(vertical: 8),
+                            padding: const EdgeInsets.all(10),
+                            decoration: ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  width: 1,
+                                  color: Color(0xFFE6E6E6),
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    getIcon(item.data['account']),
+                                    SizedBox(
+                                      width: 12,
+                                    ),
+                                    Text(
+                                      "${item.data['account']}",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Transform.scale(
+                                  scale: 0.8,
+                                  child: CupertinoSwitch(
+                                    value: _isSnsChecked,
+                                    activeColor: Color(0xFF0059FF),
+                                    onChanged: (value) {
+                                      // 토글 상태가 변경될 때 실행되는 로직
+                                      // value 변수에 변경된 토글 상태가 전달됩니다.
+                                      setState(() {
+                                        _isSnsChecked = value;
+                                        // 토글 상태에 따라 원하는 동작 수행
+                                        if (_isSnsChecked) {
+                                          // 토글이 활성화된 경우
+                                          // 여기에 수행하고자 하는 동작 추가
+                                        } else {
+                                          // 토글이 비활성화된 경우
+                                          // 여기에 수행하고자 하는 동작 추가
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                ],
               ),
+
               SizedBox(
                 height: 11,
               ),
@@ -1063,6 +1180,28 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
         ),
       ),
     );
+  }
+
+  Widget getIcon(String account) {
+    if (account.contains("github.com/")) {
+      return SvgPicture.asset(
+          "assets/icons/github.svg"); // GitHub 아이콘 이미지 경로로 변경
+    } else if (account.contains("instagram.com/")) {
+      return SvgPicture.asset(
+          "assets/icons/instagram.svg"); // Instagram 아이콘 이미지 경로로 변경
+    } else if (isValidEmail(account)) {
+      return SvgPicture.asset("assets/icons/email.svg"); // 이메일 아이콘 이미지 경로로 변경
+    } else {
+      // 다른 경우에 대한 처리
+      return Container(); // 또는 다른 기본값을 반환
+    }
+  }
+
+  bool isValidEmail(String email) {
+    // 이메일 형식이 유효한지 확인하는 로직을 구현
+    // 예시로 간단한 형식 체크를 구현했으나, 실제로는 더 정교한 체크가 필요합니다.
+    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+    return emailRegex.hasMatch(email);
   }
 }
 
