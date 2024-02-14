@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/login_page.dart';
 import 'package:team_7_sfacpolio/main_page.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
@@ -65,7 +66,7 @@ class _NextButtonState extends State<NextButton> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainPage(),
+                          builder: (context) => LoginPage(),
                         ),
                       );
                     }
@@ -145,10 +146,11 @@ class _NextButtonState extends State<NextButton> {
                   Map<String, dynamic> data =
                       context.read<Page_Controller>().select_info;
                   await PocketBaseData().Set_UserData(user_id, data);
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MainPage(),
+                      builder: (context) => LoginPage(),
                     ),
                   );
                 }

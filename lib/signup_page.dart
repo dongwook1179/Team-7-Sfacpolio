@@ -170,20 +170,7 @@ class _SignUpPageState extends State<SignUpPage> {
       };
 
       print("record: ${body}");
-      final record = await pb.collection('users').create(body: body);
-      print('Sign-up successful!');
-      print('User ID: ${record}');
-      final authData = await pb.collection('users').authWithPassword(
-            emailController.text,
-            passwordController.text,
-          );
-
-      print("로그인 : ${authData}");
-      Map<String, dynamic> user_data =
-          await PocketBaseData().Get_UserData(authData.record!.id);
-
-      Provider.of<User_Data>(context, listen: false).Save_Auth(authData,
-          pb.authStore, user_data['language'], user_data['develop_type']);
+      await pb.collection('users').create(body: body);
 
       Navigator.push(
         context,

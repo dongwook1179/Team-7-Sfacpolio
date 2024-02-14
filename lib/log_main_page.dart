@@ -456,30 +456,32 @@ class _LogMainPageState extends State<LogMainPage>
                                   ],
                                 ),
                                 LogportfolioWidget(
-                                  title: '2023년 개발자의 회고',
-                                  content:
-                                      '로그 내용 적는 부분 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일 부 차이가 있을 수 있습니다. 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일부 차이가 있을 수 있습니다.',
-                                  avatar: AssetImage(
-                                      "assets/images/log/log_card_avatar.png"),
-                                  nickname: 'qwerd4578',
-                                  tag1: "백엔드",
-                                  tag2: "코딩",
-                                  tag3: "JAVA",
-                                ),
+                                    title: '2023년 개발자의 회고',
+                                    content:
+                                        '로그 내용 적는 부분 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일 부 차이가 있을 수 있습니다. 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일부 차이가 있을 수 있습니다.',
+                                    avatar: AssetImage(
+                                        "assets/images/log/log_card_avatar.png"),
+                                    nickname: 'qwerd4578',
+                                    tag: [
+                                      "백엔드",
+                                      "코딩",
+                                      "JAVA",
+                                    ]),
                                 Divider(height: 1, color: Color(0xFFE6E6E6)),
                                 LogportfolioWidget(
-                                  title: '2023년 AI 트랜드',
-                                  content:
-                                      'AI가 점점 발전하고 있는 요즘 시대, 2023년의 AI는 어떻게 발전하고 있을까요? 요즘 시대의 AI는 하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일 부 차이가 있을 수 있습니다. 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일부 차이가 있을 수 있습니다.',
-                                  avatar: null,
-                                  thumbnail: AssetImage(
-                                      "assets/images/main/img_log.png"),
-                                  nickname: 'sfacdev',
-                                  tag1: "프론트엔드",
-                                  tag2: "HTML",
-                                  tag3: "CSS",
-                                  tag4: "JavaScript",
-                                ),
+                                    title: '2023년 AI 트랜드',
+                                    content:
+                                        'AI가 점점 발전하고 있는 요즘 시대, 2023년의 AI는 어떻게 발전하고 있을까요? 요즘 시대의 AI는 하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일 부 차이가 있을 수 있습니다. 이번 코딩 강좌에서는 구글 애널리틱스가 무엇인지 살펴보고 웹사이트에 연결하는 방법을 알아볼게요. 디자인베이스 강좌는 맥을 기준으로 해서 윈도우 사용자와 일부 차이가 있을 수 있습니다.',
+                                    avatar: null,
+                                    thumbnail: AssetImage(
+                                        "assets/images/main/img_log.png"),
+                                    nickname: 'sfacdev',
+                                    tag: [
+                                      "프론트엔드",
+                                      "HTML",
+                                      "CSS",
+                                      "JavaScript",
+                                    ]),
                                 Divider(height: 1, color: Color(0xFFE6E6E6)),
                                 LogportfolioWidget(
                                   title: '',

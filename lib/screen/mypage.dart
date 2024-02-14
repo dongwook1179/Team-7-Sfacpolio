@@ -38,6 +38,8 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
       data = user;
       print('사용자 정보');
       print(data);
+      print(data.keys);
+      print(data['language']);
 
       if (data['post'].length > 0) {
         for (String key in data['post'].keys) {
@@ -66,7 +68,9 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                 ),
               ),
               actions: [
-                SvgPicture.asset('assets/icon/bell.svg'),
+                GestureDetector(
+                    onTap: () {},
+                    child: SvgPicture.asset('assets/icon/bell.svg')),
                 SizedBox(
                   width: 20,
                 ),
@@ -112,16 +116,27 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            subtitle: Text(
-                              (data['develop_type'][0]['develop_type'] ?? ''),
-                              style: TextStyle(
-                                color: Color(0xFF7F7F7F),
-                                fontSize: 12,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w400,
-                                height: 0.12,
-                              ),
-                            ),
+                            subtitle: data['develop_type'].length != 0
+                                ? Text(
+                                    data['develop_type'][0]['develop_type'],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.12,
+                                    ),
+                                  )
+                                : Text(
+                                    '',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.12,
+                                    ),
+                                  ),
                           ),
                           GestureDetector(
                             onTap: () {

@@ -39,6 +39,12 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(milliseconds: 2500), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => SocialSignPage()),
+      );
+    });
+
     return MaterialApp(
       home: Scaffold(
         body: Container(
@@ -58,45 +64,15 @@ class SplashPage extends StatelessWidget {
             ),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 115.46,
-              ),
               SvgPicture.asset(
                 'assets/icons/spac_logo.svg',
                 height: 77.08,
                 width: 68.74,
               ),
               SizedBox(
-                height: 86.46,
-              ),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '새로운\n도전을 담은\n',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontFamily: 'S-Core Dream',
-                        fontWeight: FontWeight.w200,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '스팩 관리',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontFamily: 'S-Core Dream',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 143,
+                height: 46.46,
               ),
               SvgPicture.asset(
                 'assets/icons/SFAC_LOG.svg',
@@ -104,43 +80,32 @@ class SplashPage extends StatelessWidget {
                 width: 151,
               ),
               SizedBox(
-                height: 30.1,
+                height: 13.1,
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 30),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SocialSignPage(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(10),
-                    backgroundColor: Color(0xFF0059FF),
-                    foregroundColor: Color(0xFF0059FF),
-                    fixedSize: Size(300, 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: Container(
-                    child: Center(
-                      child: Text(
-                        '시작하기',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
-                        ),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '새로운 도전을 담은\n',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                  ),
+                    TextSpan(
+                      text: '스팩 관리',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),

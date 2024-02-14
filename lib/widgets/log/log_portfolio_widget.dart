@@ -6,23 +6,20 @@ class LogportfolioWidget extends StatelessWidget {
   final String content;
   final AssetImage? thumbnail;
   final AssetImage? avatar;
+  final NetworkImage? net_avatar;
   final String nickname;
-  final String? tag1;
-  final String? tag2;
-  final String? tag3;
-  final String? tag4;
+  final List<dynamic>? tag;
 
-  const LogportfolioWidget(
-      {super.key,
-      required this.title,
-      required this.content,
-      this.thumbnail,
-      required this.avatar,
-      required this.nickname,
-      this.tag1,
-      this.tag2,
-      this.tag3,
-      this.tag4});
+  const LogportfolioWidget({
+    super.key,
+    required this.title,
+    required this.content,
+    this.thumbnail,
+    this.avatar,
+    this.net_avatar,
+    required this.nickname,
+    this.tag,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +89,10 @@ class LogportfolioWidget extends StatelessWidget {
                       shape: OvalBorder(),
                       image: avatar != null
                           ? DecorationImage(image: avatar!, fit: BoxFit.cover)
-                          : null,
+                          : net_avatar != null
+                              ? DecorationImage(
+                                  image: net_avatar!, fit: BoxFit.cover)
+                              : null,
                     ),
                   ),
                   SizedBox(
@@ -117,10 +117,8 @@ class LogportfolioWidget extends StatelessWidget {
                 height: 20,
                 child: Row(
                   children: [
-                    if (tag1 != null) Tag_Slot(tag1!),
-                    if (tag2 != null) Tag_Slot(tag2!),
-                    if (tag3 != null) Tag_Slot(tag3!),
-                    if (tag4 != null) Tag_Slot(tag4!),
+                    if (tag != null)
+                      for (String text in tag!) Tag_Slot(text),
                   ],
                 ),
               ),

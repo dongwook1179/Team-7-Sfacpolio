@@ -27,7 +27,7 @@ class _Project_Applicant_UseState extends State<Project_Applicant_Use> {
 
   void InPut_Text() {
     List<Map<String, String>> language_data =
-        context.read<User_Data>().language;
+        context.read<User_Data>().user_data['language'];
     if (context
         .read<Page_Controller>()
         .project_applicant_type
@@ -37,7 +37,8 @@ class _Project_Applicant_UseState extends State<Project_Applicant_Use> {
             context.read<Page_Controller>().project_applicant_type['language']!;
         for (Map<String, String> data in language_data) {
           if (data['language']!.contains(choice_text)) {
-            start_index = context.read<User_Data>().language.indexOf(data);
+            start_index =
+                context.read<User_Data>().user_data['language'].indexOf(data);
             print(choice_text);
             print(start_index);
           }
@@ -45,14 +46,15 @@ class _Project_Applicant_UseState extends State<Project_Applicant_Use> {
       });
     } else {
       setState(() {
-        choice_text = context.read<User_Data>().language[0]['language']!;
+        choice_text =
+            context.read<User_Data>().user_data['language'][0]['language']!;
       });
     }
   }
 
   void Change_Type() {
     List<Map<String, String>> language_data =
-        context.read<User_Data>().language;
+        context.read<User_Data>().user_data['language'];
     for (Map<String, String> data in language_data) {
       Text widget_text = Text(
         '${data['language']}',
@@ -108,10 +110,9 @@ class _Project_Applicant_UseState extends State<Project_Applicant_Use> {
                 items: text_widget,
                 onChange: (p0) {
                   setState(() {
-                    choice_text =
-                        context.read<User_Data>().language[p0]['language']!;
-                    // choice_logo =
-                    //     context.read<User_Data>().language[p0]['logo']!;
+                    choice_text = context
+                        .read<User_Data>()
+                        .user_data['language'][p0]['language']!;
                   });
                 },
                 selectedItemIndex: start_index,
