@@ -71,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
       print('저장확인 ');
       print(context.read<User_Data>().record);
       print(context.read<User_Data>().auth);
+      print('이동');
       Navigator.push(
         context,
         MaterialPageRoute(

@@ -16,7 +16,7 @@ class _ChattingState extends State<Chatting> {
     return Container(
       width: 360,
       height: 740,
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      // padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       decoration: BoxDecoration(color: Color(0xfffffffff)),
       child: DefaultTabController(
         length: 3,
@@ -33,7 +33,7 @@ class _ChattingState extends State<Chatting> {
               Chatting_Body('project'),
               Chatting_Body('employment'),
               Container(
-                child: Text('개인'),
+                child: Center(child: Text('진행중인 대화가 없습니다.')),
               ),
             ],
           ),

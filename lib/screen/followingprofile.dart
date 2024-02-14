@@ -40,7 +40,13 @@ class _FollowingProfileState extends State<FollowingProfile>
         post_count += count;
       }
     });
-    print(data['post']);
+    print('남 페이지 데이터 확인');
+    print(data);
+    print(data.keys);
+    print(data['language']);
+    print(data['develop_type']);
+    print(data['service']);
+    print(data['career']);
   }
 
   @override
@@ -127,18 +133,29 @@ class _FollowingProfileState extends State<FollowingProfile>
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
-                                        subtitle: Text(
-                                          (data['develop_type'][0]
-                                                  ['develop_type'] ??
-                                              ''),
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontFamily: 'Pretendard',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.12,
-                                          ),
-                                        ),
+                                        subtitle: data['develop_type'].length !=
+                                                0
+                                            ? Text(
+                                                data['develop_type'][0]
+                                                    ['develop_type'],
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Pretendard',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.12,
+                                                ),
+                                              )
+                                            : Text(
+                                                '',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Pretendard',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.12,
+                                                ),
+                                              ),
                                       ),
                                       GestureDetector(
                                         onTap: () {

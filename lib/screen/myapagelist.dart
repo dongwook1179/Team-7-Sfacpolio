@@ -188,60 +188,64 @@ class _MyPageListState extends State<MyPageList> {
                     SizedBox(
                       height: 8,
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            for (var lan_data in widget.data['language'])
-                              IntrinsicWidth(
-                                child: Container(
-                                  height: 70,
-                                  margin: EdgeInsets.only(right: 8),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 7),
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          width: 1, color: Color(0xFFB5B5B5)),
-                                      borderRadius: BorderRadius.circular(8),
+                    widget.data['language'] != []
+                        ? Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  for (var lan_data in widget.data['language'])
+                                    IntrinsicWidth(
+                                      child: Container(
+                                        height: 70,
+                                        margin: EdgeInsets.only(right: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 7),
+                                        decoration: ShapeDecoration(
+                                          color: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                width: 1,
+                                                color: Color(0xFFB5B5B5)),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 32,
+                                              height: 32,
+                                              child: SvgPicture.network(
+                                                lan_data['logo'],
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 4,
+                                            ),
+                                            Text(
+                                              lan_data['language'],
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12,
+                                                fontFamily: 'Pretendard',
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 32,
-                                        height: 32,
-                                        child: SvgPicture.network(
-                                          lan_data['logo'],
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        lan_data['language'],
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 12,
-                                          fontFamily: 'Pretendard',
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
+                                ],
                               ),
-                          ],
-                        ),
-                      ),
-                    )
+                            ),
+                          )
+                        : Container()
                   ],
                 ),
               ),
@@ -271,41 +275,45 @@ class _MyPageListState extends State<MyPageList> {
                     SizedBox(
                       height: 10,
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          children: [
-                            for (var dev_data in widget.data['develop_type'])
-                              IntrinsicWidth(
-                                child: Container(
-                                  height: 32,
-                                  margin: EdgeInsets.only(right: 10),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: Color(0xFF0059FF),
-                                      )),
-                                  child: Center(
-                                    child: Text(
-                                      dev_data['develop_type'],
-                                      style: TextStyle(
-                                        color: Color(0xFF0059FF),
-                                        fontSize: 12,
-                                        fontFamily: 'Pretendard',
-                                        fontWeight: FontWeight.w700,
+                    widget.data['develop_type'] != []
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                children: [
+                                  for (var dev_data
+                                      in widget.data['develop_type'])
+                                    IntrinsicWidth(
+                                      child: Container(
+                                        height: 32,
+                                        margin: EdgeInsets.only(right: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 4),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: Color(0xFF0059FF),
+                                            )),
+                                        child: Center(
+                                          child: Text(
+                                            dev_data['develop_type'],
+                                            style: TextStyle(
+                                              color: Color(0xFF0059FF),
+                                              fontSize: 12,
+                                              fontFamily: 'Pretendard',
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                ],
                               ),
-                          ],
-                        ),
-                      ),
-                    ),
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -337,39 +345,42 @@ class _MyPageListState extends State<MyPageList> {
                         SizedBox(
                           height: 10,
                         ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                for (var ser_data in widget.data['service'])
-                                  Container(
-                                      width: 41,
-                                      height: 32,
-                                      margin: EdgeInsets.only(right: 10),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: Color(0xFF0059FF),
-                                          )),
-                                      child: Center(
-                                        child: Text(
-                                          ser_data['service'],
-                                          style: TextStyle(
-                                            color: Color(0xFF0059FF),
-                                            fontSize: 12,
-                                            fontFamily: 'Pretendard',
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      )),
-                              ],
-                            ),
-                          ),
-                        ),
+                        widget.data['service'] != []
+                            ? SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      for (var ser_data
+                                          in widget.data['service'])
+                                        Container(
+                                            width: 41,
+                                            height: 32,
+                                            margin: EdgeInsets.only(right: 10),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                  color: Color(0xFF0059FF),
+                                                )),
+                                            child: Center(
+                                              child: Text(
+                                                ser_data['service'],
+                                                style: TextStyle(
+                                                  color: Color(0xFF0059FF),
+                                                  fontSize: 12,
+                                                  fontFamily: 'Pretendard',
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
+                                            )),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -434,48 +445,59 @@ class _MyPageListState extends State<MyPageList> {
                     SizedBox(
                       height: 10,
                     ),
-                    for (var data in widget.data['career'])
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    width: 1, color: Color(0xFFF3F3F3)))),
-                        child: Row(
-                          children: [
-                            data['type'] == 'company'
-                                ? SvgPicture.asset('assets/icons/briefcase.svg')
-                                : SvgPicture.asset(
-                                    'assets/icons/academic-cap.svg'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    widget.data['career'] != []
+                        ? SingleChildScrollView(
+                            child: Column(
                               children: [
-                                Text(
-                                  data['company'],
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w700,
+                                for (var data in widget.data['career'])
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                width: 1,
+                                                color: Color(0xFFF3F3F3)))),
+                                    child: Row(
+                                      children: [
+                                        data['type'] == 'company'
+                                            ? SvgPicture.asset(
+                                                'assets/icons/briefcase.svg')
+                                            : SvgPicture.asset(
+                                                'assets/icons/academic-cap.svg'),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              data['company'],
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12,
+                                                fontFamily: 'Pretendard',
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            Text(
+                                              Period_Conversion(data['period']),
+                                              style: TextStyle(
+                                                color: Color(0xFF4C4C4C),
+                                                fontSize: 12,
+                                                fontFamily: 'Pretendard',
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  Period_Conversion(data['period']),
-                                  style: TextStyle(
-                                    color: Color(0xFF4C4C4C),
-                                    fontSize: 12,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                )
                               ],
                             ),
-                          ],
-                        ),
-                      ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
