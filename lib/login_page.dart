@@ -66,11 +66,14 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> user_data =
           await PocketBaseData().Get_UserData(authData.record!.id);
 
-      Provider.of<User_Data>(context, listen: false).Save_Auth(authData,
-          pb.authStore, user_data['language'], user_data['develop_type']);
-      print('저장확인 ');
+      Provider.of<User_Data>(context, listen: false)
+          .Save_Auth(authData, pb.authStore, user_data);
+      print('저장확인1');
       print(context.read<User_Data>().record);
+      print('저장확인2');
       print(context.read<User_Data>().auth);
+      print('저장확인3');
+      print(context.read<User_Data>().user_data);
       print('이동');
       Navigator.push(
         context,

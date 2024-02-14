@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/home_page.dart';
+import 'package:team_7_sfacpolio/login_page.dart';
+import 'package:team_7_sfacpolio/pocketbase/data.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/screen/onboarding.dart';
 
 void main() {
@@ -122,10 +126,11 @@ class SignupOnboardingConnectionPage extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 30),
               child: ElevatedButton(
                 onPressed: () {
+                  context.read<User_Data>().LogOut();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => LoginPage(),
                     ),
                   );
                 },

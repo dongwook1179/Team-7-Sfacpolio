@@ -1,9 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:pocketbase/pocketbase.dart';
 
 class PocketBaseData {
   final pb = PocketBase('http://3.36.50.35:8090');
-  final dio = Dio();
 
   // 개발언어 컬렉션 데이터 불러오기
   Future<Map<String, dynamic>> Load_Data() async {
@@ -505,87 +503,6 @@ class PocketBaseData {
     await pb.collection('users').delete(user_id);
   }
 
-  // Future<Map<String, dynamic>> Get_Community() async {
-  //   Map<String, dynamic> return_data = {};
-  //   final record_log = await pb.collection('community').getFullList();
-  //   final record_lan = await pb.collection('community_language').getFullList();
-  //   final record_dev =
-  //       await pb.collection('community_develop_type').getFullList();
-  //   final record_like = await pb.collection('community_like').getFullList();
-  //   final record_view = await pb.collection('community_view').getFullList();
-  //   final record_com = await pb.collection('community_comment').getFullList();
-
-  //   for (var data in record_log) {
-  //     return_data[data.id] = {};
-  //     return_data[data.id]['language'] = [];
-  //     return_data[data.id]['develop_type'] = [];
-  //     return_data[data.id]['like'] = [];
-  //     return_data[data.id]['view'] = [];
-  //     return_data[data.id]['comment'] = [];
-
-  //     for (var data_lan in record_lan) {
-  //       if (data_lan.data['community_id'] == data.id) {
-  //         for (var language_id in data_lan.data['language_id']) {
-  //           final language =
-  //               await pb.collection('language_list').getOne(language_id);
-  //           return_data[data.id]['language'].add(language.data['language']);
-  //         }
-  //       }
-  //     }
-  //     for (var data_dev in record_dev) {
-  //       if (data_dev.data['community_id'] == data.id) {
-  //         for (var develop_id in data_dev.data['develop_type_id']) {
-  //           final develop_type =
-  //               await pb.collection('develop_type_list').getOne(develop_id);
-  //           return_data[data.id]['develop_type']
-  //               .add(develop_type.data['develop_type']);
-  //         }
-  //       }
-  //     }
-
-  //     for (var data_like in record_like) {
-  //       if (data_like.data['community_id'] == data.id) {
-  //         return_data[data.id]['like'].add(data_like.id);
-  //       }
-  //     }
-
-  //     for (var data_view in record_view) {
-  //       if (data_view.data['community_id'] == data.id) {
-  //         return_data[data.id]['view'].add(data_view.id);
-  //       }
-  //     }
-  //     for (var data_com in record_com) {
-  //       if (data_com.data['community_id'] == data.id) {
-  //         return_data[data.id]['comment'].add({
-  //           'user': data_com.data['user_id'],
-  //           'content': data_com.data['content']
-  //         });
-  //       }
-  //     }
-  //     return_data[data.id]['comment_num'] =
-  //         return_data[data.id]['comment'].length;
-  //     return_data[data.id]['view_num'] = return_data[data.id]['view'].length;
-  //     return_data[data.id]['like_num'] = return_data[data.id]['like'].length;
-  //     return_data[data.id]['id'] = data.id;
-  //     return_data[data.id]['type'] = 'community';
-  //     final user = await pb.collection('users').getOne(data.data['user_id']);
-  //     String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
-  //     return_data[data.id]['avatar'] = user_image;
-  //     return_data[data.id]['writer'] = user.data['nickname'];
-  //     if (data.data['type'] == '포트폴리오') {
-  //       return_data[data.id]['type'] = 'LOG';
-  //     }
-  //     return_data[data.id]['image'] = [];
-  //     for (var image in data.data["image"]) {
-  //       String url = pb.files.getUrl(data, image).toString();
-  //       return_data[data.id]['image'].add(url);
-  //     }
-  //     return_data[data.id]['title'] = data.data['title'];
-  //     return_data[data.id]['content'] = data.data['content'];
-  //     return_data[data.id]['update'] = data.updated;
-  //   }
-  //   return return_data;
-  // }
   Future<Map<String, dynamic>> Get_Log() async {
     Map<String, dynamic> send_data = {};
 
@@ -1303,7 +1220,6 @@ class PocketBaseData {
     }
   }
 
-  // Future<void> Get_SNS(String user_id) async{
   Future<Map<String, dynamic>> Get_SNS() async {
     Map<String, dynamic> sns_list = {};
     int etc_count = 1;
@@ -1325,7 +1241,6 @@ class PocketBaseData {
     return sns_list;
   }
 
-  // Future<void> Delete_SNS(String user_id,String account) async{
   Future<void> Delete_SNS(String account) async {
     // final sns = await pb
     //     .collection('sns')
@@ -1337,7 +1252,6 @@ class PocketBaseData {
     await pb.collection('sns').delete(id);
   }
 
-  // Future<void> Update_SNS(String user_id, Map<String,dynamic> data) async{
   Future<void> Update_SNS(Map<String, dynamic> data) async {
     final sns = await pb
         .collection('sns')
@@ -1526,5 +1440,38 @@ class PocketBaseData {
 
       await pb.collection('project_recruit').create(body: recruit_body);
     }
+  }
+
+  Future<Map<String, dynamic>> Get_Develop_Log(String id) async {
+    Map<String, dynamic> logs = {};
+
+    final record_log = await pb
+        .collection('log_develop_type')
+        .getList(filter: '( develop_type_id ~ "$id" )');
+
+    for (var data in record_log.items) {
+      final log = await pb.collection('log').getOne(data.data['log_id']);
+      log.data['develop_type'] = [];
+
+      for (String dev_id in data.data['develop_type_id']) {
+        final develop_type =
+            await pb.collection('develop_type_list').getOne(dev_id);
+        if (dev_id == id) {
+          log.data['develop_type'].insert(0, develop_type.data['develop_type']);
+        } else {
+          log.data['develop_type'].add(develop_type.data['develop_type']);
+        }
+      }
+
+      final user = await pb.collection('users').getOne(log.data['user_id']);
+      final avatar = await pb.getFileUrl(user, user.data['avatar']).toString();
+      log.data['user_avatar'] = avatar;
+      log.data['user_nickname'] = user.data['nickname'];
+
+      logs[log.id] = log;
+      print('입력정보');
+      print(logs);
+    }
+    return logs;
   }
 }
