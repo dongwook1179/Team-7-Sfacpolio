@@ -1,14 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/log_update_complete_page.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
-import 'package:team_7_sfacpolio/widgets/log/bring_mylog_modal_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_career_card_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_career_modal_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_project_modal_widget.dart';
@@ -52,7 +52,13 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
   bool showsns = false;
   late ResultList<RecordModel> snsList;
   final pb = PocketBase('http://3.36.50.35:8090');
-  bool _isSnsChecked = true;
+  Map<String, bool> snsCheckedMap = {};
+  String logId = "";
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
   Future<void> fetchSnsData(String user_id) async {
     try {
@@ -65,6 +71,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
       setState(() {
         this.snsList = snsList; // 이 부분을 추가
       });
+      print(context.read<User_Data>().record);
     } catch (error) {
       // 에러 처리
       print('Error fetching SNS data: $error');
@@ -76,6 +83,62 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
     }
   }
 
+  Future<void> createLog() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'http://3.36.50.35:8090/api/collections/log/records'), // API 엔드포인트 주소로 변경
+      );
+
+      // Add regular fields
+      request.fields['user_id'] =
+          "${context.read<User_Data>().record.record!.id}";
+      request.fields['type'] = '포트폴리오';
+      request.fields['title'] = 'title';
+      request.fields['content'] = contentController.text;
+      request.fields['email'] = emailController.text;
+      request.fields['phone'] = phoneController.text;
+      request.fields['name'] = nameController.text;
+
+      // Add career, mywork, mysns
+      request.fields['mycareer'] = jsonEncode(
+          experiences.map((experience) => experience.toJson()).toList());
+      request.fields['mywork'] =
+          jsonEncode(projects.map((project) => project.toJson()).toList());
+      request.fields['mysns'] = jsonEncode(snsCheckedMap.entries
+          .where((entry) => entry.value)
+          .map((entry) => entry.key)
+          .toList());
+      print("image = ${_image.path}");
+      // Add avatar as MultipartFile
+      request.files.add(await http.MultipartFile.fromPath(
+        'image',
+        _image.path,
+      ));
+      var response = await request.send();
+
+      String responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> responseJson = json.decode(responseBody);
+      String log_id = responseJson['id'];
+      String logId = log_id;
+      print("로그아이디 : $logId");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LogUpdateCompletePage(logId: log_id),
+        ),
+      );
+      if (response.statusCode == 200) {
+        print('Log created successfully');
+      } else {
+        print('Failed to create log. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error updating user data: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -83,11 +146,10 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
     careerdate = widget.careerDate ?? "";
     careerproject = widget.careerProject ?? "";
     snsList = ResultList<RecordModel>(
-        page: 1,
-        perPage: 30,
-        totalItems: 0,
-        totalPages: 0,
-        items: []); // 이 부분을 추가
+        page: 1, perPage: 30, totalItems: 0, totalPages: 0, items: []);
+    for (var item in snsList.items) {
+      snsCheckedMap[item.data['account']] = false;
+    }
   }
 
   void addExperience(String date, String project) {
@@ -179,6 +241,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
+        print(_image);
       });
     }
   }
@@ -264,6 +327,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                   ),
                 ),
                 child: TextField(
+                  controller: nameController,
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: 'Pretendard',
@@ -375,6 +439,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                       height: 105,
                       padding: EdgeInsets.zero,
                       child: TextField(
+                        controller: contentController,
                         maxLines: 6,
                         cursorHeight: 20,
                         textAlignVertical: TextAlignVertical.top,
@@ -719,44 +784,33 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      width: 86,
                                       height: 86,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 14),
-                                      decoration: ShapeDecoration(
-                                        color: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              width: 1,
-                                              color: Color(0xFFE6E6E6)),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                            "assets/icons/camera-filled.svg",
-                                            width: 32,
-                                            height: 32,
-                                          ),
-                                          SizedBox(
-                                            height: 6,
-                                          ),
-                                          Text(
-                                            '사진 첨부(${project.picturelist.length}/5)',
-                                            style: TextStyle(
-                                              color: Color(0xFF999999),
-                                              fontSize: 12,
-                                              fontFamily: 'Pretendard',
-                                              fontWeight: FontWeight.w400,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: project.picturelist.length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            width: 86,
+                                            height: 86,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 6),
+                                            decoration: ShapeDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    project.picturelist[index]),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                side: BorderSide(
+                                                    width: 1,
+                                                    color: Color(0xFFE6E6E6)),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            // 이미지 삭제 등의 추가 기능을 여기에 추가할 수 있습니다
+                                          );
+                                        },
                                       ),
                                     ),
                                     Container(
@@ -806,35 +860,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
               SizedBox(
                 height: 8,
               ),
-              GestureDetector(
-                onTap: () {
-                  BringMyLogModalWidget(context);
-                },
-                child: Container(
-                  width: 328,
-                  padding: EdgeInsets.all(12),
-                  margin: EdgeInsets.symmetric(horizontal: 16),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFE5EEFF),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0x00CCCCCC)),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '마이 로그 가져오기',
-                      style: TextStyle(
-                        color: Color(0xFF0059FF),
-                        fontSize: 12,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+
               SizedBox(
                 height: 11,
               ),
@@ -889,6 +915,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                   ),
                 ),
                 child: TextField(
+                  controller: emailController,
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: 'Pretendard',
@@ -943,6 +970,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                   ),
                 ),
                 child: TextField(
+                  controller: phoneController,
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: 'Pretendard',
@@ -1064,21 +1092,16 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                                 Transform.scale(
                                   scale: 0.8,
                                   child: CupertinoSwitch(
-                                    value: _isSnsChecked,
+                                    value:
+                                        snsCheckedMap[item.data['account']] ??
+                                            false,
                                     activeColor: Color(0xFF0059FF),
                                     onChanged: (value) {
-                                      // 토글 상태가 변경될 때 실행되는 로직
-                                      // value 변수에 변경된 토글 상태가 전달됩니다.
                                       setState(() {
-                                        _isSnsChecked = value;
-                                        // 토글 상태에 따라 원하는 동작 수행
-                                        if (_isSnsChecked) {
-                                          // 토글이 활성화된 경우
-                                          // 여기에 수행하고자 하는 동작 추가
-                                        } else {
-                                          // 토글이 비활성화된 경우
-                                          // 여기에 수행하고자 하는 동작 추가
-                                        }
+                                        snsCheckedMap[item.data['account']] =
+                                            value;
+                                        print(
+                                            'Item "${item.data['account']}" is checked: $value');
                                       });
                                     },
                                   ),
@@ -1117,7 +1140,9 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        createLog();
+                      },
                       child: Container(
                         width: 144,
                         height: 50,
@@ -1145,7 +1170,9 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        createLog();
+                      },
                       child: Container(
                         width: 144,
                         height: 50,
@@ -1215,6 +1242,13 @@ class Experience {
   String toString() {
     return 'Experience(date: $date, project: $project)';
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'project': project,
+    };
+  }
 }
 
 class Project {
@@ -1235,5 +1269,15 @@ class Project {
   @override
   String toString() {
     return 'Project(date: $date, project: $projectname, tag: $tag, picturelist: $picturelist,content: $content)';
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'projectname': projectname,
+      'tag': tag,
+      'picturelist': picturelist,
+      'content': content,
+    };
   }
 }

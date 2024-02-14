@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/screen/follow.dart';
+
+import 'package:team_7_sfacpolio/screen/myactivity.dart';
+
 import 'package:team_7_sfacpolio/screen/myapagelist.dart';
 import 'package:team_7_sfacpolio/widgets/mypage/mypagelog.dart';
 
