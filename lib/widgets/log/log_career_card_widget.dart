@@ -82,7 +82,7 @@ class _LogCareerCardWidgetState extends State<LogCareerCardWidget> {
             height: 2,
           ),
           SizedBox(
-            width: 151,
+            width: 300,
             child: Text(
               widget.careerdate,
               maxLines: 1,
