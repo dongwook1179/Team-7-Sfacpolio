@@ -3,15 +3,21 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 
-class MyPage_Career_Select extends StatefulWidget {
-  const MyPage_Career_Select({super.key});
+class MyPage_Career_Period extends StatefulWidget {
+  const MyPage_Career_Period({super.key});
 
   @override
-  State<MyPage_Career_Select> createState() => _MyPage_Career_SelectState();
+  State<MyPage_Career_Period> createState() => _MyPage_Career_PeriodState();
 }
 
-class _MyPage_Career_SelectState extends State<MyPage_Career_Select> {
+class _MyPage_Career_PeriodState extends State<MyPage_Career_Period> {
+  int year_data = 0;
+  int month_data = 1;
+
   Future<void> showPicker(BuildContext context) async {
+    int firstValue = 0;
+    int secondValue = 1;
+
     await showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -27,10 +33,12 @@ class _MyPage_Career_SelectState extends State<MyPage_Career_Select> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   NumberPicker(
-                    value: 1,
+                    value: firstValue,
                     minValue: 0,
                     maxValue: 99,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      firstValue = value;
+                    },
                   ),
                 ],
               ),
@@ -38,18 +46,20 @@ class _MyPage_Career_SelectState extends State<MyPage_Career_Select> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   NumberPicker(
-                    value: 1,
+                    value: secondValue,
                     minValue: 1,
                     maxValue: 12,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      secondValue = value;
+                    },
                   ),
                 ],
               ),
               ElevatedButton(
                 onPressed: () {
                   // 선택된 값 사용
-                  // print('First Value: $firstValue, Second Value: $secondValue');
-                  // Navigator.pop(context);
+                  print('First Value: $firstValue, Second Value: $secondValue');
+                  Navigator.pop(context);
                 },
                 child: Text('OK'),
               ),
@@ -98,13 +108,15 @@ class _MyPage_Career_SelectState extends State<MyPage_Career_Select> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   NumberPicker(
-                    value: 1,
-                    minValue: 01,
-                    maxValue: 12,
-                    itemWidth: 26,
+                    value: year_data,
+                    minValue: 0,
+                    maxValue: 99,
+                    itemWidth: 30,
                     infiniteLoop: true,
                     onChanged: (value) {
-                      setState(() {});
+                      setState(() {
+                        year_data = value;
+                      });
                     },
                     itemHeight: 40,
                     textStyle: TextStyle(
@@ -123,6 +135,55 @@ class _MyPage_Career_SelectState extends State<MyPage_Career_Select> {
                   SizedBox(
                     width: 20,
                   ),
+                  Text(
+                    '년',
+                    style: TextStyle(
+                      color: Color(0xFF1D1D1D),
+                      fontSize: 20,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 56,
+                  ),
+                  NumberPicker(
+                    value: month_data,
+                    minValue: 01,
+                    maxValue: 12,
+                    itemWidth: 26,
+                    infiniteLoop: true,
+                    onChanged: (value) {
+                      setState(() {
+                        month_data = value;
+                      });
+                    },
+                    itemHeight: 40,
+                    textStyle: TextStyle(
+                      color: Color(0xFFCACACA),
+                      fontSize: 20,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                    ),
+                    selectedTextStyle: TextStyle(
+                      color: Color(0xFF1D1D1D),
+                      fontSize: 20,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    '개월',
+                    style: TextStyle(
+                      color: Color(0xFF1D1D1D),
+                      fontSize: 20,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -131,8 +192,9 @@ class _MyPage_Career_SelectState extends State<MyPage_Career_Select> {
             ),
             GestureDetector(
               onTap: () {
-                context.read<Page_Controller>();
-                // .Period_Save([year_data.toString(), month_data.toString()]);
+                context
+                    .read<Page_Controller>()
+                    .Period_Save([year_data.toString(), month_data.toString()]);
                 context.read<Page_Controller>().select_info['career_period'] =
                     [];
                 context.read<Page_Controller>().Add_Information('career_period',

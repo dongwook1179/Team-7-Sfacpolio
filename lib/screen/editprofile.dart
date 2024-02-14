@@ -183,28 +183,24 @@ class _EditProfileState extends State<EditProfile> {
                         border: Border.all(color: Color(0xFFCCCCCC)),
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Container(
-                            width: 246,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Color(0xFFCCCCCC)),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  bottomRight: Radius.circular(8)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: ' Happy_1212',
-                                    contentPadding: EdgeInsets.all(8)),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                            child: TextField(
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: ''' 개발은 저에게 항상 즐겁고 재밌는 것입니다.
+                                사용자에게 도움이 되는 서비스를 만들고 싶습니다.''',
+                              hintStyle: TextStyle(
+                                color: Color(0xFF020202),
+                                fontSize: 14,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w400,
                               ),
-                            ),
-                          )),
+                              contentPadding: EdgeInsets.all(8)),
+                        )),
+                      ),
                     ),
-                    Container(width: 360, height: 624, child: EditSearch()),
+                    Container(width: 360, height: 430, child: EditSearch()),
                     Container(width: 360, height: 490, child: EditDropDown()),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
