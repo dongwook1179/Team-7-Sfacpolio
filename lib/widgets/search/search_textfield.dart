@@ -43,14 +43,6 @@ class _Search_TextfieldState extends State<Search_Textfield> {
           String text = context.read<Page_Controller>().search;
           Map<String, dynamic> filter_data =
               await PocketBaseData().Data_Filter(text, condition);
-          print('입력 정보  --------------------');
-          print(text);
-          print(condition);
-          print('입력 정보  --------------------');
-
-          print('필터 --------------------');
-          print(filter_data);
-          print('필터 --------------------');
           context.read<Page_Controller>().Get_Data(filter_data);
           FocusScope.of(context).unfocus();
         },

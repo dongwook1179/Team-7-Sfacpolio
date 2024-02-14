@@ -37,9 +37,6 @@ class _MbtiSelectState extends State<MbtiSelect> {
 
   Future<void> Load_data() async {
     mbtidata = await dataLoad.JsonLoad('mbti');
-
-    print('여기?');
-    print(mbtidata);
   }
 
   void Give_Color() {

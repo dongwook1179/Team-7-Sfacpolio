@@ -9,7 +9,8 @@ import 'package:team_7_sfacpolio/widgets/follow/follow_body.dart';
 import 'package:team_7_sfacpolio/widgets/follow/follow_tabbar.dart';
 
 class Follow extends StatefulWidget {
-  const Follow({super.key});
+  final int page;
+  const Follow(this.page);
 
   @override
   State<Follow> createState() => _FollowState();
@@ -45,10 +46,12 @@ class _FollowState extends State<Follow> {
             decoration: BoxDecoration(color: Color(0xfffffffff)),
             child: DefaultTabController(
               length: 2,
+              initialIndex: widget.page,
               child: Scaffold(
                 appBar: PreferredSize(
                   preferredSize: Size.fromHeight(84),
                   child: AppBar(
+                    automaticallyImplyLeading: false,
                     title: Follow_Appbar(),
                     bottom: Follow_Tabbar(),
                   ),

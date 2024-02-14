@@ -24,9 +24,9 @@ class _MyPost_BodyState extends State<MyPost_Body> {
   }
 
   void Get_Data_Keys() {
-    for (var data in widget.data) {
+    for (var datas in widget.data) {
       setState(() {
-        data_key.add(data.id);
+        data_key.add(datas.id);
       });
     }
   }

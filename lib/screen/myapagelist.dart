@@ -1,14 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:team_7_sfacpolio/widgets/mypage/mbti_detail.dart';
 
 class MyPageList extends StatefulWidget {
-  const MyPageList({super.key});
+  final Map<String, dynamic> data;
+  const MyPageList(this.data);
 
   @override
   State<MyPageList> createState() => _MyPageListState();
 }
 
 class _MyPageListState extends State<MyPageList> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  String Period_Conversion(String period) {
+    List<String> text_split = period.split(' ');
+    String year = '';
+    String month = '';
+    for (String text in text_split) {
+      if (text[text.length - 1] == '년') {
+        if (text[0] != '0') {
+          year = text;
+        }
+      } else {
+        if (text[0] != '0') {
+          month = text;
+        }
+      }
+    }
+    String return_string = '';
+    if (year == '') {
+      return_string = month;
+    } else {
+      '${year} ${month}';
+    }
+
+    return return_string;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +129,7 @@ class _MyPageListState extends State<MyPageList> {
               color: Color(0xFFF8f8F9),
             ),
             Container(
+              width: MediaQuery.of(context).size.width,
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -104,7 +138,6 @@ class _MyPageListState extends State<MyPageList> {
                   children: [
                     Text(
                       '소개',
-                      textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -116,7 +149,9 @@ class _MyPageListState extends State<MyPageList> {
                       height: 8,
                     ),
                     Text(
-                      '개발은 저에게 항상 즐겁고 재밌는 것입니다. 사용자에게 도움이 되는 서비스를 만들고 싶습니다.',
+                      widget.data['user'].data['introduction'] != ''
+                          ? widget.data['user'].data['introduction']
+                          : '',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Color(0xFF020202),
@@ -153,195 +188,58 @@ class _MyPageListState extends State<MyPageList> {
                     SizedBox(
                       height: 8,
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Container(
-                              width: 70,
-                              height: 70,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 8),
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 1, color: Color(0xFFB5B5B5)),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                      'assets/programing logo/java-original.png'),
-                                  Text(
-                                    'JAVA',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w700,
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            for (var lan_data in widget.data['language'])
+                              IntrinsicWidth(
+                                child: Container(
+                                  height: 70,
+                                  margin: EdgeInsets.only(right: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 7),
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 1, color: Color(0xFFB5B5B5)),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                  )
-                                ],
-                              )),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Container(
-                              width: 70,
-                              height: 70,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 9),
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 1, color: Color(0xFFB5B5B5)),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                      'assets/programing logo/azure-original.png'),
-                                  Text(
-                                    'AUZRE',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 11,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
-                                ],
-                              )),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Container(
-                              width: 70,
-                              height: 70,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 9),
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 1, color: Color(0xFFB5B5B5)),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                      'assets/programing logo/html5-original.png'),
-                                  Text(
-                                    'HTML5',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
-                                ],
-                              )),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Container(
-                              width: 70,
-                              height: 70,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 19, vertical: 8),
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 1, color: Color(0xFFB5B5B5)),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                      'assets/programing logo/php-plain.png'),
-                                  Text(
-                                    'PHP',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
-                                ],
-                              )),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Container(
-                              width: 70,
-                              height: 70,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 9),
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 1, color: Color(0xFFB5B5B5)),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                      'assets/programing logo/vuejs-line.png'),
-                                  Text(
-                                    'VUEJS',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
-                                ],
-                              )),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Container(
-                            width: 70,
-                            height: 70,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 18, vertical: 9),
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    width: 1, color: Color(0xFFB5B5B5)),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                    'assets/programing logo/java-original.png'),
-                                Text(
-                                  'JAVA',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w700,
                                   ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 32,
+                                        height: 32,
+                                        child: SvgPicture.network(
+                                          lan_data['logo'],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 4,
+                                      ),
+                                      Text(
+                                        lan_data['language'],
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     )
                   ],
@@ -373,72 +271,40 @@ class _MyPageListState extends State<MyPageList> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Container(
-                            width: 65,
-                            height: 32,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Color(0xFF0059FF),
-                                )),
-                            child: Center(
-                              child: Text(
-                                '웹 풀스택',
-                                style: TextStyle(
-                                  color: Color(0xFF0059FF),
-                                  fontSize: 12,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w700,
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            for (var dev_data in widget.data['develop_type'])
+                              IntrinsicWidth(
+                                child: Container(
+                                  height: 32,
+                                  margin: EdgeInsets.only(right: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Color(0xFF0059FF),
+                                      )),
+                                  child: Center(
+                                    child: Text(
+                                      dev_data['develop_type'],
+                                      style: TextStyle(
+                                        color: Color(0xFF0059FF),
+                                        fontSize: 12,
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            )),
-                        SizedBox(
-                          width: 10,
+                          ],
                         ),
-                        Container(
-                            width: 65,
-                            height: 32,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Color(0xFF0059FF),
-                                )),
-                            child: Center(
-                              child: Text(
-                                '프론트엔드',
-                                style: TextStyle(
-                                  color: Color(0xFF0059FF),
-                                  fontSize: 12,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            )),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                            width: 65,
-                            height: 32,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Color(0xFF0059FF),
-                                )),
-                            child: Center(
-                              child: Text(
-                                '서버/백엔드',
-                                style: TextStyle(
-                                  color: Color(0xFF0059FF),
-                                  fontSize: 12,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            )),
-                      ],
+                      ),
                     ),
                   ],
                 ),
@@ -449,217 +315,97 @@ class _MyPageListState extends State<MyPageList> {
               height: 8,
               color: Color(0xFFF8f8F9),
             ),
+            IntrinsicHeight(
+              child: Container(
+                color: Colors.white,
+                child: Column(children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '관심업종',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                for (var ser_data in widget.data['service'])
+                                  Container(
+                                      width: 41,
+                                      height: 32,
+                                      margin: EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: Color(0xFF0059FF),
+                                          )),
+                                      child: Center(
+                                        child: Text(
+                                          ser_data['service'],
+                                          style: TextStyle(
+                                            color: Color(0xFF0059FF),
+                                            fontSize: 12,
+                                            fontFamily: 'Pretendard',
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
+              ),
+            ),
             Container(
-              height: 95,
-              color: Colors.white,
-              child: Column(children: [
-                Padding(
+              width: 360,
+              height: 8,
+              color: Color(0xFFF8f8F9),
+            ),
+            IntrinsicHeight(
+              child: Container(
+                color: Colors.white,
+                child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '관심업종',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
+                      Container(
+                        height: 30,
+                        child: Text(
+                          'MBTI',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                              width: 41,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: Color(0xFF0059FF),
-                                  )),
-                              child: Center(
-                                child: Text(
-                                  '건설',
-                                  style: TextStyle(
-                                    color: Color(0xFF0059FF),
-                                    fontSize: 12,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              )),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Container(
-                              width: 41,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: Color(0xFF0059FF),
-                                  )),
-                              child: Center(
-                                child: Text(
-                                  '식품',
-                                  style: TextStyle(
-                                    color: Color(0xFF0059FF),
-                                    fontSize: 12,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              )),
-                        ],
-                      ),
+                      (widget.data['user'].data['mbti'] ?? '') != ''
+                          ? MbtiDetail(widget.data['user'].data['mbti'])
+                          : Container()
                     ],
                   ),
-                ),
-              ]),
-            ),
-            Container(
-              width: 360,
-              height: 8,
-              color: Color(0xFFF8f8F9),
-            ),
-            Container(
-              height: 188,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 30,
-                      child: Text(
-                        'MBTI',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 328,
-                      height: 125,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 16),
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1, color: Color(0xFFF3F3F3)),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'ISTJ(현실주의자)',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              '• 철저하고 체계적으로 일을 처리하는 경향이 있음.',
-                              style: TextStyle(
-                                color: Color(0xFF020202),
-                                fontSize: 12,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            Text(
-                              '• 프로젝트 일정과 목표에 대한 엄격한 계획을 선호함.',
-                              style: TextStyle(
-                                color: Color(0xFF020202),
-                                fontSize: 12,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 61,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(7),
-                                    color: Color(0xFFE5EEFF),
-                                  ),
-                                  child: Text(
-                                    '현실적 사고',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color(0xFF0059FF),
-                                      fontSize: 11,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                Container(
-                                  width: 39,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(7),
-                                    color: Color(0xFFE5EEFF),
-                                  ),
-                                  child: Text(
-                                    '책임감',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color(0xFF0059FF),
-                                      fontSize: 11,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                Container(
-                                  width: 61,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(7),
-                                    color: Color(0xFFE5EEFF),
-                                  ),
-                                  child: Text(
-                                    '조직적 성향',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color(0xFF0059FF),
-                                      fontSize: 11,
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]),
-                    ),
-                  ],
                 ),
               ),
             ),
@@ -669,6 +415,7 @@ class _MyPageListState extends State<MyPageList> {
               color: Color(0xFFF8f8F9),
             ),
             Container(
+              width: MediaQuery.of(context).size.width,
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -687,73 +434,48 @@ class _MyPageListState extends State<MyPageList> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                            'assets/images/programing_logo/icon list.svg'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    for (var data in widget.data['career'])
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    width: 1, color: Color(0xFFF3F3F3)))),
+                        child: Row(
                           children: [
-                            Text(
-                              '와이엠에스닷코',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w700,
-                              ),
+                            data['type'] == 'company'
+                                ? SvgPicture.asset('assets/icons/briefcase.svg')
+                                : SvgPicture.asset(
+                                    'assets/icons/academic-cap.svg'),
+                            SizedBox(
+                              width: 10,
                             ),
-                            Text(
-                              '2개월',
-                              style: TextStyle(
-                                color: Color(0xFF4C4C4C),
-                                fontSize: 12,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            )
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data['company'],
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(
+                                  Period_Conversion(data['period']),
+                                  style: TextStyle(
+                                    color: Color(0xFF4C4C4C),
+                                    fontSize: 12,
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                )
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                    Divider(
-                      color: Color(0xFFF3F3F3),
-                    ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                            'assets/images/programing_logo/academic-cap.svg'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '웅진 프로젝트',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              '4개월',
-                              style: TextStyle(
-                                color: Color(0xFF4C4C4C),
-                                fontSize: 12,
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
                   ],
                 ),
               ),
@@ -764,6 +486,7 @@ class _MyPageListState extends State<MyPageList> {
               color: Color(0xFFF8f8F9),
             ),
             Container(
+              width: MediaQuery.of(context).size.width,
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -785,47 +508,53 @@ class _MyPageListState extends State<MyPageList> {
                     ),
                     Row(
                       children: [
-                        Container(
-                            width: 52,
-                            height: 32,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Color(0xFF0059FF),
-                                )),
-                            child: Center(
-                              child: Text(
-                                '온라인',
-                                style: TextStyle(
-                                  color: Color(0xFF0059FF),
-                                  fontSize: 12,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            )),
+                        widget.data['user'].data['work_type'] != ''
+                            ? Container(
+                                width: 52,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Color(0xFF0059FF),
+                                    )),
+                                child: Center(
+                                  child: Text(
+                                    widget.data['user'].data['work_type'],
+                                    style: TextStyle(
+                                      color: Color(0xFF0059FF),
+                                      fontSize: 12,
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ))
+                            : Container(),
                         SizedBox(
                           width: 10,
                         ),
-                        Container(
-                            width: 65,
-                            height: 32,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Color(0xFF0059FF),
-                                )),
-                            child: Center(
-                              child: Text(
-                                '6-9개월',
-                                style: TextStyle(
-                                  color: Color(0xFF0059FF),
-                                  fontSize: 12,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            )),
+                        widget.data['user'].data['preferred_project_period'] !=
+                                ''
+                            ? Container(
+                                width: 65,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Color(0xFF0059FF),
+                                    )),
+                                child: Center(
+                                  child: Text(
+                                    widget.data['user']
+                                        .data['preferred_project_period'],
+                                    style: TextStyle(
+                                      color: Color(0xFF0059FF),
+                                      fontSize: 12,
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ))
+                            : Container(),
                       ],
                     ),
                   ],

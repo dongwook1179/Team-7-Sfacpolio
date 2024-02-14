@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 import 'package:team_7_sfacpolio/widgets/project/projcet_calendar_select.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_Language_slot.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_appbar.dart';
@@ -65,6 +67,10 @@ class _Project_CreateState extends State<Project_Create> {
               setState(() {
                 field.remove(key);
               });
+              context
+                  .read<Page_Controller>()
+                  .project_create['develop_type']
+                  .removeAt(index + 1);
             },
             child: Container(
               padding: EdgeInsets.all(12),
@@ -107,6 +113,10 @@ class _Project_CreateState extends State<Project_Create> {
               setState(() {
                 language.remove(key);
               });
+              context
+                  .read<Page_Controller>()
+                  .project_create['language']
+                  .removeAt(index + 1);
             },
             child: Container(
               padding: EdgeInsets.all(12),
@@ -164,6 +174,11 @@ class _Project_CreateState extends State<Project_Create> {
                     child: Container(
                       margin: EdgeInsets.only(bottom: 3),
                       child: TextField(
+                        onChanged: (value) {
+                          context
+                              .read<Page_Controller>()
+                              .Input_Project_info('else', 'title', value);
+                        },
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: '프로젝트 제목을 입력해주세요.',
@@ -260,6 +275,8 @@ class _Project_CreateState extends State<Project_Create> {
                         },
                       ).then((value) => setState(() {
                             date = formatter.format(value);
+                            context.read<Page_Controller>().Input_Project_info(
+                                'else', 'start_time', value);
                           }));
                       print(date);
                     },
@@ -310,6 +327,9 @@ class _Project_CreateState extends State<Project_Create> {
                       ).then((value) => setState(() {
                             period = value;
                           }));
+                      context
+                          .read<Page_Controller>()
+                          .Input_Project_info('else', 'period', period);
                     },
                     child: Container(
                       padding: EdgeInsets.all(12),
@@ -358,6 +378,9 @@ class _Project_CreateState extends State<Project_Create> {
                               onbut = true;
                               offbut = false;
                             });
+                            context
+                                .read<Page_Controller>()
+                                .Input_Project_info('else', 'type', '온라인');
                           },
                           child: Container(
                             width: 161,
@@ -389,6 +412,9 @@ class _Project_CreateState extends State<Project_Create> {
                               offbut = true;
                               onbut = false;
                             });
+                            context
+                                .read<Page_Controller>()
+                                .Input_Project_info('else', 'type', '오프라인');
                           },
                           child: Container(
                             width: 161,
@@ -427,6 +453,11 @@ class _Project_CreateState extends State<Project_Create> {
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     decoration: boxdeco,
                     child: TextField(
+                      onChanged: (value) {
+                        context
+                            .read<Page_Controller>()
+                            .Input_Project_info('else', 'content', value);
+                      },
                       decoration: InputDecoration(
                           hintText: '프로젝트에 대한 설명을 작성해주세요.',
                           hintStyle: TextStyle(
@@ -488,6 +519,9 @@ class _Project_CreateState extends State<Project_Create> {
                           ),
                         )
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                 ],
               ),

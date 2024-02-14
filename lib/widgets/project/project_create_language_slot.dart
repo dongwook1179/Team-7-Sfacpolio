@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_language_select.dart';
 
 class Project_Create_Language_Slot extends StatefulWidget {
@@ -24,7 +26,6 @@ class _Project_Create_Language_SlotState
     fontWeight: FontWeight.w400,
   );
   String language_text = '';
-  String language_member = '';
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,9 @@ class _Project_Create_Language_SlotState
             ).then((value) => setState(() {
                   language_text = value;
                 }));
+            context
+                .read<Page_Controller>()
+                .Input_Project_info('language', '', language_text);
           },
           child: Container(
             height: 45,

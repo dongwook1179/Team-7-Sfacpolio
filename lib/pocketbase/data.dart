@@ -108,86 +108,6 @@ class PocketBaseData {
     print(record.items[0].data['following']);
   }
 
-  Future<Map<String, dynamic>> Get_Log() async {
-    Map<String, dynamic> return_data = {};
-    final record_log = await pb.collection('log').getFullList();
-    final record_lan = await pb.collection('log_language').getFullList();
-    final record_dev = await pb.collection('log_develop_type').getFullList();
-    final record_like = await pb.collection('log_like').getFullList();
-    final record_view = await pb.collection('log_view').getFullList();
-    final record_com = await pb.collection('log_comment').getFullList();
-
-    for (var data in record_log) {
-      return_data[data.id] = {};
-      return_data[data.id]['language'] = [];
-      return_data[data.id]['develop_type'] = [];
-      return_data[data.id]['like'] = [];
-      return_data[data.id]['view'] = [];
-      return_data[data.id]['comment'] = {};
-
-      for (var data_lan in record_lan) {
-        //로그 id 에 맞는 언어 가져오기
-        if (data_lan.data['log_id'] == data.id) {
-          // 언어가 멀티플이므로 반복문을 통해
-          for (var language_id in data_lan.data['language_id']) {
-            final language =
-                await pb.collection('language_list').getOne(language_id);
-            return_data[data.id]['language'].add(language.data['language']);
-          }
-        }
-      }
-      for (var data_dev in record_dev) {
-        if (data_dev.data['log_id'] == data.id) {
-          for (var develop_id in data_dev.data['develop_type_id']) {
-            final develop_type =
-                await pb.collection('develop_type_list').getOne(develop_id);
-            return_data[data.id]['develop_type']
-                .add(develop_type.data['develop_type']);
-          }
-        }
-      }
-
-      for (var data_like in record_like) {
-        if (data_like.data['log_id'] == data.id) {
-          return_data[data.id]['like'].add(data_like.id);
-        }
-      }
-
-      for (var data_view in record_view) {
-        if (data_view.data['log_id'] == data.id) {
-          return_data[data.id]['view'].add(data_view.id);
-        }
-      }
-      for (var data_com in record_com) {
-        if (data_com.data['log_id'] == data.id) {
-          return_data[data.id]['comment'] = [
-            {
-              'user': data_com.data['user_id'],
-              'content': data_com.data['content']
-            }
-          ];
-        }
-      }
-      return_data[data.id]['comment_num'] =
-          return_data[data.id]['comment'].length;
-      return_data[data.id]['view_num'] = return_data[data.id]['view'].length;
-      return_data[data.id]['like_num'] = return_data[data.id]['like'].length;
-      return_data[data.id]['id'] = data.id;
-      return_data[data.id]['type'] = 'Log';
-      final user = await pb.collection('users').getOne(data.data['user_id']);
-      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
-      return_data[data.id]['avatar'] = user_image;
-      return_data[data.id]['writer'] = user.data['nickname'];
-
-      String image = pb.files.getUrl(data, data.data['image']).toString();
-      return_data[data.id]['image'] = image;
-      return_data[data.id]['title'] = data.data['title'];
-      return_data[data.id]['content'] = data.data['content'];
-      return_data[data.id]['update'] = data.updated;
-    }
-    return return_data;
-  }
-
   Future<Map<String, dynamic>> Get_Interest_Log(String user_id) async {
     Map<String, dynamic> return_data = {};
     final interest = await pb
@@ -236,11 +156,11 @@ class PocketBaseData {
       }
 
       for (var data_like in record_like.items) {
-        return_data[record_log.id]['like'].add(data_like.id);
+        return_data[record_log.id]['like'].add(data_like.data['user_id']);
       }
 
       for (var data_view in record_view.items) {
-        return_data[record_log.id]['view'].add(data_view.id);
+        return_data[record_log.id]['view'].add(data_view.data['user_id']);
       }
 
       for (var data_com in record_com.items) {
@@ -325,11 +245,11 @@ class PocketBaseData {
       }
 
       for (var data_like in record_like.items) {
-        return_data[record_log.id]['like'].add(data_like.id);
+        return_data[record_log.id]['like'].add(data_like.data['user_id']);
       }
 
       for (var data_view in record_view.items) {
-        return_data[record_log.id]['view'].add(data_view.id);
+        return_data[record_log.id]['view'].add(data_view.data['user_id']);
       }
 
       for (var data_com in record_com.items) {
@@ -452,52 +372,69 @@ class PocketBaseData {
 
   Future<Map<String, dynamic>> Data_Filter(
       String text, Map<String, dynamic> condition) async {
-    Map<String, dynamic> datas = await Get_Log();
+    Map<String, dynamic> datas = {};
+    Map<String, dynamic> datas_log = await Get_Log();
+    Map<String, dynamic> datas_comunity = await Get_Community();
+    Map<String, dynamic> datas_project = await Get_Projcet();
+
+    for (String key in datas_log.keys) {
+      datas[key] = datas_log[key];
+    }
+    for (String key in datas_comunity.keys) {
+      datas[key] = datas_comunity[key];
+    }
+    for (String key in datas_project.keys) {
+      datas[key] = datas_project[key];
+    }
+
     Map<String, dynamic> filter_data = {};
+
     for (String data in datas.keys) {
       if (condition.isNotEmpty) {
-        if ((condition['제목'] ?? false) && datas[data]['title'].contains(text)) {
+        if ((condition['제목'] ?? false) &&
+            datas[data].data['title'].contains(text)) {
           filter_data[data] = datas[data];
         }
         if ((condition['내용'] ?? false) &&
-            datas[data]['content'].contains(text)) {
+            datas[data].data['content'].contains(text)) {
           filter_data[data] = datas[data];
         }
         if ((condition['작성자'] ?? false) &&
-            datas[data]['writer'].contains(text)) {
+            datas[data].data['writer'].contains(text)) {
           filter_data[data] = datas[data];
         }
         // if ((condition['작성자'] ?? false) &&
         //     datas[data]['comment'].contains(text)) {
         //   filter_data[data] = datas[data];
         // }
-        if ((condition['Log'] ?? false) && datas[data]['type'].contains(text)) {
+        if ((condition['Log'] ?? false) &&
+            datas[data].data['type'].contains(text)) {
           filter_data[data] = datas[data];
         }
         if ((condition['커뮤니티'] ?? false) &&
-            datas[data]['type'].contains(text)) {
+            datas[data].data['type'].contains(text)) {
           filter_data[data] = datas[data];
         }
         if ((condition['프로젝트'] ?? false) &&
-            datas[data]['type'].contains(text)) {
+            datas[data].data['type'].contains(text)) {
           filter_data[data] = datas[data];
         }
         if ((condition['내 게시물'] ?? false) &&
-            datas[data]['type'].contains(text)) {
+            datas[data].data['type'].contains(text)) {
           filter_data[data] = datas[data];
         }
         if (condition.containsKey('tag')) {
           for (String tag in condition['tag']) {
-            if (datas[data]['develop_type'].contains(tag)) {
+            if (datas[data].data['develop_type'].contains(tag)) {
               filter_data[data] = datas[data];
             }
-            if (datas[data]['develop_type'].contains(tag)) {
+            if (datas[data].data['develop_type'].contains(tag)) {
               filter_data[data] = datas[data];
             }
           }
         }
       } else {
-        if (datas[data]['title'].contains(text)) {
+        if (datas[data].data['title'].contains(text)) {
           filter_data[data] = datas[data];
         }
       }
@@ -568,86 +505,130 @@ class PocketBaseData {
     await pb.collection('users').delete(user_id);
   }
 
-  Future<Map<String, dynamic>> Get_Community() async {
-    Map<String, dynamic> return_data = {};
-    final record_log = await pb.collection('community').getFullList();
-    final record_lan = await pb.collection('community_language').getFullList();
-    final record_dev =
-        await pb.collection('community_develop_type').getFullList();
-    final record_like = await pb.collection('community_like').getFullList();
-    final record_view = await pb.collection('community_view').getFullList();
-    final record_com = await pb.collection('community_comment').getFullList();
+  // Future<Map<String, dynamic>> Get_Community() async {
+  //   Map<String, dynamic> return_data = {};
+  //   final record_log = await pb.collection('community').getFullList();
+  //   final record_lan = await pb.collection('community_language').getFullList();
+  //   final record_dev =
+  //       await pb.collection('community_develop_type').getFullList();
+  //   final record_like = await pb.collection('community_like').getFullList();
+  //   final record_view = await pb.collection('community_view').getFullList();
+  //   final record_com = await pb.collection('community_comment').getFullList();
 
-    for (var data in record_log) {
-      return_data[data.id] = {};
-      return_data[data.id]['language'] = [];
-      return_data[data.id]['develop_type'] = [];
-      return_data[data.id]['like'] = [];
-      return_data[data.id]['view'] = [];
-      return_data[data.id]['comment'] = [];
+  //   for (var data in record_log) {
+  //     return_data[data.id] = {};
+  //     return_data[data.id]['language'] = [];
+  //     return_data[data.id]['develop_type'] = [];
+  //     return_data[data.id]['like'] = [];
+  //     return_data[data.id]['view'] = [];
+  //     return_data[data.id]['comment'] = [];
 
-      for (var data_lan in record_lan) {
-        if (data_lan.data['community_id'] == data.id) {
-          for (var language_id in data_lan.data['language_id']) {
-            final language =
-                await pb.collection('language_list').getOne(language_id);
-            return_data[data.id]['language'].add(language.data['language']);
-          }
-        }
-      }
-      for (var data_dev in record_dev) {
-        if (data_dev.data['community_id'] == data.id) {
-          for (var develop_id in data_dev.data['develop_type_id']) {
-            final develop_type =
-                await pb.collection('develop_type_list').getOne(develop_id);
-            return_data[data.id]['develop_type']
-                .add(develop_type.data['develop_type']);
-          }
-        }
-      }
+  //     for (var data_lan in record_lan) {
+  //       if (data_lan.data['community_id'] == data.id) {
+  //         for (var language_id in data_lan.data['language_id']) {
+  //           final language =
+  //               await pb.collection('language_list').getOne(language_id);
+  //           return_data[data.id]['language'].add(language.data['language']);
+  //         }
+  //       }
+  //     }
+  //     for (var data_dev in record_dev) {
+  //       if (data_dev.data['community_id'] == data.id) {
+  //         for (var develop_id in data_dev.data['develop_type_id']) {
+  //           final develop_type =
+  //               await pb.collection('develop_type_list').getOne(develop_id);
+  //           return_data[data.id]['develop_type']
+  //               .add(develop_type.data['develop_type']);
+  //         }
+  //       }
+  //     }
 
-      for (var data_like in record_like) {
-        if (data_like.data['community_id'] == data.id) {
-          return_data[data.id]['like'].add(data_like.id);
-        }
-      }
+  //     for (var data_like in record_like) {
+  //       if (data_like.data['community_id'] == data.id) {
+  //         return_data[data.id]['like'].add(data_like.id);
+  //       }
+  //     }
 
-      for (var data_view in record_view) {
-        if (data_view.data['community_id'] == data.id) {
-          return_data[data.id]['view'].add(data_view.id);
-        }
+  //     for (var data_view in record_view) {
+  //       if (data_view.data['community_id'] == data.id) {
+  //         return_data[data.id]['view'].add(data_view.id);
+  //       }
+  //     }
+  //     for (var data_com in record_com) {
+  //       if (data_com.data['community_id'] == data.id) {
+  //         return_data[data.id]['comment'].add({
+  //           'user': data_com.data['user_id'],
+  //           'content': data_com.data['content']
+  //         });
+  //       }
+  //     }
+  //     return_data[data.id]['comment_num'] =
+  //         return_data[data.id]['comment'].length;
+  //     return_data[data.id]['view_num'] = return_data[data.id]['view'].length;
+  //     return_data[data.id]['like_num'] = return_data[data.id]['like'].length;
+  //     return_data[data.id]['id'] = data.id;
+  //     return_data[data.id]['type'] = 'community';
+  //     final user = await pb.collection('users').getOne(data.data['user_id']);
+  //     String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
+  //     return_data[data.id]['avatar'] = user_image;
+  //     return_data[data.id]['writer'] = user.data['nickname'];
+  //     if (data.data['type'] == '포트폴리오') {
+  //       return_data[data.id]['type'] = 'LOG';
+  //     }
+  //     return_data[data.id]['image'] = [];
+  //     for (var image in data.data["image"]) {
+  //       String url = pb.files.getUrl(data, image).toString();
+  //       return_data[data.id]['image'].add(url);
+  //     }
+  //     return_data[data.id]['title'] = data.data['title'];
+  //     return_data[data.id]['content'] = data.data['content'];
+  //     return_data[data.id]['update'] = data.updated;
+  //   }
+  //   return return_data;
+  // }
+  Future<Map<String, dynamic>> Get_Log() async {
+    Map<String, dynamic> send_data = {};
+
+    final record = await pb.collection('log').getFullList();
+
+    for (var data in record) {
+      send_data[data.id] = data;
+      Map<String, dynamic> information = await Post_information(data);
+      for (String key in information.keys) {
+        send_data[data.id].data[key] = information[key];
       }
-      for (var data_com in record_com) {
-        if (data_com.data['community_id'] == data.id) {
-          return_data[data.id]['comment'].add({
-            'user': data_com.data['user_id'],
-            'content': data_com.data['content']
-          });
-        }
-      }
-      return_data[data.id]['comment_num'] =
-          return_data[data.id]['comment'].length;
-      return_data[data.id]['view_num'] = return_data[data.id]['view'].length;
-      return_data[data.id]['like_num'] = return_data[data.id]['like'].length;
-      return_data[data.id]['id'] = data.id;
-      return_data[data.id]['type'] = 'community';
-      final user = await pb.collection('users').getOne(data.data['user_id']);
-      String user_image = pb.files.getUrl(user, user.data['avatar']).toString();
-      return_data[data.id]['avatar'] = user_image;
-      return_data[data.id]['writer'] = user.data['nickname'];
-      if (data.data['type'] == '포트폴리오') {
-        return_data[data.id]['type'] = 'LOG';
-      }
-      return_data[data.id]['image'] = [];
-      for (var image in data.data["image"]) {
-        String url = pb.files.getUrl(data, image).toString();
-        return_data[data.id]['image'].add(url);
-      }
-      return_data[data.id]['title'] = data.data['title'];
-      return_data[data.id]['content'] = data.data['content'];
-      return_data[data.id]['update'] = data.updated;
     }
-    return return_data;
+    return send_data;
+  }
+
+  Future<Map<String, dynamic>> Get_Community() async {
+    Map<String, dynamic> send_data = {};
+
+    final record = await pb.collection('community').getFullList();
+
+    for (var data in record) {
+      send_data[data.id] = data;
+      Map<String, dynamic> information = await Post_information(data);
+      for (String key in information.keys) {
+        send_data[data.id].data[key] = information[key];
+      }
+    }
+    return send_data;
+  }
+
+  Future<Map<String, dynamic>> Get_Projcet() async {
+    Map<String, dynamic> send_data = {};
+
+    final record = await pb.collection('project').getFullList();
+
+    for (var data in record) {
+      send_data[data.id] = data;
+      Map<String, dynamic> information = await Project_information(data);
+      for (String key in information.keys) {
+        send_data[data.id].data[key] = information[key];
+      }
+    }
+    return send_data;
   }
 
   Future<Map<String, dynamic>> Get_My_Community(String user_id) async {
@@ -822,13 +803,14 @@ class PocketBaseData {
     Map<String, dynamic> datas = {};
     final community = await pb
         .collection('community')
-        .getList(filter: "( user_id ='${user_id}' )");
-    final log =
-        await pb.collection('log').getList(filter: "( user_id ='${user_id}' )");
+        .getList(filter: "( user_id ='${user_id}' )", sort: '-created');
+    final log = await pb
+        .collection('log')
+        .getList(filter: "( user_id ='${user_id}' )", sort: '-created');
 
     final project = await pb
         .collection('project')
-        .getList(filter: "( user_id ='${user_id}' )");
+        .getList(filter: "( user_id ='${user_id}' )", sort: '-created');
 
     for (var data in community.items) {
       if (!datas.containsKey('community')) {
@@ -839,8 +821,6 @@ class PocketBaseData {
         data.data[key] = information[key];
       }
       datas['community'].add(data);
-      // print('커뮤니티 정보확인');
-      // print(data);
     }
 
     for (var data in log.items) {
@@ -852,8 +832,6 @@ class PocketBaseData {
         data.data[key] = information[key];
       }
       datas['log'].add(data);
-      // print('로그 정보확인');
-      // print(data);
     }
 
     for (var data in project.items) {
@@ -1111,9 +1089,13 @@ class PocketBaseData {
     project_information['recruit_number'] = 0;
     project_information['recruit'] = {};
     for (var data in recruit.items) {
+      final dev_type =
+          await pb.collection('develop_type_list').getOne(data.data['type']);
+      data.data['type'] = dev_type.data['develop_type'];
       project_information['recruit'][data.id] = data.data;
       project_information['recruit_number'] += data.data['number'];
     }
+    project_information['post_type'] = '프로젝트';
 
     return project_information;
   }
@@ -1126,6 +1108,8 @@ class PocketBaseData {
     List<dynamic> develop_list = [];
     List<dynamic> language_list = [];
     List<String> image_list = [];
+    List<String> like_list = [];
+    List<String> view_list = [];
 
     Map<String, dynamic> post_information = {};
 
@@ -1143,10 +1127,16 @@ class PocketBaseData {
     final like = await pb
         .collection('${collectionname}_like')
         .getList(filter: "( ${collectionname}_id ='${recordid}' )");
+    for (var data in like.items) {
+      like_list.add(data.data['user_id']);
+    }
 
     final view = await pb
         .collection('${collectionname}_view')
         .getList(filter: "( ${collectionname}_id ='${recordid}' )");
+    for (var data in view.items) {
+      view_list.add(data.data['user_id']);
+    }
 
     final develop_type = await pb
         .collection('${collectionname}_develop_type')
@@ -1197,8 +1187,13 @@ class PocketBaseData {
     post_information['language'] = language_list;
     post_information['comment'] = comment.items;
     post_information['recomment'] = recomment_list;
-    post_information['like'] = like.items;
-    post_information['view'] = view.items;
+    post_information['like'] = like_list;
+    post_information['view'] = view_list;
+    if (collectionname == 'log') {
+      post_information['post_type'] = 'LOG';
+    } else if (collectionname == 'community') {
+      post_information['post_type'] = '커뮤니티';
+    }
 
     return post_information;
   }
@@ -1275,14 +1270,8 @@ class PocketBaseData {
 
     if (data.containsKey('condition_type') &&
         data.containsKey('condition_period')) {
-      String type = '';
-      if (data['condition_type'][0] == '온라인') {
-        type = 'online';
-      } else if (data['condition_type'][0] == '오프라인') {
-        type = 'offline';
-      }
       final body = <String, dynamic>{
-        "work_type": type,
+        "work_type": data['condition_type'][0],
         "preferred_project_period": data['condition_period'][0]
       };
       await pb.collection('users').update(user_id, body: body);
@@ -1376,31 +1365,36 @@ class PocketBaseData {
     }
   }
 
-  Future<Map<String, dynamic>> Get_Projcet() async {
-    Map<String, dynamic> send_data = {};
-
-    final record = await pb.collection('project').getFullList();
-
-    for (var data in record) {
-      send_data[data.id] = data;
-      Map<String, dynamic> information = await Project_information(data);
-      for (String key in information.keys) {
-        send_data[data.id].data[key] = information[key];
-      }
-    }
-    return send_data;
-  }
-
   Future<Map<String, dynamic>> Get_UserData(String user_id) async {
     Map<String, dynamic> data = {};
     List<Map<String, String>> language_list = [];
     List<Map<String, String>> develop_list = [];
+    List<Map<String, String>> service_list = [];
+
+    final user = await pb.collection('users').getOne(user_id);
+    user.data['avatar'] = pb.files.getUrl(user, user.data['avatar']).toString();
+    data['user'] = user;
+
+    Map<String, dynamic> follow = await Get_Follow(user_id);
+    data['follow'] = follow;
+
+    Map<String, dynamic> post = await Get_MyPost(user_id);
+    data['post'] = post;
 
     final language = await pb
         .collection('language')
         .getList(filter: "( user_id = '${user_id}' )");
+
     final develop_type = await pb
         .collection('develop_type')
+        .getList(filter: "( user_id = '${user_id}' )");
+
+    final service = await pb
+        .collection('service')
+        .getList(filter: "( user_id = '${user_id}' )");
+
+    final career = await pb
+        .collection('career')
         .getList(filter: "( user_id = '${user_id}' )");
 
     for (var data in language.items) {
@@ -1430,6 +1424,107 @@ class PocketBaseData {
 
     data['develop_type'] = develop_list;
 
+    for (var data in service.items) {
+      for (String id in data.data['service']) {
+        Map<String, String> service_data = {};
+        final ser_info = await pb.collection('service_list').getOne(id);
+        service_data['id'] = ser_info.id;
+        service_data['service'] = ser_info.data['service'];
+        final image =
+            pb.files.getUrl(ser_info, ser_info.data['image']).toString();
+        service_data['image'] = image;
+        service_list.add(service_data);
+      }
+    }
+
+    data['service'] = service_list;
+
+    data['career'] = [];
+
+    for (var datas in career.items) {
+      Map<String, String> career_data = {};
+      career_data['id'] = datas.id;
+      career_data['user_id'] = datas.data['user_id'];
+      career_data['type'] = datas.data['type'];
+      career_data['company'] = datas.data['company'];
+      career_data['period'] = datas.data['period'];
+      data['career'].add(career_data);
+    }
+
     return data;
+  }
+
+  Future<void> Create_Project(Map<String, dynamic> data) async {
+    int recruit = 0;
+    for (String key in data['develop_type'].keys) {
+      int member_counter = data['develop_type']![key]!;
+      recruit += member_counter;
+    }
+    print(data['start_time']);
+    print(data['start_time'].runtimeType);
+
+    final project_body = <String, dynamic>{
+      "user_id": data['user_id'],
+      "recruit": recruit,
+      "start_time": "${data['start_time']}",
+      "period": data['period'],
+      "title": data['title'],
+      "content": data['content'],
+      "type": data['type']
+    };
+
+    final record = await pb.collection('project').create(body: project_body);
+    if (record.id.isNotEmpty) {
+      print('등록 완료');
+    }
+
+    List<String> dev_ids = [];
+    for (String key in data['develop_type'].keys) {
+      final dev_type = await pb
+          .collection('develop_type_list')
+          .getList(filter: '( develop_type = "${key}" )');
+      for (var data in dev_type.items) {
+        dev_ids.add(data.id);
+      }
+    }
+    final develop_type_body = <String, dynamic>{
+      "project_id": record.id,
+      "develop_type_id": dev_ids
+    };
+    await pb.collection('project_develop_type').create(body: develop_type_body);
+
+    List<String> lan_ids = [];
+    for (String key in data['language']) {
+      final lan_type = await pb
+          .collection('language_list')
+          .getList(filter: '( language = "${key}" )');
+      for (var data in lan_type.items) {
+        lan_ids.add(data.id);
+      }
+    }
+    final language_body = <String, dynamic>{
+      "project_id": record.id,
+      "language_id": lan_ids
+    };
+
+    await pb.collection('project_language').create(body: language_body);
+
+    for (String key in data['develop_type'].keys) {
+      final dev_type = await pb
+          .collection('develop_type_list')
+          .getList(filter: '( develop_type = "${key}" )');
+      String id = '';
+      for (var data in dev_type.items) {
+        id = data.id;
+      }
+      final recruit_body = <String, dynamic>{
+        "project_id": record.id,
+        "type": id,
+        "number": data['develop_type'][key],
+        "member": []
+      };
+
+      await pb.collection('project_recruit').create(body: recruit_body);
+    }
   }
 }

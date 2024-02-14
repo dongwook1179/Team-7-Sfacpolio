@@ -12,13 +12,6 @@ class Chatting_Mold extends StatefulWidget {
 
 class _Chatting_MoldState extends State<Chatting_Mold> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print(widget.chatting);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       width: 360,

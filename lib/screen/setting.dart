@@ -44,6 +44,7 @@ class _SettingState extends State<Setting> {
             Get_Data();
             return Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: false,
                 title: Setting_Appbar(),
               ),
               body: Container(

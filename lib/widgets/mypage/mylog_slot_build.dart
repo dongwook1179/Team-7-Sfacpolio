@@ -21,26 +21,27 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print('내 로그');
     print(widget.data);
-    // Date_Division();
+    Date_Division();
   }
 
   void Date_Division() {
-    DateTime dateTime = DateTime.parse(widget.data.updated);
+    DateTime dateTime = DateTime.parse(widget.data['update']);
     String formattedDate =
         "${dateTime.year}.${_twoDigits(dateTime.month)}.${_twoDigits(dateTime.day)}";
 
-    if (widget.data.data['image'].runtimeType == List) {
+    if (widget.data['image'].runtimeType == List) {
       setState(() {
-        widget.data.data['image'] = widget.data.data['image'][0];
+        widget.data['image'] = widget.data['image'][0];
       });
     }
 
     setState(() {
       String id = context.read<User_Data>().record.record!.id;
 
-      for (var data in widget.data.data['like']) {
-        print(widget.data.data['like']);
+      for (var data in widget.data['like']) {
+        print(widget.data['like']);
         print(data);
         if (data.contains(id)) {
           like_state = true;
@@ -50,7 +51,7 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
       date = formattedDate;
     });
     print('아이디들 확인 : $like_state');
-    print('조회수 확인 : ${widget.data.data['view']}');
+    print('조회수 확인 : ${widget.data['view']}');
   }
 
   String _twoDigits(int n) {
@@ -77,7 +78,7 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
               color: Color(0xFFE6E6E6),
             ),
           ),
-          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          margin: EdgeInsets.symmetric(vertical: 12),
           child: ClipRRect(
             child: Column(
               children: [
@@ -91,17 +92,17 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
                       topRight: Radius.circular(8),
                     ),
                     image: DecorationImage(
-                        image: NetworkImage(widget.data.data['image']),
+                        image: NetworkImage(widget.data['image']),
                         fit: BoxFit.cover),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      widget.data.data['develop_type'].isNotEmpty
-                          ? Tag_Slot(widget.data.data['develop_type'][0])
+                      widget.data['develop_type'].isNotEmpty
+                          ? Tag_Slot(widget.data['develop_type'][0])
                           : Container(),
-                      widget.data.data['language'].isNotEmpty
-                          ? Tag_Slot(widget.data.data['language'][0])
+                      widget.data['language'].isNotEmpty
+                          ? Tag_Slot(widget.data['language'][0])
                           : Container(),
                       Spacer(),
                       context.watch<Page_Controller>().post_delete_active
@@ -112,7 +113,7 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
                                   color: context
                                           .watch<Page_Controller>()
                                           .post_delete_select
-                                          .contains(widget.data.id)
+                                          .contains(widget.data['id'])
                                       ? Color(0xFF0059FF)
                                       : Color(0xffffffff),
                                   shape: BoxShape.circle),
@@ -139,7 +140,7 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.data.data['title'],
+                        widget.data['title'],
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -171,15 +172,14 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image: NetworkImage(
-                                        widget.data.data['avatar']),
+                                    image: NetworkImage(widget.data['avatar']),
                                     fit: BoxFit.cover)),
                           ),
                           SizedBox(
                             width: 6,
                           ),
                           Text(
-                            widget.data.data['nickname'],
+                            widget.data['writer'],
                             style: TextStyle(
                               color: Color(0xFF020202),
                               fontSize: 12,
@@ -203,7 +203,7 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
                             width: 2,
                           ),
                           Text(
-                            '${widget.data.data['like'].length}',
+                            '${widget.data['like'].length}',
                             style: TextStyle(
                               color: Color(0xFF7F7F7F),
                               fontSize: 12,
@@ -223,7 +223,7 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
                             width: 2,
                           ),
                           Text(
-                            '${widget.data.data['comment'].length}',
+                            '${widget.data['comment'].length}',
                             style: TextStyle(
                               color: Color(0xFF7F7F7F),
                               fontSize: 12,
@@ -243,7 +243,7 @@ class _MyLog_slot_buildState extends State<MyLog_slot_build> {
                             width: 2,
                           ),
                           Text(
-                            '${widget.data.data['view'].length}',
+                            '${widget.data['view'].length}',
                             style: TextStyle(
                               color: Color(0xFF7F7F7F),
                               fontSize: 12,

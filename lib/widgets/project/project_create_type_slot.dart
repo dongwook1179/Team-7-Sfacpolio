@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_type_number_select.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_type_select.dart';
 
@@ -44,6 +46,10 @@ class _Project_Create_Type_SlotState extends State<Project_Create_Type_Slot> {
                 ).then((value) => setState(() {
                       field_text = value;
                     }));
+                if (field_text != '' && field_member != 0) {
+                  context.read<Page_Controller>().Input_Project_info(
+                      'develop_type', field_text, field_member);
+                }
                 print(field_text);
               },
               child: Container(
@@ -89,6 +95,10 @@ class _Project_Create_Type_SlotState extends State<Project_Create_Type_Slot> {
                 ).then((value) => setState(() {
                       field_member = value;
                     }));
+                if (field_text != '' && field_member != 0) {
+                  context.read<Page_Controller>().Input_Project_info(
+                      'develop_type', field_text, field_member);
+                }
                 print(field_member);
               },
               child: Container(

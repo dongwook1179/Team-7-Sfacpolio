@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/screen/followingprofile.dart';
 
 class Follow_Bottom_Sheet extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -11,6 +12,13 @@ class Follow_Bottom_Sheet extends StatefulWidget {
 }
 
 class _Follow_Bottom_SheetState extends State<Follow_Bottom_Sheet> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.data['id']);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<Page_Controller>(
@@ -83,7 +91,13 @@ class _Follow_Bottom_SheetState extends State<Follow_Bottom_Sheet> {
                 height: 8,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              FollowingProfile(widget.data['id'])));
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 41,
