@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:team_7_sfacpolio/widgets/mypage/mypage_career.dart';
+import 'package:team_7_sfacpolio/widgets/mypage/mypage_career_period.dart';
+import 'package:team_7_sfacpolio/widgets/mypage/mypage_mbti.dart';
 
 class EditDropDown extends StatefulWidget {
   const EditDropDown({super.key});
@@ -56,8 +59,19 @@ class _EditDropDownState extends State<EditDropDown> {
                     fontWeight: FontWeight.w400,
                   ),
                   contentPadding: EdgeInsets.all(13),
-                  suffixIcon: Icon(
-                    Icons.expand_more,
+                  suffixIcon: InkWell(
+                    onTap: () async {
+                      await showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return MyPage_Applicant_MBTI();
+                        },
+                      );
+                    },
+                    child: Icon(
+                      Icons.expand_more,
+                    ),
                   )),
             ),
           ),
@@ -94,7 +108,7 @@ class _EditDropDownState extends State<EditDropDown> {
           Row(
             children: [
               Container(
-                width: 183,
+                width: 93,
                 height: 45,
                 decoration: BoxDecoration(
                   border: Border.all(color: Color(0xFFCCCCCC)),
@@ -111,8 +125,16 @@ class _EditDropDownState extends State<EditDropDown> {
                         fontWeight: FontWeight.w400,
                       ),
                       contentPadding: EdgeInsets.all(13),
-                      suffixIcon: GestureDetector(
-                        onTap: () {},
+                      suffixIcon: InkWell(
+                        onTap: () async {
+                          await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return MyPage_Career_Select();
+                            },
+                          );
+                        },
                         child: Icon(
                           Icons.expand_more,
                         ),
@@ -123,7 +145,7 @@ class _EditDropDownState extends State<EditDropDown> {
                 width: 6,
               ),
               Container(
-                width: 83,
+                width: 173,
                 height: 45,
                 decoration: BoxDecoration(
                   border: Border.all(color: Color(0xFFCCCCCC)),
@@ -140,8 +162,16 @@ class _EditDropDownState extends State<EditDropDown> {
                         fontWeight: FontWeight.w400,
                       ),
                       contentPadding: EdgeInsets.all(13),
-                      suffixIcon: GestureDetector(
-                        onTap: () {},
+                      suffixIcon: InkWell(
+                        onTap: () async {
+                          await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return MyPage_Career_Period();
+                            },
+                          );
+                        },
                         child: Icon(
                           Icons.expand_more,
                         ),
@@ -162,21 +192,16 @@ class _EditDropDownState extends State<EditDropDown> {
             ),
             child: TextField(
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '와이엠에스닷코',
-                  hintStyle: TextStyle(
-                    color: Color(0xFF020202),
-                    fontSize: 14,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  contentPadding: EdgeInsets.all(13),
-                  suffixIcon: GestureDetector(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.expand_more,
-                    ),
-                  )),
+                border: InputBorder.none,
+                hintText: '와이엠에스닷코',
+                hintStyle: TextStyle(
+                  color: Color(0xFF020202),
+                  fontSize: 14,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w400,
+                ),
+                contentPadding: EdgeInsets.all(13),
+              ),
             ),
           ),
           SizedBox(
@@ -185,7 +210,7 @@ class _EditDropDownState extends State<EditDropDown> {
           Row(
             children: [
               Container(
-                width: 183,
+                width: 93,
                 height: 45,
                 decoration: BoxDecoration(
                   border: Border.all(color: Color(0xFFCCCCCC)),
@@ -202,8 +227,16 @@ class _EditDropDownState extends State<EditDropDown> {
                         fontWeight: FontWeight.w400,
                       ),
                       contentPadding: EdgeInsets.all(13),
-                      suffixIcon: GestureDetector(
-                        onTap: () {},
+                      suffixIcon: InkWell(
+                        onTap: () async {
+                          await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return MyPage_Applicant_MBTI();
+                            },
+                          );
+                        },
                         child: Icon(
                           Icons.expand_more,
                         ),
@@ -214,7 +247,7 @@ class _EditDropDownState extends State<EditDropDown> {
                 width: 6,
               ),
               Container(
-                width: 83,
+                width: 173,
                 height: 45,
                 decoration: BoxDecoration(
                   border: Border.all(color: Color(0xFFCCCCCC)),
@@ -231,13 +264,18 @@ class _EditDropDownState extends State<EditDropDown> {
                         fontWeight: FontWeight.w400,
                       ),
                       contentPadding: EdgeInsets.all(13),
-                      suffixIcon: GestureDetector(
-                        onTap: () {},
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Icon(
-                            Icons.expand_more,
-                          ),
+                      suffixIcon: InkWell(
+                        onTap: () async {
+                          await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return MyPage_Career_Period();
+                            },
+                          );
+                        },
+                        child: Icon(
+                          Icons.expand_more,
                         ),
                       )),
                 ),
@@ -258,21 +296,16 @@ class _EditDropDownState extends State<EditDropDown> {
                 ),
                 child: TextField(
                   decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '웅진 프로젝트',
-                      hintStyle: TextStyle(
-                        color: Color(0xFF020202),
-                        fontSize: 14,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      contentPadding: EdgeInsets.all(13),
-                      suffixIcon: GestureDetector(
-                        onTap: () {},
-                        child: Icon(
-                          Icons.expand_more,
-                        ),
-                      )),
+                    border: InputBorder.none,
+                    hintText: '웅진 프로젝트',
+                    hintStyle: TextStyle(
+                      color: Color(0xFF020202),
+                      fontSize: 14,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    contentPadding: EdgeInsets.all(13),
+                  ),
                 ),
               ),
               SizedBox(
@@ -403,8 +436,16 @@ class _EditDropDownState extends State<EditDropDown> {
                     fontWeight: FontWeight.w400,
                   ),
                   contentPadding: EdgeInsets.all(7),
-                  suffixIcon: GestureDetector(
-                    onTap: () {},
+                  suffixIcon: InkWell(
+                    onTap: () async {
+                      await showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return MyPage_Applicant_MBTI();
+                        },
+                      );
+                    },
                     child: Icon(
                       Icons.expand_more,
                     ),

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:team_7_sfacpolio/screen/editprofile.dart';
-import 'package:team_7_sfacpolio/screen/myactive.dart';
 import 'package:team_7_sfacpolio/screen/myactivity.dart';
 import 'package:team_7_sfacpolio/screen/myapagelist.dart';
 import 'package:team_7_sfacpolio/screen/onboarding.dart';
