@@ -38,9 +38,12 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
       data = user;
       print('사용자 정보');
       print(data);
-      for (String key in data['post'].keys) {
-        int count = data['post'][key].length;
-        post_count += count;
+
+      if (data['post'].length > 0) {
+        for (String key in data['post'].keys) {
+          int count = data['post'][key].length;
+          post_count += count;
+        }
       }
       page_load = true;
     });

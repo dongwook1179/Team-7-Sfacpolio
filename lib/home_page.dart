@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _getPage(int index) {
-    Navigator.pop(context);
     switch (index) {
       case 0:
         return MainPage();
