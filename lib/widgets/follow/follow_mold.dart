@@ -50,42 +50,39 @@ class _Follow_MoldState extends State<Follow_Mold> {
           SizedBox(
             width: 15,
           ),
-          Expanded(
-            child: Container(
-              height: 40,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.read<Page_Controller>().follow_data[widget.type]
-                                [widget.data_index]['nickname'] !=
-                            ''
-                        ? context
-                                .read<Page_Controller>()
-                                .follow_data[widget.type][widget.data_index]
-                            ['nickname']
-                        : '  ',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                    ),
+          Container(
+            height: 40,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.read<Page_Controller>().follow_data[widget.type]
+                              [widget.data_index]['nickname'] !=
+                          ''
+                      ? context.read<Page_Controller>().follow_data[widget.type]
+                          [widget.data_index]['nickname']
+                      : '  ',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    context.read<Page_Controller>().follow_data[widget.type]
-                        [widget.data_index]['email'],
-                    style: TextStyle(
-                      color: Color(0xFF4C4C4C),
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  )
-                ],
-              ),
+                ),
+                Text(
+                  context.read<Page_Controller>().follow_data[widget.type]
+                      [widget.data_index]['email'],
+                  style: TextStyle(
+                    color: Color(0xFF4C4C4C),
+                    fontSize: 12,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w400,
+                  ),
+                )
+              ],
             ),
           ),
+          Spacer(),
           GestureDetector(
             onTap: () async {
               await showDialog(
@@ -148,10 +145,9 @@ class _Follow_MoldState extends State<Follow_Mold> {
                 isScrollControlled: true,
                 builder: (BuildContext context) {
                   return Container(
-                      child: Expanded(
-                          child: Follow_Bottom_Sheet(context
-                              .read<Page_Controller>()
-                              .follow_data[widget.type][widget.data_index])));
+                      child: Follow_Bottom_Sheet(context
+                          .read<Page_Controller>()
+                          .follow_data[widget.type][widget.data_index]));
                 },
               );
             },

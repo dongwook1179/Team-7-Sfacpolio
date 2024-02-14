@@ -74,6 +74,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icon/
     - assets/jsons/
     - assets/images/chatting/
     - assets/images/log/

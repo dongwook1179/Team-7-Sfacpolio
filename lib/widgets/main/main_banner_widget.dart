@@ -57,34 +57,38 @@ class MainBannerWidget extends StatelessWidget {
                 height: 20,
               ),
             if (title == "" && subtitle == "")
-              Container(
-                width: 128.016,
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: ShapeDecoration(
-                  color: Colors.white.withOpacity(0.30000001192092896),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.white),
-                    borderRadius: BorderRadius.circular(8),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  width: 128.016,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: ShapeDecoration(
+                    color: Colors.white.withOpacity(0.30000001192092896),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(width: 1, color: Colors.white),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      '개인 맞춤 설정 하기',
-                      style: TextStyle(
-                        color: Color(0xFF7E87B5),
-                        fontSize: 12,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w700,
+                  child: Row(
+                    children: [
+                      Text(
+                        '개인 맞춤 설정 하기',
+                        style: TextStyle(
+                          color: Color(0xFF7E87B5),
+                          fontSize: 12,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                    SvgPicture.asset(
-                      "assets/icons/chevron-right.svg",
-                      color: Color(0xFF7E87B5),
-                      width: 16,
-                      height: 16,
-                    ),
-                  ],
+                      SvgPicture.asset(
+                        "assets/icons/chevron-right.svg",
+                        color: Color(0xFF7E87B5),
+                        width: 16,
+                        height: 16,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             if (title != "" && subtitle != "")

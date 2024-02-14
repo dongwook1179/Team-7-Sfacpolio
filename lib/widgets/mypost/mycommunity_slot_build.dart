@@ -46,7 +46,7 @@ class _MyCommunity_Slot_BuildState extends State<MyCommunity_Slot_Build> {
       String id = context.read<User_Data>().record.record!.id;
 
       for (var data in widget.data.data['like']) {
-        if (data.data['user_id'].contains(id)) {
+        if (data.contains(id)) {
           like_state = true;
         }
       }

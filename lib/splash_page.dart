@@ -110,6 +110,7 @@ class SplashPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 30),
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

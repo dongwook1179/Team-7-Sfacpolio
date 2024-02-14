@@ -93,7 +93,7 @@ class _SearchState extends State<Search> {
                                       .read<Page_Controller>()
                                       .get_data_search
                                       .values)
-                                    Data_Slot(Map<String, dynamic>.from(data))
+                                    Data_Slot(data)
                                 ],
                               ),
                             ),

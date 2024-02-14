@@ -29,6 +29,7 @@ class Page_Controller with ChangeNotifier {
   bool post_delete_active = false;
   List<String> post_delete_select = [];
   Map<String, String> project_applicant_type = {};
+  Map<String, dynamic> project_create = {'language': [], 'develop_type': {}};
 
   void Page_Reload() {
     notifyListeners();
@@ -210,6 +211,17 @@ class Page_Controller with ChangeNotifier {
 
   void Project_Change_Type(String type, String content) {
     project_applicant_type[type] = content;
+    notifyListeners();
+  }
+
+  void Input_Project_info(String type, String key, dynamic value) {
+    if (type == 'language') {
+      project_create[type].add(value);
+    } else if (type == 'develop_type') {
+      project_create[type][key] = value;
+    } else {
+      project_create[key] = value;
+    }
     notifyListeners();
   }
 }
