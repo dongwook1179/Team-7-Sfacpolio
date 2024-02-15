@@ -7,7 +7,8 @@ import '/widgets/onboarding/progressbar.dart';
 import '/widgets/onboarding/questiontext.dart';
 
 class Onboarding extends StatefulWidget {
-  const Onboarding({super.key});
+  final String user_id;
+  const Onboarding({super.key, required this.user_id});
 
   @override
   State<Onboarding> createState() => _OnboardingState();

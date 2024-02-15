@@ -9,18 +9,16 @@ import 'package:team_7_sfacpolio/splash_page.dart';
 void main() async {
   await initializeDateFormatting('ko-KR', null);
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => Page_Controller()),
-        ChangeNotifierProvider(create: (_) => User_Data()),
-        ChangeNotifierProvider(create: (_) => NavigationProvider()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        color: Color(0xFFFFFFFF),
-        home: MyApp(),
-      ),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => Page_Controller()),
+      ChangeNotifierProvider(create: (_) => User_Data()),
+      ChangeNotifierProvider(create: (_) => NavigationProvider()),
+    ],
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      color: Color(0xFFFFFFFF),
+      home: MyApp(),
     ),
-  );
+  ));
 }

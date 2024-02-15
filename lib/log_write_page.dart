@@ -14,6 +14,7 @@ class _LogWritePageState extends State<LogWritePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           leading: GestureDetector(

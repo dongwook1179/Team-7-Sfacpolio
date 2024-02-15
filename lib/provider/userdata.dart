@@ -23,6 +23,7 @@ class User_Data with ChangeNotifier {
   void LogOut() {
     auth.clear();
     record.meta.clear();
+    user_data.clear();
     notifyListeners();
   }
 
