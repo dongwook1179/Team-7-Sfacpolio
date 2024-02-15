@@ -7,24 +7,6 @@ import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/social_signup_page.dart';
 
-void main() async {
-  await initializeDateFormatting('ko-KR', null);
-
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => Page_Controller()),
-        ChangeNotifierProvider(create: (_) => User_Data()),
-        ChangeNotifierProvider(create: (_) => NavigationProvider()),
-      ],
-      child: MaterialApp(
-        color: Color(0xFFFFFFFF),
-        home: MyApp(),
-      ),
-    ),
-  );
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -1445,12 +1445,10 @@ class PocketBaseData {
   Future<Map<String, dynamic>> Get_Develop_Log(String id) async {
     Map<String, dynamic> logs = {};
 
-    print('확인1');
     final record_log = await pb
         .collection('log_develop_type')
         .getList(filter: '( develop_type_id ~ "$id" )');
 
-    print('확인2');
     for (var data in record_log.items) {
       final log = await pb.collection('log').getOne(data.data['log_id']);
       log.data['develop_type'] = [];
@@ -1471,8 +1469,6 @@ class PocketBaseData {
       log.data['user_nickname'] = user.data['nickname'];
 
       logs[log.id] = log;
-      print('입력정보');
-      print(logs);
     }
     return logs;
   }
