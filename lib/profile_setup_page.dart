@@ -11,13 +11,14 @@ import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/signup_onboarding_connection_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProfileSetupPage());
 }
 
 class ProfileSetupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: _ProfileSetupPage(),
     );
   }
@@ -67,10 +68,8 @@ class _ProfileSetupPageState extends State<_ProfileSetupPage> {
   }
 
   Future<void> _uploadData() async {
-    print('닉네임: ${_nicknameController.text}');
-    print('아바타: ${_image.uri}');
     print(
-        '사용자 ID: ${Provider.of<User_Data>(context, listen: false).record.record!.id}');
+        'User ID from sign-up: ${Provider.of<User_Data>(context, listen: false).record.record!.id}');
 
     try {
       Dio dio = Dio();
@@ -175,14 +174,18 @@ class _ProfileSetupPageState extends State<_ProfileSetupPage> {
                           )
                         : null,
                   ),
-                  child: _image.existsSync()
-                      ? null
-                      : SvgPicture.asset(
-                          "assets/icons/camera.svg",
-                          color: Color(0xFF7F7F7F),
-                          width: 50,
-                          height: 50,
-                        ),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    child: _image.existsSync()
+                        ? null
+                        : Image.asset(
+                            "assets/icons/camera_2.png",
+                            color: Color(0xFF7F7F7F),
+                            width: 50,
+                            height: 50,
+                          ),
+                  ),
                 ),
               ),
               SizedBox(
@@ -307,9 +310,9 @@ class _ProfileSetupPageState extends State<_ProfileSetupPage> {
                   children: [
                     SvgPicture.asset(
                       "assets/icons/camera.svg",
-                      color: Color(0xFF7F7F7F),
-                      width: 50,
-                      height: 50,
+                      color: Colors.black,
+                      width: 25,
+                      height: 25,
                     ),
                     SizedBox(
                       width: 10,
@@ -333,7 +336,12 @@ class _ProfileSetupPageState extends State<_ProfileSetupPage> {
                 },
                 child: Row(
                   children: [
-                    Icon(Icons.access_alarms_outlined),
+                    SvgPicture.asset(
+                      "assets/icons/icon_list.svg",
+                      color: Colors.black,
+                      width: 25,
+                      height: 25,
+                    ),
                     SizedBox(
                       width: 10,
                     ),

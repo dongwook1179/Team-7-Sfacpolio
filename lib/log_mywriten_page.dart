@@ -84,6 +84,7 @@ class _LogMyWritenPageState extends State<LogMyWritenPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           surfaceTintColor: Color(0xFFF8F8F9),

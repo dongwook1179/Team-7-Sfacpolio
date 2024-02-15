@@ -25,7 +25,10 @@ void main() {
         ChangeNotifierProvider(create: (_) => User_Data()),
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
       ],
-      child: MaterialApp(color: Color(0xFFFFFFFF), home: MyPage()),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          color: Color(0xFFFFFFFF),
+          home: MyPage()),
     ),
   );
 }
