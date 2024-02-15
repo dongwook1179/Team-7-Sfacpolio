@@ -1,21 +1,28 @@
 import 'package:bottom_picker/widgets/simple_picker.dart';
 import 'package:flutter/material.dart';
 
-class Profile_Edit_Career_type_Select extends StatefulWidget {
+class Profile_Edit_Project_Period_Select extends StatefulWidget {
   final String select;
-  const Profile_Edit_Career_type_Select(this.select);
+  const Profile_Edit_Project_Period_Select(this.select);
 
   @override
-  State<Profile_Edit_Career_type_Select> createState() =>
-      _Profile_Edit_Career_type_SelectState();
+  State<Profile_Edit_Project_Period_Select> createState() =>
+      _Profile_Edit_Project_Period_SelectState();
 }
 
-class _Profile_Edit_Career_type_SelectState
-    extends State<Profile_Edit_Career_type_Select> {
+class _Profile_Edit_Project_Period_SelectState
+    extends State<Profile_Edit_Project_Period_Select> {
   List<Text> text_widget = [];
   String choice_text = '';
   int start_index = 0;
-  List<String> career_type = ['경력', '교육'];
+  List<String> period_type = [
+    '기간 무관',
+    '1~2개월',
+    '3~6개월',
+    '6~9개월',
+    '9~12개월',
+    '1년이상'
+  ];
 
   @override
   void initState() {
@@ -33,17 +40,17 @@ class _Profile_Edit_Career_type_SelectState
     if (widget.select != '') {
       setState(() {
         choice_text = widget.select;
-        start_index = career_type.indexOf(choice_text);
+        start_index = period_type.indexOf(choice_text);
       });
     } else {
       setState(() {
-        choice_text = career_type[0];
+        choice_text = period_type[0];
       });
     }
   }
 
   void Change_Type() {
-    for (String text in career_type) {
+    for (String text in period_type) {
       Text widget_text = Text(
         text,
       );
@@ -111,7 +118,7 @@ class _Profile_Edit_Career_type_SelectState
                 items: text_widget,
                 onChange: (p0) {
                   setState(() {
-                    choice_text = career_type[p0];
+                    choice_text = period_type[p0];
                   });
                 },
                 selectedItemIndex: start_index,

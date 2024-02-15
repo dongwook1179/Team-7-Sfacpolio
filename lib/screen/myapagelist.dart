@@ -15,6 +15,7 @@ class _MyPageListState extends State<MyPageList> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(widget.data['career']);
   }
 
   String Period_Conversion(String period) {
@@ -188,7 +189,7 @@ class _MyPageListState extends State<MyPageList> {
                     SizedBox(
                       height: 8,
                     ),
-                    widget.data['language'] != []
+                    widget.data['language_key'] != null
                         ? Container(
                             width: MediaQuery.of(context).size.width,
                             child: SingleChildScrollView(
@@ -196,7 +197,8 @@ class _MyPageListState extends State<MyPageList> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  for (var lan_data in widget.data['language'])
+                                  for (String lan_data
+                                      in widget.data['language_key'])
                                     IntrinsicWidth(
                                       child: Container(
                                         height: 70,
@@ -220,8 +222,8 @@ class _MyPageListState extends State<MyPageList> {
                                             Container(
                                               width: 32,
                                               height: 32,
-                                              child: SvgPicture.network(
-                                                lan_data['logo'],
+                                              child: SvgPicture.asset(
+                                                'assets/icons/icon_list_sXza12VDr4.svg',
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
@@ -229,7 +231,7 @@ class _MyPageListState extends State<MyPageList> {
                                               height: 4,
                                             ),
                                             Text(
-                                              lan_data['language'],
+                                              lan_data,
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 12,
@@ -245,7 +247,65 @@ class _MyPageListState extends State<MyPageList> {
                               ),
                             ),
                           )
-                        : Container()
+                        : widget.data['language'] != []
+                            ? Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      for (var lan_data
+                                          in widget.data['language'])
+                                        IntrinsicWidth(
+                                          child: Container(
+                                            height: 70,
+                                            margin: EdgeInsets.only(right: 8),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 7),
+                                            decoration: ShapeDecoration(
+                                              color: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                side: BorderSide(
+                                                    width: 1,
+                                                    color: Color(0xFFB5B5B5)),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 32,
+                                                  height: 32,
+                                                  child: SvgPicture.network(
+                                                    lan_data['logo'],
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Text(
+                                                  lan_data['language'],
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12,
+                                                    fontFamily: 'Pretendard',
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Container()
                   ],
                 ),
               ),
@@ -275,15 +335,15 @@ class _MyPageListState extends State<MyPageList> {
                     SizedBox(
                       height: 10,
                     ),
-                    widget.data['develop_type'] != []
+                    widget.data['develop_type_key'] != null
                         ? SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               child: Row(
                                 children: [
-                                  for (var dev_data
-                                      in widget.data['develop_type'])
+                                  for (String dev_data
+                                      in widget.data['develop_type_key'])
                                     IntrinsicWidth(
                                       child: Container(
                                         height: 32,
@@ -298,7 +358,7 @@ class _MyPageListState extends State<MyPageList> {
                                             )),
                                         child: Center(
                                           child: Text(
-                                            dev_data['develop_type'],
+                                            dev_data,
                                             style: TextStyle(
                                               color: Color(0xFF0059FF),
                                               fontSize: 12,
@@ -313,7 +373,45 @@ class _MyPageListState extends State<MyPageList> {
                               ),
                             ),
                           )
-                        : Container(),
+                        : widget.data['develop_type'] != []
+                            ? SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    children: [
+                                      for (var dev_data
+                                          in widget.data['develop_type'])
+                                        IntrinsicWidth(
+                                          child: Container(
+                                            height: 32,
+                                            margin: EdgeInsets.only(right: 10),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 4),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                  color: Color(0xFF0059FF),
+                                                )),
+                                            child: Center(
+                                              child: Text(
+                                                dev_data['develop_type'],
+                                                style: TextStyle(
+                                                  color: Color(0xFF0059FF),
+                                                  fontSize: 12,
+                                                  fontFamily: 'Pretendard',
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Container(),
                   ],
                 ),
               ),
@@ -345,7 +443,7 @@ class _MyPageListState extends State<MyPageList> {
                         SizedBox(
                           height: 10,
                         ),
-                        widget.data['service'] != []
+                        widget.data['service_key'] != null
                             ? SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Container(
@@ -353,8 +451,8 @@ class _MyPageListState extends State<MyPageList> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      for (var ser_data
-                                          in widget.data['service'])
+                                      for (String ser_data
+                                          in widget.data['service_key'])
                                         Container(
                                             width: 41,
                                             height: 32,
@@ -367,7 +465,7 @@ class _MyPageListState extends State<MyPageList> {
                                                 )),
                                             child: Center(
                                               child: Text(
-                                                ser_data['service'],
+                                                ser_data,
                                                 style: TextStyle(
                                                   color: Color(0xFF0059FF),
                                                   fontSize: 12,
@@ -380,7 +478,46 @@ class _MyPageListState extends State<MyPageList> {
                                   ),
                                 ),
                               )
-                            : Container(),
+                            : widget.data['service'] != []
+                                ? SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          for (var ser_data
+                                              in widget.data['service'])
+                                            Container(
+                                                width: 41,
+                                                height: 32,
+                                                margin:
+                                                    EdgeInsets.only(right: 10),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                      color: Color(0xFF0059FF),
+                                                    )),
+                                                child: Center(
+                                                  child: Text(
+                                                    ser_data['service'],
+                                                    style: TextStyle(
+                                                      color: Color(0xFF0059FF),
+                                                      fontSize: 12,
+                                                      fontFamily: 'Pretendard',
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                )),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
                       ],
                     ),
                   ),
@@ -449,7 +586,7 @@ class _MyPageListState extends State<MyPageList> {
                         ? SingleChildScrollView(
                             child: Column(
                               children: [
-                                for (var data in widget.data['career'])
+                                for (String key in widget.data['career'].keys)
                                   Container(
                                     width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
@@ -459,7 +596,8 @@ class _MyPageListState extends State<MyPageList> {
                                                 color: Color(0xFFF3F3F3)))),
                                     child: Row(
                                       children: [
-                                        data['type'] == 'company'
+                                        widget.data['career'][key]['type'] ==
+                                                'company'
                                             ? SvgPicture.asset(
                                                 'assets/icons/briefcase.svg')
                                             : SvgPicture.asset(
@@ -472,7 +610,9 @@ class _MyPageListState extends State<MyPageList> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              data['company'],
+                                              (widget.data['career'][key]
+                                                      ['company'] ??
+                                                  ''),
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 12,
@@ -481,7 +621,10 @@ class _MyPageListState extends State<MyPageList> {
                                               ),
                                             ),
                                             Text(
-                                              Period_Conversion(data['period']),
+                                              Period_Conversion(
+                                                  (widget.data['career'][key]
+                                                          ['period'] ??
+                                                      '')),
                                               style: TextStyle(
                                                 color: Color(0xFF4C4C4C),
                                                 fontSize: 12,

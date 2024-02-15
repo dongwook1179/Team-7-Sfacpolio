@@ -53,7 +53,6 @@ class _Profile_Edit_MBTI_SelectState extends State<Profile_Edit_MBTI_Select> {
       mbti = mbti_data;
     });
     for (String text in mbti.keys) {
-      print(text);
       Text widget_text = Text(
         text,
       );
