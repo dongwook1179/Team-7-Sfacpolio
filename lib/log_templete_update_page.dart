@@ -53,8 +53,9 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
   late ResultList<RecordModel> snsList;
   final pb = PocketBase('http://3.36.50.35:8090');
   Map<String, bool> snsCheckedMap = {};
-  String logId = "";
+  String? logId;
 
+  final TextEditingController titleController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -95,7 +96,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
       request.fields['user_id'] =
           "${context.read<User_Data>().record.record!.id}";
       request.fields['type'] = '포트폴리오';
-      request.fields['title'] = 'title';
+      request.fields['title'] = titleController.text;
       request.fields['content'] = contentController.text;
       request.fields['email'] = emailController.text;
       request.fields['phone'] = phoneController.text;
@@ -104,8 +105,8 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
       // Add career, mywork, mysns
       request.fields['mycareer'] = jsonEncode(
           experiences.map((experience) => experience.toJson()).toList());
-      request.fields['mywork'] =
-          jsonEncode(projects.map((project) => project.toJson()).toList());
+      // request.fields['mywork'] =
+      //     jsonEncode(projects.map((project) => project.toJson()).toList());
       request.fields['mysns'] = jsonEncode(snsCheckedMap.entries
           .where((entry) => entry.value)
           .map((entry) => entry.key)
@@ -120,15 +121,9 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
 
       String responseBody = await response.stream.bytesToString();
       Map<String, dynamic> responseJson = json.decode(responseBody);
-      String log_id = responseJson['id'];
-      String logId = log_id;
+      logId = responseJson['id'];
       print("로그아이디 : $logId");
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LogUpdateCompletePage(logId: log_id),
-        ),
-      );
+
       if (response.statusCode == 200) {
         print('Log created successfully');
       } else {
@@ -136,6 +131,59 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
       }
     } catch (e) {
       print('Error updating user data: $e');
+    }
+  }
+
+  Future<void> createProjects() async {
+    try {
+      List<String> projectIds = [];
+      for (Project project in projects) {
+        var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(
+              'http://3.36.50.35:8090/api/collections/log_mywork/records'),
+        );
+
+        request.fields['date'] = project.date;
+        request.fields['name'] = project.projectname;
+        request.fields['tag'] = project.tag;
+        request.fields['content'] = project.content;
+
+        // Add image files
+        for (String imagePath in project.picturelist) {
+          request.files.add(await http.MultipartFile.fromPath(
+            'image',
+            imagePath,
+          ));
+        }
+
+        var response = await request.send();
+        String responseBody = await response.stream.bytesToString();
+
+        if (response.statusCode == 200) {
+          // Handle the response as needed
+          Map<String, dynamic> responseJson = json.decode(responseBody);
+          String logProjectId = responseJson['id'];
+          print('Project created successfully with ID: $logProjectId');
+          projectIds.add(logProjectId);
+        } else {
+          print(
+              'Failed to create project. Status code: ${response.statusCode}');
+        }
+      }
+      final body = <String, dynamic>{"mywork": projectIds};
+      print("projectIds : ${projectIds}");
+      print("body : ${body}");
+      final record = await pb.collection('log').update(logId!, body: body);
+      print("업데이트 : ${record}");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LogUpdateCompletePage(logId: logId!),
+        ),
+      );
+    } catch (e) {
+      print('Error creating projects: $e');
     }
   }
 
@@ -293,6 +341,61 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                     fontSize: 16,
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '제목',
+                  style: TextStyle(
+                    color: Color(0xFF020202),
+                    fontSize: 14,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 6,
+              ),
+              Container(
+                width: 328,
+                height: 42,
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                clipBehavior: Clip.antiAlias,
+                decoration: ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(width: 1, color: Color(0xFFCCCCCC)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: TextField(
+                  controller: titleController,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: '제목을 입력해주세요.',
+                    hintStyle: TextStyle(
+                      color: Color(0xFFB3B3B3),
+                      fontSize: 12,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    contentPadding: EdgeInsets.all(12),
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
                   ),
                 ),
               ),
@@ -789,27 +892,45 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                                         scrollDirection: Axis.horizontal,
                                         itemCount: project.picturelist.length,
                                         itemBuilder: (context, index) {
-                                          return Container(
-                                            width: 86,
-                                            height: 86,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 6),
-                                            decoration: ShapeDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                    project.picturelist[index]),
-                                                fit: BoxFit.cover,
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                side: BorderSide(
-                                                    width: 1,
-                                                    color: Color(0xFFE6E6E6)),
+                                          String imagePath =
+                                              project.picturelist[index];
+
+                                          // 이미지 경로가 앱의 asset인 경우
+                                          if (imagePath.startsWith('assets/')) {
+                                            return Container(
+                                              width: 86,
+                                              height: 86,
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 6),
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: AssetImage(imagePath),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                shape: BoxShape.rectangle,
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                               ),
-                                            ),
-                                            // 이미지 삭제 등의 추가 기능을 여기에 추가할 수 있습니다
-                                          );
+                                            );
+                                          } else {
+                                            // 로컬 파일 시스템에서 이미지를 로드할 경우
+                                            return Container(
+                                              width: 86,
+                                              height: 86,
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 6),
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: FileImage(
+                                                      File(imagePath)),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                shape: BoxShape.rectangle,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            );
+                                          }
                                         },
                                       ),
                                     ),
@@ -1172,6 +1293,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
                     GestureDetector(
                       onTap: () {
                         createLog();
+                        createProjects();
                       },
                       child: Container(
                         width: 144,

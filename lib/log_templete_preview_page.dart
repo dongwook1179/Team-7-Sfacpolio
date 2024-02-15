@@ -362,7 +362,7 @@ class LogTempletePreviewPage extends StatelessWidget {
                   height: 20.5,
                 ),
                 Text(
-                  'Contact Me ',
+                  'Contact Me',
                   style: TextStyle(
                     color: Color(0xFF7F7F7F),
                     fontSize: 14,
