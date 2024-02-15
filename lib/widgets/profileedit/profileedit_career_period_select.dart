@@ -15,8 +15,25 @@ class _Profile_Edit_Career_Period_SelectState
   int year_data = 0;
   int month_data = 1;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Input_Date();
+  }
+
   void Input_Date() {
-    if (widget.text != '') {}
+    if (widget.text != '') {
+      RegExp regExp = RegExp(r'(\d+)년 (\d+)개월');
+      final match = regExp.firstMatch(widget.text);
+
+      if (match != null) {
+        setState(() {
+          year_data = int.parse(match.group(1)!);
+          month_data = int.parse(match.group(2)!);
+        });
+      }
+    }
   }
 
   @override

@@ -1353,7 +1353,7 @@ class PocketBaseData {
 
     data['service'] = service_list;
 
-    data['career'] = [];
+    data['career'] = {};
 
     for (var datas in career.items) {
       Map<String, String> career_data = {};
@@ -1362,7 +1362,7 @@ class PocketBaseData {
       career_data['type'] = datas.data['type'];
       career_data['company'] = datas.data['company'];
       career_data['period'] = datas.data['period'];
-      data['career'].add(career_data);
+      data['career'][datas.id] = career_data;
     }
 
     return data;
@@ -1475,5 +1475,137 @@ class PocketBaseData {
       print(logs);
     }
     return logs;
+  }
+
+  Future<bool> User_Data_Update(Map<String, dynamic> data) async {
+    String user_id = data['id'];
+    Map<String, dynamic> users = {};
+    List<String> language_id = [];
+    List<String> develop_type_id = [];
+    List<String> service_id = [];
+
+    try {
+      if (data.containsKey('nickname')) {
+        users['nickname'] = data['nickname'];
+      }
+      if (data.containsKey('mbti')) {
+        users['mbti'] = data['mbti'];
+      }
+      if (data.containsKey('introduction')) {
+        users['introduction'] = data['introduction'];
+      }
+      if (data.containsKey('project')) {
+        users['work_type'] = data['project']['work_type'];
+        users['preferred_project_period'] =
+            data['project']['preferred_project_period'];
+      }
+      if (users.length > 0) {
+        await pb.collection('users').update(user_id, body: users);
+      }
+      if (data.containsKey('language')) {
+        for (String text in data['language']) {
+          final language = await pb
+              .collection('language_list')
+              .getList(filter: '(language = "${text}")');
+          for (var data in language.items) {
+            language_id.add(data.id);
+          }
+        }
+
+        final body = <String, dynamic>{
+          "user_id": user_id,
+          "language_id": language_id
+        };
+        String record_id = '';
+        final language = await pb
+            .collection('language')
+            .getList(filter: '(user_id = "${user_id}")');
+        for (var data in language.items) {
+          record_id = data.id;
+        }
+
+        await pb.collection('language').update(record_id, body: body);
+      }
+
+      if (data.containsKey('develop_type')) {
+        for (String text in data['develop_type']) {
+          final develop_type = await pb
+              .collection('develop_type_list')
+              .getList(filter: '(develop_type = "${text}")');
+          for (var data in develop_type.items) {
+            develop_type_id.add(data.id);
+          }
+        }
+
+        final body = <String, dynamic>{
+          "user_id": user_id,
+          "develop_type_id": develop_type_id
+        };
+        String record_id = '';
+        final language = await pb
+            .collection('develop_type')
+            .getList(filter: '(user_id = "${user_id}")');
+        for (var data in language.items) {
+          record_id = data.id;
+        }
+
+        await pb.collection('develop_type').update(record_id, body: body);
+      }
+
+      if (data.containsKey('service')) {
+        for (String text in data['service']) {
+          final service_type = await pb
+              .collection('service_list')
+              .getList(filter: '(service = "${text}")');
+          for (var data in service_type.items) {
+            service_id.add(data.id);
+          }
+        }
+
+        final body = <String, dynamic>{
+          "user_id": user_id,
+          "develop_type_id": service_id
+        };
+
+        String record_id = '';
+        final language = await pb
+            .collection('service')
+            .getList(filter: '(user_id = "${user_id}")');
+        for (var data in language.items) {
+          record_id = data.id;
+        }
+
+        await pb.collection('service').update(record_id, body: body);
+      }
+
+      if (data.containsKey('career')) {
+        final career = await pb
+            .collection('career')
+            .getList(filter: '(user_id = "${user_id}")');
+
+        if (career.totalItems > 0) {
+          for (var data in career.items) {
+            print(data.id);
+            await pb.collection('career').delete(data.id);
+          }
+        }
+
+        for (String key in data['career'].keys) {
+          data['career'][key].remove('id');
+          data['career'][key]['user_id'] = user_id;
+          if (data['career'][key]['type'] == '경력') {
+            data['career'][key]['type'] = 'company';
+          } else if (data['career'][key]['type'] == '교육') {
+            data['career'][key]['type'] = 'education';
+          }
+
+          await pb.collection('career').create(body: data['career'][key]);
+        }
+      }
+      return true;
+    } catch (e) {
+      print('에러? $e');
+      return false;
+    }
   }
 }
