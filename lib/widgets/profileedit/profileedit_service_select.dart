@@ -1,23 +1,23 @@
 import 'package:bottom_picker/widgets/simple_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:team_7_sfacpolio/jsondata/dataload.dart';
-import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
-import 'package:team_7_sfacpolio/provider/userdata.dart';
+import 'package:team_7_sfacpolio/pocketbase/data.dart';
 
-class Project_Applicant_MBTI extends StatefulWidget {
-  const Project_Applicant_MBTI();
+class Profile_Edit_Service_Select extends StatefulWidget {
+  final String select;
+  const Profile_Edit_Service_Select(this.select);
 
   @override
-  State<Project_Applicant_MBTI> createState() => _Project_Applicant_MBTIState();
+  State<Profile_Edit_Service_Select> createState() =>
+      _Profile_Edit_Service_SelectState();
 }
 
-class _Project_Applicant_MBTIState extends State<Project_Applicant_MBTI> {
+class _Profile_Edit_Service_SelectState
+    extends State<Profile_Edit_Service_Select> {
   List<Text> text_widget = [];
   String choice_text = '';
   int start_index = 0;
-  Map<String, dynamic> mbti = {};
   bool page_load = false;
+  List<String> service_type = [];
 
   @override
   void initState() {
@@ -27,34 +27,31 @@ class _Project_Applicant_MBTIState extends State<Project_Applicant_MBTI> {
   }
 
   void Page_load() async {
-    await Change_Type();
-    InPut_Text();
+    Map<String, dynamic> load_data = await PocketBaseData().Service_Load();
 
     setState(() {
+      service_type = load_data.keys.toList();
       page_load = true;
     });
+    Change_Type();
+    InPut_Text();
   }
 
   void InPut_Text() {
-    if (context.read<User_Data>().user_data['user'].data['mbti'] != '') {
+    if (widget.select != '') {
       setState(() {
-        choice_text = context.read<User_Data>().user_data['user'].data['mbti'];
-        start_index = mbti.keys.toList().indexOf(choice_text);
+        choice_text = widget.select;
+        start_index = service_type.indexOf(choice_text);
       });
     } else {
       setState(() {
-        choice_text = mbti.keys.toList()[0];
+        choice_text = service_type[0];
       });
     }
   }
 
-  Future<void> Change_Type() async {
-    Map<String, dynamic> mbti_data = await DataLoad().JsonLoad('mbti');
-    setState(() {
-      mbti = mbti_data;
-    });
-    for (String text in mbti.keys) {
-      print(text);
+  void Change_Type() {
+    for (String text in service_type) {
       Text widget_text = Text(
         text,
       );
@@ -98,6 +95,22 @@ class _Project_Applicant_MBTIState extends State<Project_Applicant_MBTI> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(
+                      '개발 직군을 선택하세요.',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Color(0xFF020202),
+                        fontSize: 18,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 141,
@@ -107,7 +120,7 @@ class _Project_Applicant_MBTIState extends State<Project_Applicant_MBTI> {
                       items: text_widget,
                       onChange: (p0) {
                         setState(() {
-                          choice_text = mbti.keys.toList()[p0];
+                          choice_text = service_type[p0];
                         });
                       },
                       selectedItemIndex: start_index,

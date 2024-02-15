@@ -7,7 +7,6 @@ import 'package:team_7_sfacpolio/widgets/project/projcet_calendar_select.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_Language_slot.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_appbar.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_period_select.dart';
-import 'package:team_7_sfacpolio/widgets/project/project_create_type_select.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_create_type_slot.dart';
 import 'package:team_7_sfacpolio/widgets/project/title_text.dart';
 
@@ -75,13 +74,13 @@ class _Project_CreateState extends State<Project_Create> {
             child: Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Color(0xFF0059FF)),
+                  color: Color(0xFF0059FF),
                   borderRadius: BorderRadius.circular(8)),
               child: Center(
                 child: Text(
                   '삭제',
                   style: TextStyle(
-                    color: Color(0xFF0059FF),
+                    color: Colors.white,
                     fontSize: 14,
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w500,

@@ -32,8 +32,8 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   }
 
   void Get_Data() async {
-    String id = context.read<User_Data>().record.record!.id;
-    Map<String, dynamic> user = await PocketBaseData().Get_UserData(id);
+    // String id = context.read<User_Data>().record.record!.id;
+    Map<String, dynamic> user = context.read<User_Data>().user_data;
     setState(() {
       data = user;
       print('사용자 정보');

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
+import 'package:team_7_sfacpolio/provider/userdata.dart';
 import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_applicant_mbti.dart';
 import 'package:team_7_sfacpolio/widgets/project/project_applicant_type.dart';
@@ -17,6 +18,17 @@ class Project_Applicant extends StatefulWidget {
 }
 
 class _Project_ApplicantState extends State<Project_Applicant> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if (context.read<User_Data>().record.record!.data['mbti'] != '') {
+      context.read<Page_Controller>().Project_Change_Type(
+          'mbti', context.read<User_Data>().record.record!.data['mbti']);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<Page_Controller>(

@@ -90,10 +90,12 @@ class _MainPageState extends State<MainPage> {
           await PocketBaseData().Get_Develop_Log(id);
       setState(() {
         log_data = log_datas;
-        page_load = true;
         bannerDataList.removeAt(0);
       });
     }
+    setState(() {
+      page_load = true;
+    });
   }
 
   @override
@@ -121,7 +123,7 @@ class _MainPageState extends State<MainPage> {
               elevation: 0,
               surfaceTintColor: Colors.transparent,
               titleSpacing: 0.0,
-              backgroundColor: Colors.transparent, //appBar 투명색
+              backgroundColor: Colors.white, //appBar 투명색
               title: Container(
                 margin: EdgeInsets.only(left: 16),
                 child: Row(
@@ -145,7 +147,8 @@ class _MainPageState extends State<MainPage> {
                             color: Colors.white,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                  width: 1, color: Color(0xFFF3F3F3)),
+                                  width: 1,
+                                  color: Color.fromARGB(255, 218, 217, 217)),
                               borderRadius: BorderRadius.circular(100),
                             ),
                           ),
@@ -451,21 +454,40 @@ class _MainPageState extends State<MainPage> {
                                           : Container(),
                                     ],
                                   ),
+                                log_data.length == 0
+                                    ? Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 80,
+                                        child: Center(
+                                          child: Text(
+                                            '등록된 로그가 존재하지않습니다.',
+                                            style: TextStyle(
+                                              color: Color(0xFF7F7F7F),
+                                              fontSize: 12,
+                                              fontFamily: 'Pretendard',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                                SizedBox(
+                                  height: 28,
+                                ),
+                                Container(
+                                  width: 360,
+                                  height: 6,
+                                  decoration:
+                                      BoxDecoration(color: Color(0xFFF3F3F3)),
+                                ),
+                                SizedBox(
+                                  height: 28,
+                                ),
                               ]),
                             ),
                           )
                         : Container(),
-                    SizedBox(
-                      height: 28,
-                    ),
-                    Container(
-                      width: 360,
-                      height: 6,
-                      decoration: BoxDecoration(color: Color(0xFFF3F3F3)),
-                    ),
-                    SizedBox(
-                      height: 28,
-                    ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 16),
                       padding: EdgeInsets.only(right: 4),

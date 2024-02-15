@@ -1,18 +1,17 @@
 import 'package:bottom_picker/widgets/simple_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:team_7_sfacpolio/jsondata/dataload.dart';
-import 'package:team_7_sfacpolio/provider/pagecontrol.dart';
-import 'package:team_7_sfacpolio/provider/userdata.dart';
 
-class Project_Applicant_MBTI extends StatefulWidget {
-  const Project_Applicant_MBTI();
+class Profile_Edit_MBTI_Select extends StatefulWidget {
+  final String text;
+  const Profile_Edit_MBTI_Select(this.text);
 
   @override
-  State<Project_Applicant_MBTI> createState() => _Project_Applicant_MBTIState();
+  State<Profile_Edit_MBTI_Select> createState() =>
+      _Profile_Edit_MBTI_SelectState();
 }
 
-class _Project_Applicant_MBTIState extends State<Project_Applicant_MBTI> {
+class _Profile_Edit_MBTI_SelectState extends State<Profile_Edit_MBTI_Select> {
   List<Text> text_widget = [];
   String choice_text = '';
   int start_index = 0;
@@ -36,9 +35,9 @@ class _Project_Applicant_MBTIState extends State<Project_Applicant_MBTI> {
   }
 
   void InPut_Text() {
-    if (context.read<User_Data>().user_data['user'].data['mbti'] != '') {
+    if (widget.text != '') {
       setState(() {
-        choice_text = context.read<User_Data>().user_data['user'].data['mbti'];
+        choice_text = widget.text;
         start_index = mbti.keys.toList().indexOf(choice_text);
       });
     } else {

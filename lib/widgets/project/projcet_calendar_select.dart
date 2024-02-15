@@ -149,6 +149,8 @@ class _Project_Calendar_SelectState extends State<Project_Calendar_Select> {
                             style: TextStyle(color: Colors.red),
                           ),
                         );
+                      default:
+                        return null;
                     }
                   },
                 ),
