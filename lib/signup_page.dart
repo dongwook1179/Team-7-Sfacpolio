@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pocketbase/pocketbase.dart';
@@ -8,23 +7,6 @@ import 'package:team_7_sfacpolio/pocketbase/data.dart';
 import 'package:team_7_sfacpolio/privacy_policy_page.dart';
 import 'package:team_7_sfacpolio/profile_setup_page.dart';
 import 'package:team_7_sfacpolio/provider/userdata.dart';
-
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => User_Data(),
-      child: MaterialApp(
-        home: SignUpPage(),
-      ),
-    );
-  }
-}
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -99,48 +81,6 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  // Future<void> handleSendEmail() async {
-  //   try {
-  //     Random random = Random();
-  //     for (int i = 0; i < 10; i++) {
-  //       randomNum += random.nextInt(10).toString();
-  //     }
-  //     final body = <String, dynamic>{
-  //       "email": emailController.text,
-  //       "password": randomNum,
-  //       "passwordConfirm": randomNum,
-  //       "verified": false,
-  //     };
-
-  //     record = (await pb.collection('users').create(body: body));
-
-  //     print("email : ${emailController.text}");
-  //     print("password : ${record}");
-
-  //     await pb.collection('users').requestVerification(
-  //           '${emailController.text}',
-  //         );
-  //     print("이메일 잘 보내짐");
-  //   } catch (e) {
-  //     print('이메일 전송 오류: $e');
-  //   }
-  // }
-
-  // Future<void> handleEmailVerification() async {
-  //   try {
-  //     // 인증번호 확인
-  //     await pb.collection('users').confirmVerification(
-  //           verificationCodeController.text,
-  //         );
-  //     setState(() {
-  //       emailVerified = true;
-  //     });
-  //     print('이메일 인증이 성공했습니다!');
-  //   } catch (e) {
-  //     print('이메일 인증 중 오류 발생: $e');
-  //   }
-  // }
-
   Future<void> handleEmailDelete() async {
     try {
       // 인증번호 확인
@@ -170,8 +110,20 @@ class _SignUpPageState extends State<SignUpPage> {
       };
 
       print("record: ${body}");
-      await pb.collection('users').create(body: body);
+      final record = await pb.collection('users').create(body: body);
+      print('Sign-up successful!');
+      print('User ID: ${record}');
+      final authData = await pb.collection('users').authWithPassword(
+            emailController.text,
+            passwordController.text,
+          );
 
+      print("로그인 : ${authData}");
+      Map<String, dynamic> user_data =
+          await PocketBaseData().Get_UserData(authData.record!.id);
+
+      Provider.of<User_Data>(context, listen: false)
+          .Save_Auth(authData, pb.authStore, user_data);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -188,6 +140,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return ChangeNotifierProvider(
       create: (context) => User_Data(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           backgroundColor: Color(0xFFF8F8F9),
           appBar: AppBar(
@@ -334,98 +287,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(8.0),
                           borderSide: BorderSide.none,
                         ),
-                        // suffixIcon: Container(
-                        //   width: 64,
-                        //   height: 32,
-                        //   margin: EdgeInsets.only(top: 6, bottom: 6, right: 4),
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: 9, vertical: 4),
-                        //   decoration: ShapeDecoration(
-                        //     color: Color(0xFF0059FF),
-                        //     shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(8),
-                        //     ),
-                        //   ),
-                        //   child: GestureDetector(
-                        //     onTap: () {
-                        //       print("되냐");
-                        //       handleSendEmail();
-                        //     },
-                        //     child: Center(
-                        //       child: Text(
-                        //         '인증요청',
-                        //         style: TextStyle(
-                        //           color: Colors.white,
-                        //           fontSize: 12,
-                        //           fontFamily: 'Pretendard',
-                        //           fontWeight: FontWeight.w700,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ),
                     ),
                   ),
-                  // SizedBox(
-                  //   height: 6,
-                  // ),
-                  // TextField(
-                  //   controller: verificationCodeController,
-                  //   decoration: InputDecoration(
-                  //     hintText: '인증번호 입력',
-                  //     hintStyle: TextStyle(
-                  //       color: Color(0xFFB3B3B3),
-                  //       fontSize: 14,
-                  //       fontFamily: 'Pretendard',
-                  //       fontWeight: FontWeight.w400,
-                  //     ),
-                  //     contentPadding:
-                  //         EdgeInsets.only(left: 12, top: 14, bottom: 10),
-                  //     fillColor: Colors.white,
-                  //     filled: true,
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8.0),
-                  //       borderSide: BorderSide.none,
-                  //     ),
-                  //   ),
-                  //   onTap: () {
-                  //     setState(() {
-                  //       if (!isVerificationCodeValid) {
-                  //         isVerificationCodeValid = true;
-                  //       }
-                  //     });
-                  //   },
-                  // ),
-                  // SizedBox(
-                  //   height: 8,
-                  // ),
-                  // if (!isEmailValid)
-                  //   Container(
-                  //     alignment: Alignment.centerRight,
-                  //     child: Text(
-                  //       '잘못된 이메일 형식입니다. 다시 입력해주세요.',
-                  //       style: TextStyle(
-                  //         color: Color(0xFFFF0000),
-                  //         fontSize: 12,
-                  //         fontFamily: 'Pretendard',
-                  //         fontWeight: FontWeight.w400,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // if (!isVerificationCodeValid)
-                  //   Container(
-                  //     alignment: Alignment.centerRight,
-                  //     child: Text(
-                  //       '잘못된 인증번호입니다. 다시 인증해주세요.',
-                  //       style: TextStyle(
-                  //         color: Color(0xFFFF0000),
-                  //         fontSize: 12,
-                  //         fontFamily: 'Pretendard',
-                  //         fontWeight: FontWeight.w400,
-                  //       ),
-                  //     ),
-                  //   ),
                   SizedBox(
                     height: 25,
                   ),
@@ -619,7 +483,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     ),
-
                   SizedBox(
                     height: 24,
                   ),
@@ -690,12 +553,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 1,
                     decoration: BoxDecoration(color: Color(0xFFE6E6E6)),
                   ),
-                  // CupertinoTextField(
-                  //   controller: phoneController,
-                  //   placeholder: 'sfaclog@gmail.com',
-                  //   keyboardType: TextInputType.phone,
-                  // ),
-
                   SizedBox(height: 16.0),
                   Row(
                     children: [
@@ -801,7 +658,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ],
                   ),
-
                   SizedBox(
                     height: 24,
                   ),

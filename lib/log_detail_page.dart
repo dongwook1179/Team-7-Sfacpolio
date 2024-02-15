@@ -26,6 +26,7 @@ class _LogDetailPageState extends State<LogDetailPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           surfaceTintColor: Color(0xFFF8F8F9),

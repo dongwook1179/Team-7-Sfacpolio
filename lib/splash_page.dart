@@ -18,6 +18,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         color: Color(0xFFFFFFFF),
         home: MyApp(),
       ),
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SplashPage(),
     );
   }
@@ -46,6 +48,7 @@ class SplashPage extends StatelessWidget {
     });
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(
           width: 360,
