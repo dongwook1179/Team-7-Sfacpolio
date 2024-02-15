@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:dio/dio.dart';
@@ -174,7 +175,14 @@ class _ProfileSetupPageState extends State<_ProfileSetupPage> {
                           )
                         : null,
                   ),
-                  child: _image.existsSync() ? null : Icon(Icons.camera),
+                  child: _image.existsSync()
+                      ? null
+                      : SvgPicture.asset(
+                          "assets/icons/camera.svg",
+                          color: Color(0xFF7F7F7F),
+                          width: 50,
+                          height: 50,
+                        ),
                 ),
               ),
               SizedBox(
@@ -297,7 +305,12 @@ class _ProfileSetupPageState extends State<_ProfileSetupPage> {
                 },
                 child: Row(
                   children: [
-                    Icon(Icons.camera),
+                    SvgPicture.asset(
+                      "assets/icons/camera.svg",
+                      color: Color(0xFF7F7F7F),
+                      width: 50,
+                      height: 50,
+                    ),
                     SizedBox(
                       width: 10,
                     ),

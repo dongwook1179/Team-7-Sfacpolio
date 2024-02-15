@@ -28,9 +28,12 @@ class _LogDetailPageState extends State<LogDetailPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          surfaceTintColor: Color(0xFFF8F8F9),
           toolbarHeight: 48,
           leading: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: Icon(
                 Icons.chevron_left,
                 size: 16,
@@ -66,6 +69,9 @@ class _LogDetailPageState extends State<LogDetailPage> {
                               height: 24,
                               decoration: ShapeDecoration(
                                 color: Colors.grey,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/log/log_card_avatar.png")),
                                 shape: OvalBorder(),
                               ),
                             ),
@@ -73,7 +79,7 @@ class _LogDetailPageState extends State<LogDetailPage> {
                               width: 12,
                             ),
                             Text(
-                              'qwerd4578',
+                              'Master0332',
                               style: TextStyle(
                                 color: Color(0xFF4C4C4C),
                                 fontSize: 12,
@@ -123,9 +129,13 @@ class _LogDetailPageState extends State<LogDetailPage> {
                     ),
                     Container(
                       width: 326,
-                      height: 246,
+                      height: 189,
                       decoration: ShapeDecoration(
                         color: Colors.grey,
+                        image: DecorationImage(
+                            image: AssetImage(
+                                "assets/images/log/logcardbackground.png"),
+                            fit: BoxFit.contain),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
                       ),
@@ -379,19 +389,38 @@ class _LogDetailPageState extends State<LogDetailPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    Comment(),
+                    Comment(
+                      nickname: 'myfuture0201',
+                      avatar:
+                          AssetImage("assets/images/main/log2_profile1.png"),
+                      tag: '백엔드',
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    Comment(),
+                    Comment(
+                      nickname: 'legolego022',
+                      avatar:
+                          AssetImage("assets/images/main/log2_profile2.png"),
+                      tag: '프론트엔드',
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    Comment(),
+                    Comment(
+                      nickname: 'study_ing02',
+                      avatar:
+                          AssetImage("assets/images/main/log2_profile3.png"),
+                      tag: '안드로이드',
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    Comment(),
+                    Comment(
+                      nickname: 'backend_master',
+                      avatar: AssetImage("assets/images/main/log-profile1.png"),
+                      tag: '백엔드',
+                    ),
                     SizedBox(
                       height: 20,
                     ),
@@ -405,7 +434,7 @@ class _LogDetailPageState extends State<LogDetailPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 80,
                     ),
                   ],
                 ),

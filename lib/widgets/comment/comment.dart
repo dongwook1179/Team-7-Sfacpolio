@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Comment(),
-      ),
-    );
-  }
-}
-
 class Comment extends StatefulWidget {
-  const Comment({super.key});
+  final String nickname;
+  final ImageProvider<Object> avatar;
+  final String tag;
+  const Comment(
+      {super.key,
+      required this.nickname,
+      required this.avatar,
+      required this.tag});
 
   @override
   State<Comment> createState() => _CommentState();
@@ -39,6 +31,7 @@ class _CommentState extends State<Comment> {
                     width: 24,
                     height: 24,
                     decoration: ShapeDecoration(
+                      image: DecorationImage(image: widget.avatar),
                       color: Colors.grey,
                       shape: OvalBorder(),
                     ),
@@ -47,7 +40,7 @@ class _CommentState extends State<Comment> {
                     width: 12,
                   ),
                   Text(
-                    'qwerd4578',
+                    widget.nickname,
                     style: TextStyle(
                       color: Color(0xFF7F7F7F),
                       fontSize: 12,

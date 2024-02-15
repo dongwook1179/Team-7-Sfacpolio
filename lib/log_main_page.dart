@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:team_7_sfacpolio/log_write_page.dart';
 import 'package:team_7_sfacpolio/screen/search.dart';
-import 'package:team_7_sfacpolio/widgets/common/bottom_nav_bar.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_card_widget.dart';
 import 'package:team_7_sfacpolio/widgets/log/log_portfolio_widget.dart';
 
@@ -40,9 +38,22 @@ class _LogMainPageState extends State<LogMainPage>
     /// 탭 변경 애니메이션 시간
     animationDuration: const Duration(milliseconds: 400),
   );
-  int page_currentPage = 0;
-  int _currentPage = 0;
-  int _itemCount = 5;
+
+  Future<List<RecordModel>> loadData() async {
+    final pb = PocketBase('http://3.36.50.35:8090');
+    try {
+      final records = await pb
+          .collection('log')
+          .getFullList(sort: '-created', filter: "type = '포트폴리오'");
+      print(records.length);
+
+      return records;
+    } catch (e) {
+      print('데이터 로딩 중 오류: $e');
+      throw e;
+    }
+  }
+
   List<LogCardWidget> logCardDataList = [
     LogCardWidget(
       backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
@@ -58,30 +69,30 @@ class _LogMainPageState extends State<LogMainPage>
       comment: 550,
     ),
     LogCardWidget(
-      backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
-      tag1: 'JAVA',
-      tag2: 'Python',
+      backgroundimage: AssetImage("assets/images/main/img_re_log.png"),
+      tag1: '프론트엔드',
+      tag2: '풀스택',
       tag3: '',
-      title: '개발자가 되기 위한 5일의 기록',
+      title: '백엔드 개발....',
       logdate: DateTime.timestamp(),
-      avatar: AssetImage("assets/images/log/log_card_avatar.png"),
-      nickname: 'Master0332',
-      view: 22,
-      like: 999,
-      comment: 550,
+      avatar: AssetImage("assets/images/main/log2_profile1.png"),
+      nickname: 'myfuture0201',
+      view: 10,
+      like: 50,
+      comment: 80,
     ),
     LogCardWidget(
-      backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
-      tag1: 'JAVA',
-      tag2: 'Python',
+      backgroundimage: AssetImage("assets/images/main/img_edu6.png"),
+      tag1: '블록체인',
+      tag2: '인공지능',
       tag3: '',
-      title: '개발자가 되기 위한 5일의 기록',
+      title: '블록체인에 대하여',
       logdate: DateTime.timestamp(),
-      avatar: AssetImage("assets/images/log/log_card_avatar.png"),
-      nickname: 'Master0332',
-      view: 22,
-      like: 999,
-      comment: 550,
+      avatar: AssetImage("assets/images/main/log2_profile2.png"),
+      nickname: 'legolego022',
+      view: 800,
+      like: 40,
+      comment: 90,
     ),
     LogCardWidget(
       backgroundimage: AssetImage("assets/images/log/logcardbackground.png"),
@@ -113,11 +124,7 @@ class _LogMainPageState extends State<LogMainPage>
   @override
   void initState() {
     super.initState();
-    _pageController.addListener(() {
-      setState(() {
-        _currentPage = _pageController.page?.round() ?? 0;
-      });
-    });
+    loadData();
   }
 
   @override
@@ -323,10 +330,6 @@ class _LogMainPageState extends State<LogMainPage>
                     },
                   ),
                 ),
-                DotsIndicator(
-                  pageCount: _itemCount, // Replace with your actual item count
-                  currentPage: _currentPage,
-                ),
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -406,7 +409,7 @@ class _LogMainPageState extends State<LogMainPage>
                       Container(
                         child: PageView.builder(
                           controller: _controller,
-                          itemCount: 9, // 페이지 수 지정
+                          itemCount: 5, // 페이지 수 지정
                           itemBuilder: (context, index) {
                             return Column(
                               children: [
@@ -496,76 +499,8 @@ class _LogMainPageState extends State<LogMainPage>
                                   avatar: null,
                                   nickname: '',
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 44),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        child:
-                                            Icon(Icons.chevron_left, size: 14),
-                                        onTap: () {
-                                          if (_currentPage > 0) {
-                                            _controller.previousPage(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              curve: Curves.ease,
-                                            );
-                                          }
-                                        },
-                                      ),
-                                      Row(
-                                        children: List.generate(7, (index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                _controller
-                                                    .jumpToPage(index + 1);
-                                                print("여긴 ${index + 1}페이지야");
-                                              },
-                                              child: Text(
-                                                (index + 1).toString(),
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: _currentPage == index
-                                                      ? Color(0xFF0059FF)
-                                                      : Colors.black,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                      ),
-                                      GestureDetector(
-                                        child: Icon(
-                                          Icons.chevron_right,
-                                          size: 14,
-                                        ),
-                                        onTap: () {
-                                          if (_currentPage < 6) {
-                                            _controller.nextPage(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              curve: Curves.ease,
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                )
                               ],
                             );
-                          },
-                          onPageChanged: (index) {
-                            setState(() {
-                              page_currentPage = index;
-                            });
                           },
                         ),
                       ),
