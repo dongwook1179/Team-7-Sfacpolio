@@ -36,7 +36,8 @@ class _ProfileSetupPage extends StatefulWidget {
 class _ProfileSetupPageState extends State<_ProfileSetupPage> {
   late File _image;
   TextEditingController _nicknameController = TextEditingController();
-  final pb = PocketBase('http://3.36.50.35:8090');
+  final pb =
+      PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
 
   @override
   void initState() {
@@ -89,12 +90,12 @@ class _ProfileSetupPageState extends State<_ProfileSetupPage> {
 
       // POST 요청 보내기
       Response response = await dio.patch(
-        'http://3.36.50.35:8090/api/collections/users/records/${Provider.of<User_Data>(context, listen: false).record.record!.id}',
+        'https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com/api/collections/users/records/${Provider.of<User_Data>(context, listen: false).record.record!.id}',
         data: formData,
       );
 
       Response imageResponse = await dio.patch(
-        'http://3.36.50.35:8090/api/collections/users/records/${Provider.of<User_Data>(context, listen: false).record.record!.id}',
+        'https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com/api/collections/users/records/${Provider.of<User_Data>(context, listen: false).record.record!.id}',
         data: imageFormData,
       );
 

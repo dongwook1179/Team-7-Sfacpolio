@@ -22,6 +22,8 @@ class _MyPageListState extends State<MyPageList> {
     List<String> text_split = period.split(' ');
     String year = '';
     String month = '';
+
+    print(text_split);
     for (String text in text_split) {
       if (text[text.length - 1] == '년') {
         if (text[0] != '0') {

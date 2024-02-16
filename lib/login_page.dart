@@ -43,7 +43,8 @@ class LoginPage extends StatefulWidget {
 
 // class _LoginPageState extends State<_LoginPage> {
 class _LoginPageState extends State<LoginPage> {
-  final pb = PocketBase('http://3.36.50.35:8090');
+  final pb =
+      PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool checkboxvalue = false;
@@ -55,6 +56,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> handleLogin() async {
     try {
+      print('${idController.text}');
+      print('${passwordController.text}');
       final authData = await pb.collection('users').authWithPassword(
             idController.text,
             passwordController.text,

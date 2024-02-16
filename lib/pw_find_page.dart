@@ -12,7 +12,8 @@ class PwFindPage extends StatefulWidget {
 }
 
 class _PwFindPageState extends State<PwFindPage> {
-  final pb = PocketBase('http://3.36.50.35:8090');
+  final pb =
+      PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
   final TextEditingController emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {

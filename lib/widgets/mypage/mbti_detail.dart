@@ -25,6 +25,7 @@ class _MbtiDetailState extends State<MbtiDetail> {
     setState(() {
       data = mbti_data[widget.mbti];
     });
+    print(data);
   }
 
   @override

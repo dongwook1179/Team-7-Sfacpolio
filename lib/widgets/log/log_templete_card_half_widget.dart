@@ -8,7 +8,7 @@ class LogCardHalfWidget extends StatelessWidget {
   final String? tag;
 
   late String baseUrl =
-      'http://3.36.50.35:8090/api/files/uu8n8wlr77yjuf7/${id}/';
+      'https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com/api/files/uu8n8wlr77yjuf7/${id}/';
 
   LogCardHalfWidget(
       {super.key, this.thumbnail, this.title, this.date, this.tag, this.id});

@@ -19,10 +19,11 @@ class LogUpdateCompletePage extends StatefulWidget {
 class _LogUpdateCompletePageState extends State<LogUpdateCompletePage> {
   late Map<String, dynamic> _record = {};
   late String baseUrl =
-      'http://3.36.50.35:8090/api/files/g125rr5po70z7g5/${widget.logId}/';
+      'https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com/api/files/g125rr5po70z7g5/${widget.logId}/';
   String? imagePath;
   String? fullImageUrl;
-  final pb = PocketBase('http://3.36.50.35:8090');
+  final pb =
+      PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
   late List<Map<String, dynamic>>? _myCareerList = [];
   late List<Map<String, dynamic>>? _myWorkList = [];
   TextEditingController tagEditingController = TextEditingController();

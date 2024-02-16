@@ -1,7 +1,7 @@
 // import 'package:pocketbase/pocketbase.dart';
 
 // void main() async {
-//   final pb = PocketBase('http://3.36.50.35:8090');
+//   final pb = PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
 
 //   // Replace 'YOUR_USERNAME_OR_EMAIL' and '1234567890' with actual login credentials
 //   final authData = await pb

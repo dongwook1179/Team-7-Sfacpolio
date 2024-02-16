@@ -14,7 +14,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final pb = PocketBase('http://3.36.50.35:8090');
+  final pb =
+      PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController PasswordconfirmController =

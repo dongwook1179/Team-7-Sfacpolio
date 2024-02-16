@@ -32,7 +32,8 @@ class BringMyLogCustomDialog extends StatefulWidget {
 }
 
 class _BringMyLogCustomDialogState extends State<BringMyLogCustomDialog> {
-  final pb = PocketBase('http://3.36.50.35:8090');
+  final pb =
+      PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
 
   Future<Map<String, dynamic>> Get_My_Log(String user_id) async {
     Map<String, dynamic> return_data = {};

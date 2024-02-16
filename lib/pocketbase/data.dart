@@ -1,7 +1,8 @@
 import 'package:pocketbase/pocketbase.dart';
 
 class PocketBaseData {
-  final pb = PocketBase('http://3.36.50.35:8090');
+  final pb =
+      PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
 
   // 개발언어 컬렉션 데이터 불러오기
   Future<Map<String, dynamic>> Load_Data() async {

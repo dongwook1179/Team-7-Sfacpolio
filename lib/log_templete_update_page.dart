@@ -51,7 +51,8 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
   List<Project> projects = [];
   bool showsns = false;
   late ResultList<RecordModel> snsList;
-  final pb = PocketBase('http://3.36.50.35:8090');
+  final pb =
+      PocketBase('https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
   Map<String, bool> snsCheckedMap = {};
   String? logId;
 
@@ -89,7 +90,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-            'http://3.36.50.35:8090/api/collections/log/records'), // API 엔드포인트 주소로 변경
+            'https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com/api/collections/log/records'), // API 엔드포인트 주소로 변경
       );
 
       // Add regular fields
@@ -141,7 +142,7 @@ class _LogTempleteUpdatePageState extends State<LogTempleteUpdatePage> {
         var request = http.MultipartRequest(
           'POST',
           Uri.parse(
-              'http://3.36.50.35:8090/api/collections/log_mywork/records'),
+              'https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com/api/collections/log_mywork/records'),
         );
 
         request.fields['date'] = project.date;

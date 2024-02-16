@@ -11,7 +11,8 @@ class SignupOnboardingConnectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pb = PocketBase('http://3.36.50.35:8090');
+    final pb = PocketBase(
+        'https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

@@ -40,7 +40,8 @@ class _LogMainPageState extends State<LogMainPage>
   );
 
   Future<List<RecordModel>> loadData() async {
-    final pb = PocketBase('http://3.36.50.35:8090');
+    final pb = PocketBase(
+        'https://iooykz0o87.execute-api.ap-northeast-2.amazonaws.com');
     try {
       final records = await pb
           .collection('log')
